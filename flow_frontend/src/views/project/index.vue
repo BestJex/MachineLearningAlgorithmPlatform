@@ -12,8 +12,7 @@
                                     class="action-btn"
                                     icon="el-icon-delete"
                                     type="danger"
-                                    size="small"
-                            ></el-button>
+                                    size="small"></el-button>
                         </el-col>
                         <el-col class="action-group-right">
                             <el-button @click="isShowDialog = true" class="action-btn" size="medium">
