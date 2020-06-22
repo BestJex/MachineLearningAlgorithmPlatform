@@ -1,0 +1,66 @@
+{
+  "name": "vue-g6-editor",
+  "version": "0.0.1",
+  "description": "vue+g6+element可视化编辑器",
+  "keyword": "vue g6 g6-editor",
+  "author": "280196641@qq.com",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "dev": "npm run serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@antv/g6": "3.2.0",
+    "axios": "^0.19.2",
+    "core-js": "^2.6.5",
+    "echarts": "^4.6.0",
+    "element-ui": "^2.11.1",
+    "html-webpack-plugin": "^4.0.0-beta.8",
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.15",
+    "node-sass": "^4.13.1",
+    "sass": "^1.25.0",
+    "sass-loader": "^8.0.2",
+    "script-ext-html-webpack-plugin": "^2.1.4",
+    "v-charts": "^1.19.0",
+    "vue": "^2.6.10",
+    "vue-icon-font": "^1.0.4",
+    "vue-router": "^3.1.6",
+    "vuex": "^3.1.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.10.0",
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}
