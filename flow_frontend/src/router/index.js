@@ -39,6 +39,18 @@ export default new Router({
       ]
     },
     {
+      path: '/personal/',
+      component: Layout,
+      hidden: true,
+      children: [
+        {
+          path: ':id',
+          component: () => import('@/components/PersonalCenter/PersonalCenter'),
+          name: 'PersonalCenter'
+        }
+      ]
+    },
+    {
       path: '*',
       name: 'NotFound',
       redirect: '/project'
