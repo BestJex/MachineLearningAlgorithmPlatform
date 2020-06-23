@@ -9,11 +9,6 @@ import Layout from '@/layout'
 export default new Router({
   mode: 'hash',
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'HelloWorld',
-    //   component: HelloWorld
-    // }
     {
       path: '/',
       component: Layout,

@@ -2,138 +2,100 @@
     <div class="container view">
         <div class="left_box">
             <ul class="aside">
-                <li class="router-link-exact-active router-link-active">
-                    <a href="" class="zl" aria-current="page">个人资料</a>
+                <li v-for="(item, _) in asideList"
+                    :key="item.id"
+                    :class="{asideActive: item.id === asideIndex}"
+                    @click="asideClick(item.id)">
+                    <a class="zl" style="cursor: pointer">{{item.title}}</a>
                 </li>
-                <br>
-                <li class="">
-                    <a href="" class="zl">修改密码</a>
-                </li>
-                <br>
-                <li class="">
-                    <a href="" class="zl">修改手机</a>
-                </li>
-                <br>
-                <li class="">
-                    <a href="" class="zl">修改邮箱</a>
-                </li>
-                <br>
-                <li class="">
-                    <a href="" class="zl">绑定账号</a>
-                </li>
-                <br>
             </ul>
         </div>
         <div class="view-container" style="margin-left: 250px">
-            <!--            个人资料-->
-            <div data-v-0d738edb="" data-v-357a65ed="" class="cont view">
-                <div data-v-0d738edb="" class="right_cont">
-                    <h3 data-v-0d738edb="" class="title">个人资料</h3>
-                    <div data-v-0d738edb="" class="user_info">
-                        <div data-v-0d738edb="" class="header">
-                            <img data-v-0d738edb="" src="@/assets/img/logo.jpg" alt="" class="head">
-                            <p data-v-0d738edb="" class="modify">修改头像</p></div>
-                        <div data-v-0d738edb="" class="right_c">
-                            <div data-v-0d738edb="" class="right_info">
-                                <div data-v-0d738edb="" class="id_card">
-                                    <span data-v-0d738edb="" class="id_name">ID：weixin_43336281</span>
+            <!--个人资料-->
+            <div v-show="asideIndex === 1" class="cont view">
+                <div class="right_cont">
+                    <h3 class="title">个人资料</h3>
+                    <div class="user_info">
+                        <div class="header">
+                            <img src="@/assets/img/logo.jpg" alt="" class="head">
+                            <p class="modify">修改头像</p></div>
+                        <div class="right_c">
+                            <div class="right_info">
+                                <div class="id_card">
+                                    <span class="id_name">ID：weixin_43336281</span>
                                 </div>
                             </div>
-                            <div data-v-0d738edb="" class="csdn_info">
-                                <span data-v-0d738edb=""
-                                      style="margin-right: 16px; color: rgb(77, 77, 77); font-size: 14px;">
-                                    关注 40
-                                </span>
-                                <span data-v-0d738edb=""
-                                      style="margin-right: 16px; color: rgb(77, 77, 77); font-size: 14px;">
-                                    粉丝 594
-                                </span>
-                                <span data-v-0d738edb="" class="splits">|</span>
-                                <span data-v-0d738edb=""
-                                      style="margin-right: 8px; color: rgb(77, 77, 77); font-size: 14px;">
-                                    C币  40
-                                </span>
-                                <a data-v-0d738edb="" href="https://mall.csdn.net/vip" class="charge">充值</a>
-                            </div>
-                            <div data-v-0d738edb="" class="line"></div>
-                            <div data-v-0d738edb="" class="nick">
+                            <div class="nick">
                                 <span data-v-0d738edb="">昵称：Alex 007</span>
-                                <span data-v-0d738edb="" class="mod">修改资料</span>
+                                <span class="mod">修改资料</span>
                             </div>
-                            <ul data-v-0d738edb="" class="self">
-                                <li data-v-0d738edb="" class="comon">姓名：刘兆峰</li>
+                            <ul class="self">
+                                <li class="comon">姓名：刘兆峰</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">性别：男</li>
+                                <li class="comon">性别：男</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">生日：2000-10-01</li>
+                                <li class="comon">生日：2000-10-01</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">职位：学生</li>
+                                <li class="comon">职位：学生</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">公司：天津科技大学</li>
+                                <li class="comon">公司：天津科技大学</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">学历：本科</li>
+                                <li class="comon">学历：本科</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">学校：天津科技大学</li>
+                                <li class="comon">学校：天津科技大学</li>
                                 <br>
-                                <li data-v-0d738edb="" class="comon">行业：教育</li>
-                                <br>
-                                <li data-v-0d738edb="" class="comon">开始工作时间：2020-05-31</li>
-                                <br>
-                                <li data-v-0d738edb="" class="comon intro">
-                                    <span data-v-0d738edb="" class="noWid">简介：</span>
-                                    <span data-v-0d738edb="" class="cont">
-                                        I want to be the king of the code world.
-                                    </span>
-                                </li>
+                                <li class="comon">行业：教育</li>
                                 <br>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--            修改密码-->
-            <div data-v-3a20a40c="" class="acc_pass">
+            <!--修改密码-->
+            <div v-show="asideIndex === 3" class="acc_pass">
                 <div class="acc_index_t">
                     <h3 class="acc_t">
-                        <strong data-v-08c18f7a="">修改密码</strong>
+                        <strong>修改密码</strong>
                     </h3>
                 </div>
                 <div class="acc_pass_con">
                     <ul class="acc_pass_list">
-                        <li data-v-08c18f7a="">
-                            <label data-v-08c18f7a="">输入新密码：</label>
-                            <input data-v-08c18f7a="" type="password" name="password" id="password"
-                                   placeholder="11-20位数字和字母组合" autocomplete="off" validate="true"
-                                   data-rule="['password']" oncopy="return false" class="inpt">
-                            <span for="icon-password" class="visible_icon">
-                                <svg data-v-08c18f7a="" aria-hidden="true" class="icon">
-                                    <use xlink:href="#csdnc-m-passwords-invisible"></use>
-                                </svg>
-                            </span>
+                        <li>
+                            <label>输入旧密码：</label>
+                            <label for="oldPassword"></label>
+                            <input type="password" name="password" id="oldPassword"
+                                   placeholder="输入旧密码" autocomplete="off" validate="true"
+                                   data-rule="['password']" oncopy="return false" class="inpt"
+                                   v-model="oldPassword">
                         </li>
-                        <br>
-                        <li data-v-08c18f7a="">
-                            <label data-v-08c18f7a="">确认新密码：</label>
-                            <input data-v-08c18f7a="" id="confirmPwd" type="password" placeholder="确认新密码"
-                                   autocomplete="off" oncopy="return false" class="inpt">
-                            <span class="visible_icon">
-                                <svg aria-hidden="true" class="icon">
-                                    <use data-v-08c18f7a="" xlink:href="#csdnc-m-passwords-invisible"></use>
-                                </svg>
-                            </span>
+                        <li>
+                            <label>输入新密码：</label>
+                            <label for="password"></label>
+                            <input type="password" name="password" id="password"
+                                   placeholder="6-18位数字和字母组合" autocomplete="off" validate="true"
+                                   data-rule="['password']" oncopy="return false" class="inpt"
+                                   v-model="newPassword">
                         </li>
-                        <br>
-                        <li class="error_tips hide"></li>
+                        <li>
+                            <label>确认新密码：</label>
+                            <label for="confirmPwd"></label>
+                            <input id="confirmPwd" type="password" placeholder="确认新密码"
+                                   autocomplete="off" oncopy="return false" class="inpt"
+                                   v-model="confirmNewPassword">
+                        </li>
+                        <li class="error_tips">
+                            <label style="color: red">{{changePasswordError}}</label>
+                        </li>
                         <br>
                         <li class="acc_pass_b">
-                            <button disabled="disabled" class="confirm_btn confirm_disable">确认</button>
+                            <button class="confirm_btn confirm_disable" @click="changePassword()">确认</button>
                         </li>
                         <br>
                     </ul>
                 </div>
             </div>
-            <!--            修改手机-->
-            <div data-v-3a20a40c="" class="contain">
+            <!--修改手机-->
+            <div v-show="asideIndex === 4" class="contain">
                 <div class="form-main">
                     <div class="title acount-title">
                         <span data-v-5505c8c8="">
@@ -263,8 +225,8 @@
                     <div class="line"></div>
                 </div>
             </div>
-            <!--            修改邮箱-->
-            <div data-v-3a20a40c="" class="form-main">
+            <!--修改邮箱-->
+            <div v-show="asideIndex === 5" class="form-main">
                 <div class="title acount-title">
                     <span data-v-d2bb5870="">
                         <strong data-v-d2bb5870="">修改邮箱</strong>
@@ -316,7 +278,7 @@
                     <div class="form-group info-other">
                         <label class="inline form-label"></label>
                         <div class="inline control-col-pos control-col">
-                            <a href="" class="zl">通过手机号修改</a>
+                            <a class="zl" style="cursor: pointer">通过手机号修改</a>
                         </div>
                     </div>
                 </div>
@@ -334,8 +296,8 @@
                 </div>
                 <div class="line"></div>
             </div>
-            <!--            绑定账号-->
-            <div data-v-3a20a40c="" class="content">
+            <!--绑定账号-->
+            <div v-show="asideIndex === 6" class="content">
                 <div class="bar">
                     <h3 class="title">绑定登录帐号</h3>
                 </div>
@@ -399,7 +361,41 @@
     export default {
         name: "PersonalCenter",
         data() {
-            return {};
+            return {
+                asideList: [
+                    {id: 1, name: "PersonalData", title: "个人资料"},
+                    {id: 2, name: "ProjectList", title: "项目列表"},
+                    {id: 3, name: "ChangePassword", title: "修改密码"},
+                    {id: 4, name: "ModifyPhone", title: "修改手机"},
+                    {id: 5, name: "ModifyMailbox", title: "修改邮箱"},
+                    {id: 6, name: "BindAccount", title: "绑定账号"},
+                ],
+                asideIndex: 1,
+
+                token: "",
+                username: "",
+
+                oldPassword: "",
+                newPassword: "",
+                confirmNewPassword: "",
+                changePasswordError: "",
+            };
+        },
+        methods: {
+            asideClick(itemId) {
+                this.asideIndex = itemId;
+            },
+            changePassword() {
+                // 1.校验密码位数
+                if (this.oldPassword.length < 6) {
+                    this.changePasswordError = "密码位数错误！";
+                }
+                let changePasswordParam = {
+                    username: "",
+                    oldPassword: this.oldPassword,
+                    newPassword: this.newPassword,
+                }
+            }
         }
     }
 </script>
@@ -420,8 +416,6 @@
     }
 
     .container {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
         flex: 1;
         width: 1200px;
         margin: 16px auto 0;
@@ -450,7 +444,7 @@
         list-style: none;
     }
 
-    .container .left_box .aside li.router-link-active {
+    .container .left_box .aside li.asideActive {
         background: rgb(40, 150, 170);
         color: #fff;
     }
@@ -472,7 +466,7 @@
         display: inline-block;
     }
 
-    .container .left_box .aside li.router-link-active .zl {
+    .container .left_box .aside li.asideActive .zl {
         color: #fff;
     }
 
@@ -731,6 +725,7 @@
 
     .acc_pass_con .acc_pass_list li {
         position: relative;
+        width: 100%;
         margin-bottom: 8px;
         font-size: 0;
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="my-login-page">
     <el-row>
-      <el-col :span="24" align="center">
+      <el-col :span="24" style="text-align: center">
         <div class="container h-100">
           <div class="row justify-content-md-center h-100">
             <div class="card-wrapper">

@@ -8,7 +8,6 @@ import auth from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
-  // baseURL: process.env.BASE_API, // api的base_url
   baseURL: configJS.BASE_API,
   withCredentials: true,
   // timeout: 15000                  // 请求超时时间
@@ -19,10 +18,9 @@ service.interceptors.request.use(
   config => {
     if (auth.getToken()) {
       // 验证token是否过期
-
-      var payload = jwt.payload_decode(auth.getToken())
-      var now = Date.parse(new Date())
-      if (now / 1000 > payload.exp) {
+        const payload = jwt.payload_decode(auth.getToken());
+        const now = Date.parse(new Date());
+        if (now / 1000 > payload.exp) {
         store.dispatch('user/Logout')
         router.push('/login')
         return Promise.reject({
