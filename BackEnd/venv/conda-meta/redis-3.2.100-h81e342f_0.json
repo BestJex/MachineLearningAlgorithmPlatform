@@ -1,0 +1,68 @@
+{
+  "build": "h81e342f_0",
+  "build_number": 0,
+  "channel": "https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [],
+  "extracted_package_dir": "D:\\MiniConda\\pkgs\\redis-3.2.100-h81e342f_0",
+  "features": "",
+  "files": [
+    "Library/bin/redis-benchmark.exe",
+    "Library/bin/redis-check-aof.exe",
+    "Library/bin/redis-cli.exe",
+    "Library/bin/redis-server.exe",
+    ".nonadmin"
+  ],
+  "fn": "redis-3.2.100-h81e342f_0.conda",
+  "legacy_bz2_md5": "171fdb83856a8007f82a86fda9318745",
+  "license": "3-clause BSD",
+  "license_family": "BSD",
+  "link": {
+    "source": "D:\\MiniConda\\pkgs\\redis-3.2.100-h81e342f_0",
+    "type": 1
+  },
+  "md5": "02aca1d8b56e1fa4ea6ac1415335f8e8",
+  "name": "redis",
+  "package_tarball_full_path": "D:\\MiniConda\\pkgs\\redis-3.2.100-h81e342f_0.conda",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "Library/bin/redis-benchmark.exe",
+        "path_type": "hardlink",
+        "sha256": "5e07427936f1bddc4988411ea9784d4c26c86a7b0e808515eab0e21365f05301",
+        "sha256_in_prefix": "5e07427936f1bddc4988411ea9784d4c26c86a7b0e808515eab0e21365f05301",
+        "size_in_bytes": 479232
+      },
+      {
+        "_path": "Library/bin/redis-check-aof.exe",
+        "path_type": "hardlink",
+        "sha256": "d370880728d5e6d9af83f7f2c19ba194be732ca134a1080204856ef9c100951f",
+        "sha256_in_prefix": "d370880728d5e6d9af83f7f2c19ba194be732ca134a1080204856ef9c100951f",
+        "size_in_bytes": 309760
+      },
+      {
+        "_path": "Library/bin/redis-cli.exe",
+        "path_type": "hardlink",
+        "sha256": "65c1d7e0a830058c6a37c27c6abac60126496f7ad0b6395c05e105a4511b5b95",
+        "sha256_in_prefix": "65c1d7e0a830058c6a37c27c6abac60126496f7ad0b6395c05e105a4511b5b95",
+        "size_in_bytes": 556032
+      },
+      {
+        "_path": "Library/bin/redis-server.exe",
+        "path_type": "hardlink",
+        "sha256": "9a0e79c295d0fa547b8c7d8cbebe35db7d0b31f7ca4992f3a4767665c370ad77",
+        "sha256_in_prefix": "9a0e79c295d0fa547b8c7d8cbebe35db7d0b31f7ca4992f3a4767665c370ad77",
+        "size_in_bytes": 1730048
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "redis",
+  "sha256": "2db9c18db5aba2aa89f5b2b16921de8eee7561f1b1405ec004b397c8320dcaa2",
+  "size": 905432,
+  "subdir": "win-64",
+  "timestamp": 1509553067024,
+  "track_features": "",
+  "url": "https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64/redis-3.2.100-h81e342f_0.conda",
+  "version": "3.2.100"
+}

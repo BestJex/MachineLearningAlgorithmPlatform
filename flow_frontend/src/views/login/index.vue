@@ -123,6 +123,7 @@
                         this.$store
                             .dispatch("user/Login", formData)
                             .then(() => {
+                                localStorage.setItem("username", user.username);
                                 this.loading = false;
                                 this.$router.push({path: this.redirect || '/', query: this.otherQuery});
                             })

@@ -20,11 +20,6 @@
                             <img src="@/assets/img/logo.jpg" alt="" class="head">
                             <p class="modify">修改头像</p></div>
                         <div class="right_c">
-                            <div class="right_info">
-                                <div class="id_card">
-                                    <span class="id_name">ID：weixin_43336281</span>
-                                </div>
-                            </div>
                             <div class="nick">
                                 <span data-v-0d738edb="">昵称：Alex 007</span>
                                 <span class="mod">修改资料</span>
@@ -35,6 +30,10 @@
                                 <li class="comon">性别：男</li>
                                 <br>
                                 <li class="comon">生日：2000-10-01</li>
+                                <br>
+                                <li class="comon">手机：18812649207</li>
+                                <br>
+                                <li class="comon">邮箱：alex18812649207@gmail.com</li>
                                 <br>
                                 <li class="comon">职位：学生</li>
                                 <br>
@@ -49,6 +48,14 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!--项目列表-->
+            <div v-show="asideIndex === 2" class="acc_project">
+                <div class="acc_index_t">
+                    <h3 class="acc_t">
+                        <strong>项目列表</strong>
+                    </h3>
                 </div>
             </div>
             <!--修改密码-->
@@ -83,218 +90,12 @@
                                    autocomplete="off" oncopy="return false" class="inpt"
                                    v-model="confirmNewPassword">
                         </li>
-                        <li class="error_tips">
-                            <label style="color: red">{{changePasswordError}}</label>
-                        </li>
-                        <br>
                         <li class="acc_pass_b">
                             <button class="confirm_btn confirm_disable" @click="changePassword()">确认</button>
                         </li>
                         <br>
                     </ul>
                 </div>
-            </div>
-            <!--修改手机-->
-            <div v-show="asideIndex === 4" class="contain">
-                <div class="form-main">
-                    <div class="title acount-title">
-                        <span data-v-5505c8c8="">
-                            <strong data-v-5505c8c8="">修改手机号</strong>
-                        </span>
-                    </div>
-                    <div role="form" class="form-coustom">
-                        <div class="form-group form-info">
-                            <span data-v-5505c8c8="">验证码将发送到手机188****9207</span>
-                            <p data-v-5505c8c8="">如果长时间未收到验证码，请检查是否将运营商拉黑</p>
-                        </div>
-                        <div class="form-group form-info hide">
-                            <span data-v-5505c8c8="">验证码将发送到邮箱</span>
-                            <p data-v-5505c8c8="">如果长时间未收到验证码，请检查垃圾箱</p>
-                        </div>
-                        <div class="form-group hide">
-                            <label class="inline form-label">输入新手机：</label>
-                            <div class="select-list dropdown-select inline">
-                                <span data-toggle="dropdown" data-target="drop-new-menus" data-value="86"
-                                      class="dropdown-text" unselectable="on">
-                                    86
-                                </span>
-                            </div>
-                            <div class="inline control-phone">
-                                <input type="text" id="phone" name="cnPhone" validate="true" data-rule="['enPhone']"
-                                       autocomplete="off" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 control-col-pos drop-wrap">
-                            <div class="select-list dropdown-select control-col-absos">
-                                <ul id="drop-new-menus" class="dropdown-list dropdown-menus">
-                                    <li data-text="86">
-                                        <span data-text="86">+ 86</span>
-                                        <em data-text="86">中国</em></li>
-                                    <br>
-                                    <li data-text="1">
-                                        <span data-text="1">+ 1</span>
-                                        <em data-text="1">美国</em>
-                                    </li>
-                                    <br>
-                                    <li data-text="1">
-                                        <span data-text="1">+ 1</span>
-                                        <em data-text="1">加拿大</em>
-                                    </li>
-                                    <br>
-                                    <li data-text="852">
-                                        <span data-text="852">+ 852</span>
-                                        <em data-text="852">中国香港</em>
-                                    </li>
-                                    <br>
-                                    <li data-text="886">
-                                        <span data-text="886">+ 886</span>
-                                        <em data-text="886">中国台湾</em>
-                                    </li>
-                                    <br>
-                                    <li data-text="81">
-                                        <span data-text="81">+ 81</span>
-                                        <em data-text="81">日本</em>
-                                    </li>
-                                    <br>
-                                    <li data-text="65">
-                                        <span data-text="65">+ 65</span>
-                                        <em data-text="65">新加坡</em>
-                                    </li>
-                                    <br>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="inline form-label">填写验证码：</label>
-                            <div class="inline control-col-pos control-col">
-                                <input type="text" name="code" validate="true" data-rule="['code']" autocomplete="off"
-                                       class="form-control inline control-code">
-                                <button class="btn btn-confirm btn-control">获取短信验证码</button>
-                            </div>
-                        </div>
-                        <div class="form-group form-group-error">
-                            <label class="inline form-label"></label>
-                            <div class="text-error hide"></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-submit">
-                                <label class="inline form-label"></label>
-                                <button disabled="disabled" data-type="phone" class="btn btn-primary__disabled">
-                                    下一步
-                                </button>
-                            </div>
-                        </div>
-                        <div class="wx-wrap hide">
-                            <div style="display: none;">
-                                <div id="wxqr" class="wx-code">
-                                    <iframe id="iframe_id"
-                                            src="https://open.weixin.qq.com/connect/qrconnect?appid=wx0ae11b6a28b4b9fc&amp;scope=snsapi_login&amp;redirect_uri=https%3A%2F%2Fpassport.csdn.net%2Fv1%2Fservice%2FchangeMobile%2FcheckWeixin%3FmobileType%3Dweixin&amp;state=csdn&amp;login_type=jssdk&amp;self_redirect=default&amp;style=white&amp;href=https://csdnimg.cn/release/passport/history/css/replace-wx-style.css"
-                                            sandbox="allow-scripts allow-top-navigation" frameborder="0" scrolling="no"
-                                            width="172px" height="172px"></iframe>
-                                </div>
-                                <em data-v-5505c8c8="">请使用您绑定的微信账号扫码验证</em>
-                            </div>
-                            <div style="display: none;">
-                                <div class="wx-info">
-                                    <span data-v-5505c8c8="">
-                                        <span class="phone-icon">
-                                            <span class="error-icon">×</span>
-                                        </span>
-                                    </span>
-                                    <em data-v-5505c8c8=""></em>
-                                    <p data-v-5505c8c8="">
-                                        <a href="" class="link-l link-button">重新扫码验证</a>
-                                        <a href="" class="link-r link-button">返回</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-text hide">
-                        <div class="info-status">
-                            <label class="icon-coustom-check icon-control">
-                                <svg aria-hidden="true" class="icon">
-                                    <use xlink:href="#csdnc-check"></use>
-                                </svg>
-                            </label>
-                        </div>
-                        <span data-v-5505c8c8="">成功设置/修改手机</span>
-                        <p data-v-5505c8c8="">新手机号码为</p>
-                        <button class="btn btn-primary">完成(s)</button>
-                    </div>
-                    <div class="line"></div>
-                </div>
-            </div>
-            <!--修改邮箱-->
-            <div v-show="asideIndex === 5" class="form-main">
-                <div class="title acount-title">
-                    <span data-v-d2bb5870="">
-                        <strong data-v-d2bb5870="">修改邮箱</strong>
-                    </span>
-                </div>
-                <div role="form" class="form-coustom">
-                    <div class="form-group form-info">
-                        <span data-v-d2bb5870="">验证码将发送到al****邮箱</span>
-                        <p data-v-d2bb5870="">如果长时间未收到验证码，请检查垃圾箱</p>
-                    </div>
-                    <div class="form-group form-info hide">
-                        <span data-v-d2bb5870="">验证码将发送到手机188****9207</span>
-                        <p data-v-d2bb5870="">如果长时间未收到验证码，请检查是否将运营商拉黑</p>
-                    </div>
-                    <div class="form-group hide">
-                        <label class="inline form-label">输入新邮箱：</label>
-                        <div class="inline control-col-pos control-col">
-                            <input type="text" id="email" name="email" validate="true" data-rule="['email']"
-                                   autocomplete="off" placeholder="不建议使用QQ邮箱" class="form-control inline control-email">
-                            <ul class="email-list hide">
-                                <li class="last-li"></li>
-                                <br>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="inline form-label">填写验证码：</label>
-                        <div class="inline control-col-pos control-col">
-                            <input type="text" id="code" name="code" validate="true" data-rule="['code']"
-                                   autocomplete="off" class="form-control inline control-code">
-                            <button class="btn btn-confirm btn-control">获取验证码</button>
-                        </div>
-                    </div>
-                    <div class="form-group form-group-error">
-                        <label class="inline form-label"></label>
-                        <div class="text-error hide"></div>
-                    </div>
-                    <div class="form-group hide">
-                        <p class="info-p">如果长时间未收到验证码，请检查垃圾箱</p>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-submit">
-                            <label class="inline form-label"></label>
-                            <button disabled="disabled" data-type="email" class="btn btn-primary__disabled">
-                                下一步
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group info-other">
-                        <label class="inline form-label"></label>
-                        <div class="inline control-col-pos control-col">
-                            <a class="zl" style="cursor: pointer">通过手机号修改</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="info-text hide">
-                    <div class="info-status">
-                        <label data-v-d2bb5870="" class="icon-coustom-check icon-control">
-                            <svg aria-hidden="true" class="icon">
-                                <use xlink:href="#csdnc-check"></use>
-                            </svg>
-                        </label>
-                    </div>
-                    <span data-v-d2bb5870="">成功修改邮箱</span>
-                    <p data-v-d2bb5870="">新邮箱为</p>
-                    <button class="btn btn-primary">完成(s)</button>
-                </div>
-                <div class="line"></div>
             </div>
             <!--绑定账号-->
             <div v-show="asideIndex === 6" class="content">
@@ -366,8 +167,6 @@
                     {id: 1, name: "PersonalData", title: "个人资料"},
                     {id: 2, name: "ProjectList", title: "项目列表"},
                     {id: 3, name: "ChangePassword", title: "修改密码"},
-                    {id: 4, name: "ModifyPhone", title: "修改手机"},
-                    {id: 5, name: "ModifyMailbox", title: "修改邮箱"},
                     {id: 6, name: "BindAccount", title: "绑定账号"},
                 ],
                 asideIndex: 1,
@@ -387,14 +186,39 @@
             },
             changePassword() {
                 // 1.校验密码位数
-                if (this.oldPassword.length < 6) {
-                    this.changePasswordError = "密码位数错误！";
+                if (this.oldPassword.length < 6 || this.newPassword.length < 6) {
+                    this.$message({
+                        message: '密码位数错误！',
+                        type: 'warning'
+                    });
                 }
+                // 2.校验新密码和确认密码
+                if (this.newPassword !== this.confirmNewPassword) {
+                    this.$message({
+                        message: '新密码不一致！',
+                        type: 'error'
+                    });
+                }
+                // 3.整理消息体
                 let changePasswordParam = {
-                    username: "",
-                    oldPassword: this.oldPassword,
-                    newPassword: this.newPassword,
+                    username: localStorage.getItem('username'),
+                    password: this.oldPassword,
+                    newpassword: this.newPassword,
                 }
+                // 4.通过axios发送数据
+                this.axios({
+                    method: 'post',
+                    url: 'http://39.105.21.62/flow/api/user/chapassword',
+                    data: changePasswordParam
+                }).then(res => {
+                    console.log(res);
+                    this.$message('密码更改成功！');
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    });
+                })
             }
         }
     }

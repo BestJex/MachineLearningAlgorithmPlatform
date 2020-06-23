@@ -16,7 +16,6 @@ Vue.use(ElementUI,{size:'mini'})
 Vue.use(VueIconFont)
 Vue.component(VeLine.name, VeLine)
 Vue.component(VeScatter.name, VeScatter)
-
 Vue.prototype.axios = axios
 
 new Vue({

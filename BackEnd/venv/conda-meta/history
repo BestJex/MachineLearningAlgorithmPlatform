@@ -22,3 +22,8 @@
 +https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/noarch::pytz-2020.1-py_0
 +https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/noarch::sqlparse-0.3.1-py_0
 # update specs: ['django']
+==> 2020-06-23 17:38:38 <==
+# cmd: D:\MiniConda\Scripts\conda-script.py install -p W:/NankaiUniversity-ArtificialIntelligenceOpenPlatform/BackEnd/venv redis -y
+# conda version: 4.8.3
++https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64::redis-3.2.100-h81e342f_0
+# update specs: ['redis']

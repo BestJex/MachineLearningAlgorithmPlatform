@@ -10,7 +10,6 @@ import auth from '@/utils/auth'
 const service = axios.create({
   baseURL: configJS.BASE_API,
   withCredentials: true,
-  // timeout: 15000                  // 请求超时时间
 })
 
 // request interceptor
