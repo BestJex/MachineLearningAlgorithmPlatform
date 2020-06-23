@@ -12,8 +12,7 @@
       accept=".jpg, .csv, .png"
       :action="base_api + 'upload_file'"
       class="upload-demo"
-      multiple
-    >
+      multiple>
       <el-button size="small" type="primary">点击上传</el-button>
     </el-upload>
   </div>
