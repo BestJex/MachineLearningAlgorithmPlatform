@@ -12,8 +12,7 @@
       :on-success="onUploadSucc"
       accept=".jpg, .csv, .png"
       :action="base_api + 'upload_file'"
-      class="upload-demo"
-    >
+      class="upload-demo">
       <el-button size="small" type="primary">点击上传</el-button>
     </el-upload>
   </div>
@@ -32,7 +31,6 @@ export default {
         nodeId: '',
         owner: 'christopher'
       },
-
       base_api: configJS.BASE_API
     }
   },
@@ -56,9 +54,9 @@ export default {
         .deleteFile({ filepath: file.filepath, nodeId: this.item._cfg.id })
         .then(res => {
           // 修改node_detail的值
-          var nodeId = res.nodeId
+          const nodeId = res.nodeId;
 
-          var node_detail = this.graph.findById(nodeId).getModel().node_detail
+          const node_detail = this.graph.findById(nodeId).getModel().node_detail;
           node_detail.forEach(node => {
             if (node.name === 'upload') {
               node.value = []
@@ -132,7 +130,7 @@ export default {
         message: '文件上传成功',
         type: 'success',
         duration: 3000
-      })
+      });
 
       var nodeId = res.nodeId
       var filepath = res.filepath

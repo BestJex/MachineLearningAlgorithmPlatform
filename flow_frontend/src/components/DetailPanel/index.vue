@@ -4,14 +4,12 @@
       :style="`right:${detailWidth}px;`"
       @mousedown="onResizeMouseDown"
       class="resizer"
-      id="detail-resizer"
-    ></div>
+      id="detail-resizer"></div>
     <div
       :style="`width:${detailWidth}px;`"
       @mousedown="clickDetailPanel"
       class="detailpannel"
-      id="detailpannel"
-    >
+      id="detailpannel">
       <detail />
     </div>
   </div>

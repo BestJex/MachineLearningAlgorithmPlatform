@@ -3,9 +3,7 @@
             :style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 100%;`"
             @click="clickCanvas"
             @dragover.prevent
-            @drop="handleDrop"
-    >
-        <span style="position: absolute;">{{ canvasWidth }}</span>
+            @drop="handleDrop">
         <div :id="pageId" class="graph-container" style="position: relative; height: 100%;"></div>
     </div>
 </template>

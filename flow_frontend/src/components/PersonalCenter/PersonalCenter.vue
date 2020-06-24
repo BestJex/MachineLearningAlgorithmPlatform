@@ -21,30 +21,23 @@
                             <p class="modify">修改头像</p></div>
                         <div class="right_c">
                             <div class="nick">
-                                <span data-v-0d738edb="">昵称：Alex 007</span>
-                                <span class="mod">修改资料</span>
+                                <span class="mod" @click="changeInformation()" v-if="!changeInformationFlag">
+                                    修改资料
+                                </span>
+                                <span class="mod" @click="saveChangeInformation()" v-if="changeInformationFlag">
+                                    保存资料
+                                </span>
                             </div>
                             <ul class="self">
-                                <li class="comon">姓名：刘兆峰</li>
-                                <br>
-                                <li class="comon">性别：男</li>
-                                <br>
-                                <li class="comon">生日：2000-10-01</li>
-                                <br>
-                                <li class="comon">手机：18812649207</li>
-                                <br>
-                                <li class="comon">邮箱：alex18812649207@gmail.com</li>
-                                <br>
-                                <li class="comon">职位：学生</li>
-                                <br>
-                                <li class="comon">公司：天津科技大学</li>
-                                <br>
-                                <li class="comon">学历：本科</li>
-                                <br>
-                                <li class="comon">学校：天津科技大学</li>
-                                <br>
-                                <li class="comon">行业：教育</li>
-                                <br>
+                                <li class="comon" v-for="(item, _) in userInfo" :key="item.id">
+                                    <div>
+                                        <span>{{item.title}}：</span>
+                                        <span v-if="!changeInformationFlag">
+                                            {{item.value ? item.value : "不告诉你！"}}
+                                        </span>
+                                        <input v-model="item.value" v-if="changeInformationFlag"></input>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -125,31 +118,10 @@
                     </li>
                     <br>
                     <li class="item_cont">
-                        <img src="https://i.csdn.net/static/img/bind_sinat.png" alt="新浪微博" class="icon_img">
-                        <span class="method_name">新浪微博</span>
-                        <span class="user_name">知其不可奈何而安之若命7</span>
-                        <a href="javascript:void(0)" class="handle_text remove_text">解绑</a>
-                    </li>
-                    <br>
-                    <li class="item_cont">
-                        <img src="https://i.csdn.net/static/img/bind_linkedin.png" alt="领英" class="icon_img">
-                        <span class="method_name">领英</span>
-                        <span class="user_name">兆峰</span>
-                        <a href="javascript:void(0)" class="handle_text remove_text">解绑</a>
-                    </li>
-                    <br>
-                    <li class="item_cont">
                         <img src="https://i.csdn.net/static/img/bind_baidu.png" alt="百度" class="icon_img">
                         <span class="method_name">百度</span>
                         <span class="user_name">刘***k</span>
                         <a href="javascript:void(0)" class="handle_text remove_text">解绑</a>
-                    </li>
-                    <br>
-                    <li class="item_cont">
-                        <img src="https://i.csdn.net/static/img/bind_maimai.png" alt="脉脉" class="icon_img">
-                        <span class="method_name">脉脉</span>
-                        <span class="user_name">绑账号领勋章</span>
-                        <span class="handle_text">绑定</span>
                     </li>
                     <br>
                 </ul>
@@ -172,7 +144,14 @@
                 asideIndex: 1,
 
                 token: "",
-                username: "",
+                changeInformationFlag: false,
+                userInfo: [
+                    {id: 1, name: "username", title: "昵称", value: localStorage.getItem('username')},
+                    {id: 2, name: "name", title: "姓名", value: ''},
+                    {id: 3, name: "gender", title: "性别", value: ''},
+                    {id: 5, name: "phone", title: "手机", value: ''},
+                    {id: 6, name: "mailbox", title: "邮箱", value: ''},
+                ],
 
                 oldPassword: "",
                 newPassword: "",
@@ -219,7 +198,53 @@
                         type: 'error'
                     });
                 })
+            },
+            changeInformation() {
+                this.changeInformationFlag = true;
+            },
+            saveChangeInformation() {
+                this.changeInformationFlag = false;
+                let changeData = {
+                    username: localStorage.getItem('username'),
+                    name: this.userInfo[1].value,
+                    gender: this.userInfo[2].value,
+                    phone: this.userInfo[3].value,
+                    mailbox: this.userInfo[4].value,
+                };
+                this.axios({
+                    method: 'post',
+                    url: 'http://39.105.21.62/flow/api/user/chainformation',
+                    data: changeData,
+                }).then(res => {
+                    this.$message({
+                        message: res,
+                        type: 'success'
+                    });
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    });
+                })
             }
+        },
+        created() {
+            // 1.获取用户个人资料
+            this.axios({
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/user/information?username=${localStorage.getItem('username')}`,
+            }).then(res => {
+                console.log(res);
+                this.userInfo[1].value = res.data.data.name;
+                this.userInfo[2].value = res.data.data.gender;
+                this.userInfo[3].value = res.data.data.phone;
+                this.userInfo[4].value = res.data.data.mailbox;
+            }).catch(err => {
+                this.$message({
+                    message: err,
+                    type: 'error'
+                });
+            })
         }
     }
 </script>
@@ -284,10 +309,6 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         margin-bottom: 1px;
-    }
-
-    li {
-        display: inline-block;
     }
 
     .container .left_box .aside li.asideActive .zl {

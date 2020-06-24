@@ -5,20 +5,17 @@
         <link
           href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
           rel="stylesheet"
-          type="text/css"
-        />
+          type="text/css"/>
         <i
           :class="undoList.length>0?'':'disable'"
           @click="handleUndo"
           class="command iconfont icon-undo"
-          title="撤销"
-        ></i>
+          title="撤销"></i>
         <i
           :class="redoList.length>0?'':'disable'"
           @click="handleRedo"
           class="command iconfont icon-redo"
-          title="重做"
-        ></i>
+          title="重做"></i>
         <span class="separator"></span>
         <!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
         <i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
@@ -27,33 +24,28 @@
           @click="handleDelete"
           class="command iconfont icon-delete-o"
           data-command="delete"
-          title="删除"
-        ></i>
+          title="删除"></i>
         <span class="separator"></span>
         <i
           @click="handleZoomIn"
           class="command iconfont icon-zoom-in-o"
           data-command="zoomIn"
-          title="放大"
-        ></i>
+          title="放大"></i>
         <i
           @click="handleZoomOut"
           class="command iconfont icon-zoom-out-o"
           data-command="zoomOut"
-          title="缩小"
-        ></i>
+          title="缩小"></i>
         <i
           @click="handleAutoZoom"
           class="command iconfont icon-fit"
           data-command="autoZoom"
-          title="适应画布"
-        ></i>
+          title="适应画布"></i>
         <i
           @click="handleResetZoom"
           class="command iconfont icon-actual-size-o"
           data-command="resetZoom"
-          title="实际尺寸"
-        ></i>
+          title="实际尺寸"></i>
         <span class="separator"></span>
         <i
           :class="selectedItem.length?'':'disable'"
@@ -97,8 +89,7 @@
       <div
         :class="{'delay-4': isRunning, 'delay-0': !isRunning}"
         style="text-align: center;"
-        v-show="isRunning"
-      >
+        v-show="isRunning">
         <span>正在运行</span>
       </div>
     </transition>
@@ -106,16 +97,14 @@
       :append-to-body="true"
       :visible.sync="isShowFileManagement"
       custom-class="preview-dialog"
-      title="文件管理"
-    >
+      title="文件管理">
       <file-manage :graph="graph"></file-manage>
     </el-dialog>
     <el-dialog
       :append-to-body="true"
       :visible.sync="isShowNodeManage"
       custom-class="preview-dialog"
-      title="新增结点"
-    >
+      title="新增结点">
       <node-manage />
     </el-dialog>
   </div>

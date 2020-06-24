@@ -5,7 +5,9 @@
         <p>当前节点未保存或预览文件不存在</p>
       </div>
       <div style="display: inline-block">
-        <el-button :disabled="!canPreview" @click="isShowPreview = true" small type="primary">预览文件</el-button>
+        <el-button :disabled="!canPreview" @click="isShowPreview = true" small type="primary">
+          预览文件
+        </el-button>
       </div>
     </el-tooltip>
     <el-dialog
@@ -18,7 +20,9 @@
       title="预览文件"
     >
       <el-table :data="csv" v-loading="loading" border highlight-current-row style="width: 100%">
-        <el-table-column :index="indexMethod" :show-overflow-tooltip="true" label="\" type="index"></el-table-column>
+        <el-table-column :index="indexMethod" :show-overflow-tooltip="true" label="\" type="index">
+
+        </el-table-column>
         <el-table-column
           :key="index"
           :label="String(index + 1)"
