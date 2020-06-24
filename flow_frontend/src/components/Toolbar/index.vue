@@ -83,6 +83,22 @@
         <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
         <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
         <el-button @click="runProject" type="success">运行项目</el-button>
+
+        <el-dropdown size="mini" split-button type="primary" style="">
+          导出
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <el-link target="_blank" :href="pythonFilePath" :underline="false">
+                导出.py文件
+              </el-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-link target="_blank" :href="jsonFilePath" :underline="false">
+                导出.json文件
+              </el-link>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </transition>
     <transition name="el-zoom-in-center">
@@ -122,6 +138,9 @@ import nodeManage from './components/nodeManage'
 export default {
   data() {
     return {
+      jsonFilePath: "",
+      pythonFilePath: "",
+
       page: {},
       graph: {},
       redoList: [],
@@ -132,7 +151,6 @@ export default {
       multiSelect: false,
       addGroup: false,
       isShowFileManagement: false,
-
       max_id: 0
     }
   },
@@ -170,11 +188,7 @@ export default {
   },
   watch: {
     selectedItem(val) {
-      if (val && val.length > 1) {
-        this.addGroup = true
-      } else {
-        this.addGroup = false
-      }
+      this.addGroup = !!(val && val.length > 1);
     }
   },
   methods: {
