@@ -78,7 +78,6 @@ export default {
         var show = this.$store.getters.isShowPreview
         if (show) {
           this.loading = true
-          console.log(this.node_id)
           fileApi
             .previewCsv({ nodeId: this.node_id, graphId: this.graphId })
             .then(res => {

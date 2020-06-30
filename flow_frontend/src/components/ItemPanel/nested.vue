@@ -1,6 +1,5 @@
 <template>
   <div class>
-    <!-- <draggable v-model="tasks" :sort="false" :disabled="tasks.is_menu"> :draggable="!el.is_menu"-->
     <div
       :draggable="!el.is_menu"
       :key="el.name"
@@ -8,13 +7,11 @@
       @dragstart="el.is_menu ? '' : handleDragstart($event)"
       class="tree-node"
       tabindex="-1"
-      v-for="(el, index) in tasks"
-    >
+      v-for="(el, index) in tasks">
       <div
         :style="`padding-left: ${level * 18}px;`"
         @click="el.is_menu ? handleTreeNodeClick($event) : ''"
-        class="tree-node__content"
-      >
+        class="tree-node__content">
         <i :class="el.is_menu ? '' : 'is-leaf'" class="tree-node__expand-icon el-icon-caret-bottom"></i>
         <span class="tree-node__label">{{ el.name }}</span>
       </div>
@@ -22,7 +19,6 @@
         <nested-draggable :level="level + 1" :tasks="el.children" v-if="el.children" />
       </div>
     </div>
-    <!-- </draggable> -->
   </div>
 </template>
 <script>
@@ -57,20 +53,17 @@ export default {
   },
   methods: {
     handleDragstart(e) {
-      console.log('drag start', e)
       e.dataTransfer.effectAllowed = 'move'
       this.offsetX = e.offsetX
       this.offsetY = e.offsetY
     },
     handleDragEnd(e, item) {
-      console.log('drag end', e, item)
       let data = {}
       Object.assign(data, item)
       data.offsetX = this.offsetX
       data.offsetY = this.offsetY
       if (this.page) {
         const graph = this.page.graph
-        // const size = e.target.dataset.size.split("*");
         const xy = graph.getPointByClient(e.x, e.y)
         data.x = xy.x
         data.y = xy.y
@@ -80,13 +73,13 @@ export default {
       }
     },
     handleTreeNodeClick(e) {
-      console.log(e)
       e.target.classList.toggle('is_expanded')
       this.is_expanded = !this.is_expanded
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .dragArea {
   min-height: 50px;

@@ -67,8 +67,6 @@ export default {
                             shape: 'customEdge',
                             type: 'edge'
                         }
-                        // eslint-disable-next-line no-console
-                        console.log('add item')
                         eventBus.$emit('addItem', model)
                     }
                 } else if (this.edge) {
@@ -120,8 +118,6 @@ export default {
             const startY = parseInt(e.target._attrs.y)
             startPoint = { x: startX, y: startY }
             startPointId = e.target._attrs.parent ? e.target._attrs.parent : e.target._attrs.id
-            // eslint-disable-next-line no-console
-            console.log(e.target, startPoint);
             startItem = item
             this.graph.find("node", node => {
                 const group = node.get('group')

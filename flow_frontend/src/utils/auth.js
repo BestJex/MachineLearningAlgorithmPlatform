@@ -8,7 +8,7 @@ export default {
   },
 
   getToken() {
-    return Cookies.get("token")
+    return Cookies.get("token");
   },
 
   removeToken() {

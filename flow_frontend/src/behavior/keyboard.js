@@ -21,7 +21,6 @@ export default {
     },
 
     onKeyDown(e) {
-        // console.log(e.keyCode)
         this.keydown = true
         const code = e.keyCode || e.which
         if (!code)

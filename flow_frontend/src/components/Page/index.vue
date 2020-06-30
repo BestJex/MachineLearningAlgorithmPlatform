@@ -51,8 +51,6 @@
                 this.graph.changeSize(val, this.canvasHeight)
             },
             canvasHeight: function (val) {
-                // eslint-disable-next-line no-console
-                console.log('canvas height change detected: ', val)
                 this.graph.changeSize(this.canvasWidth, val)
             }
         },

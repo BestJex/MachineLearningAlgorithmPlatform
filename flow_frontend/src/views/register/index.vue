@@ -15,33 +15,37 @@
                                             label-position="left"
                                             :model="formRegister"
                                             :rules="rules"
-                                            ref="formRegister"
-                                    >
+                                            ref="formRegister">
                                         <!-- name -->
                                         <el-form-item label="用户名" prop="username">
-                                            <el-input
+                                            <el-input style="display: inline-block; width: 80%; float: right"
                                                     v-model="formRegister.username"
                                                     clearable
-                                                    prefix-icon="el-icon-user-solid"
-                                            ></el-input>
+                                                    prefix-icon="el-icon-user-solid"></el-input>
                                         </el-form-item>
 
                                         <!-- password -->
                                         <el-form-item label="密码" prop="password">
-                                            <el-input
+                                            <el-input style="display: inline-block; width: 80%; float: right"
                                                     v-model="formRegister.password"
                                                     show-password
-                                                    prefix-icon="el-icon-lock"
-                                            ></el-input>
+                                                    prefix-icon="el-icon-lock"></el-input>
                                         </el-form-item>
 
                                         <!-- checkPassword -->
                                         <el-form-item label="确认密码" prop="checkPassword">
-                                            <el-input
+                                            <el-input style="display: inline-block; width: 80%; float: right"
                                                     v-model="formRegister.checkPassword"
                                                     show-password
-                                                    prefix-icon="el-icon-lock"
-                                            ></el-input>
+                                                    prefix-icon="el-icon-lock"></el-input>
+                                        </el-form-item>
+
+                                        <!-- Invitation Code -->
+                                        <el-form-item label="邀请码" prop="checkPassword">
+                                            <el-input style="display: inline-block; width: 80%; float: right"
+                                                    v-model="formRegister.invitationCode"
+                                                    clearable
+                                                    prefix-icon="el-icon-ice-cream-square"></el-input>
                                         </el-form-item>
 
                                         <!-- register button -->
@@ -50,8 +54,7 @@
                                                     style="width: 100%; font-weight: bold;"
                                                     type="primary"
                                                     :loading="loading"
-                                                    @click="register"
-                                            >注&nbsp;&nbsp;&nbsp;&nbsp;册
+                                                    @click="register">注&nbsp;&nbsp;&nbsp;&nbsp;册
                                             </el-button>
                                         </el-form-item>
 
@@ -110,7 +113,8 @@
                 formRegister: {
                     username: "",
                     password: "",
-                    checkPassword: ""
+                    checkPassword: "",
+                    invitationCode: "",
                 },
                 rules: {
                     username: [{validator: checkUserName, trigger: "blur"}],
@@ -127,7 +131,8 @@
                 let formData = {
                     name: user.name,
                     username: user.username,
-                    password: user.password
+                    password: user.password,
+                    invitcode: user.invitationCode,
                 };
                 // 表单验证
                 this.$refs["formRegister"].validate(valid => {
@@ -137,6 +142,7 @@
                         this.$store
                             .dispatch("user/Register", formData)
                             .then(() => {
+                                localStorage.setItem("username", formData.username);
                                 this.loading = false;
                                 this.$router.push({path: "/"});
                             })

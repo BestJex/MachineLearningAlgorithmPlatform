@@ -69,7 +69,6 @@ export default {
     this.seclectedCol.forEach(col => {
       selectedIndex.push(col[0])
     })
-    console.log(selectedIndex)
     fileApi
       .previewEcharts({ graphId: this.graphId, queries: selectedIndex, pid: this.pid })
       .then(res => {

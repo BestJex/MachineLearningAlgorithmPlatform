@@ -31,7 +31,6 @@ export default {
     };
   },
   getNode(e) {
-    console.log(this.shouldBegin)
     if (!this.shouldBegin.call(this, e)) {
       return;
     }

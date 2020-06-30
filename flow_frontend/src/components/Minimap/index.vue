@@ -28,7 +28,6 @@ export default {
   watch: {
     // detailWidth(width) {
     //   let height = Math.floor((width * this.canvasHeight) / this.canvasWidth)
-    //   console.log(width, height);
     //   const cfgs = {
     //     size: [width, height],
     //     container: 'minimap'

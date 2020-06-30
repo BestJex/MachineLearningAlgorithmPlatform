@@ -32,7 +32,6 @@ export default {
       trigger = this.trigger;
     } else {
       trigger = DEFAULT_TRIGGER;
-      console.warn('Behavior brush-select的trigger参数不合法，请输入drag、shift、ctrl或alt');
     }
     if (trigger === 'drag') {
       return {
@@ -216,8 +215,6 @@ export default {
     if (!code) {
       return;
     }
-    // 按住control键时，允许用户设置trigger为ctrl
-    // console.log(code)
     if (code.toLowerCase() === this.trigger.toLowerCase()
       || code.toLowerCase() === 'control') {
       this.keydown = true;

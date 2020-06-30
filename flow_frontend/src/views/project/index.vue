@@ -92,8 +92,7 @@
                 <el-button
                         :disabled="form.projectName === '' || form.owner === ''"
                         @click="createProject"
-                        type="primary"
-                >完 成
+                        type="primary">完 成
                 </el-button>
             </div>
         </el-dialog>
@@ -150,7 +149,7 @@
             }
         },
         created() {
-            this.getGraphs()
+            this.getGraphs();
         },
         methods: {
             getGraphs() {
@@ -209,7 +208,6 @@
                     multipleSelection.push(item.id)
                 })
                 this.multipleSelection = multipleSelection
-                console.log(this.multipleSelection)
             },
             deleteProjects() {
                 this.$confirm('此操作将永久删除该项目, 是否继续?', '提示', {
@@ -231,8 +229,8 @@
                     })
                     .catch(err => {
                         this.$message({
-                            type: err == 'cancel' ? 'info' : 'error',
-                            message: err == 'cancel' ? '已取消删除' : err.data
+                            type: err === 'cancel' ? 'info' : 'error',
+                            message: err === 'cancel' ? '已取消删除' : err.data
                         })
                     })
             }

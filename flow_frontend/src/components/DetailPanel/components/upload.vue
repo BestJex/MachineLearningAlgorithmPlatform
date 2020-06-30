@@ -157,7 +157,6 @@ export default {
       // this.graph.update(this.item, model)
     },
     onUploadErr(res, file, fileList) {
-      console.log(res)
     }
   }
 }

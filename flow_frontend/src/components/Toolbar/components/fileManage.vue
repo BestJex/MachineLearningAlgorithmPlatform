@@ -1,51 +1,47 @@
 <template>
     <div>
-        <el-upload
-                :before-remove="beforeRemove"
-                :before-upload="beforeUpload"
-                :data="uploadData"
-                :file-list="fileList"
-                :on-error="onUploadErr"
-                :on-remove="handleRemove"
-                :on-success="onUploadSucc"
-                :headers="{Authorization: 'JWT ' + token}"
-                accept=".jpg, .csv, .png"
-                :action="base_api + 'upload_file'"
-                class="upload-demo"
-                :show-file-list="false"
-                multiple>
-            <el-button size="small" type="primary">上传文件</el-button>
-        </el-upload>
-        <el-table
-                ref="multipleTable"
-                :data="fileTableData"
-                tooltip-effect="dark"
-                style="width: 100%"
-                :default-sort="{prop: 'date', order: 'descending'}"
-                @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="70"></el-table-column>
-            <el-table-column prop="date" label="日期" width="150" sortable>
-                <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="文件名" width="120"></el-table-column>
-            <el-table-column prop="size" label="文件大小" width="120" sortable></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
-                        编辑
-                    </el-button>
-                    <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
-                        删除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div style="margin-top: 20px">
-            <el-button @click="toggleSelectionDelete()">
-                批量删除
-            </el-button>
-            <el-button @click="toggleSelection()">取消选择</el-button>
-        </div>
+        <el-tabs :tab-position="tabPosition" style="height: 200px;">
+            <el-tab-pane label="文件管理">
+                <el-button @click="toggleSelectionDelete()"
+                           size="small"
+                           type="primary"
+                           style="margin-left: 10px">
+                    批量删除
+                </el-button>
+                <el-button @click="toggleSelection()" size="small" type="primary">取消选择</el-button>
+                <el-table
+                        ref="multipleTable"
+                        :data="fileTableData"
+                        tooltip-effect="dark"
+                        style="width: 100%"
+                        :default-sort="{prop: 'buildtime', order: 'descending'}">
+                    <el-table-column prop="buildtime" label="日期" width="200" sortable></el-table-column>
+                    <el-table-column prop="filename" label="文件名" width="200"></el-table-column>
+                    <el-table-column prop="size" label="文件大小" width="150" sortable></el-table-column>
+                </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="上传文件">
+                <el-upload
+                        :before-remove="beforeRemove"
+                        :before-upload="beforeUpload"
+                        :data="uploadData"
+                        :file-list="fileList"
+                        :on-error="onUploadErr"
+                        :on-remove="handleRemove"
+                        :on-success="onUploadSucc"
+                        :headers="{Authorization: 'JWT ' + token}"
+                        accept=".jpg, .csv, .png"
+                        :action="base_api + 'upload_file'"
+                        class="upload-demo"
+                        :show-file-list="false"
+                        multiple
+                        drag
+                        style="display: inline-block">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em>，大小不能超过10MB。</div>
+                </el-upload>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
@@ -59,15 +55,13 @@
         name: 'file-mange',
         data() {
             return {
-                fileTableData: [{
-                    date: '2016-05-03',
-                    name: 'iris.csv',
-                    size: '1',
-                }, {
-                    date: '2016-05-02',
-                    name: 'train.csv',
-                    size: '2',
-                }],
+                tabPosition: 'left',
+                // 从服务端搜索数据
+                restaurants: [],
+                state: '',
+                timeout: null,
+
+                fileTableData: [],
                 multipleSelection: [],
                 uploadData: {
                     graphId: 0
@@ -98,11 +92,24 @@
             this.uploadData.graphId = this.graphId;
             // 1.获取文件列表
             let projectId = this.$route.params.id;
+            console.log(typeof projectId);
             this.axios({
-                methods: 'get',
-                url: `${this.base_api}user/file?username=${localStorage.getItem('username')}&project=${projectId}`,
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
             }).then(res => {
-                this.fileTableData = res.data;
+                this.fileTableData = Array(res.data.data.list)[0];
+                for (let i = 0; i < this.fileTableData.length; i++) {
+                    let item = this.fileTableData[i];
+                    if (item.graphid.toString() !== projectId) {
+                        this.fileTableData.splice(i, 1);
+                        console.log(i);
+                    }
+                    let TIndex = item.buildtime.indexOf('T');
+                    let pointIndex = item.buildtime.indexOf('.');
+                    item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+                    item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+                }
+                console.log(this.fileTableData);
             }).catch(err => {
                 this.$message({
                     message: err,
@@ -110,12 +117,43 @@
                 });
             });
         },
+        mounted() {
+            this.restaurants = this.loadAll();
+        },
         methods: {
+            loadAll() {
+                let fileListLength = this.fileTableData.length;
+                let fileArray = Array(fileListLength);
+                for (let i = 0; i < this.fileTableData.length; i++) {
+                    fileArray[i] = {
+                        "value": this.fileTableData[i].name,
+                    };
+                }
+                return fileArray;
+            },
+            querySearchAsync(queryString, cb) {
+                const restaurants = this.restaurants;
+                const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+
+                clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    cb(results);
+                }, 300 * Math.random());
+            },
+            createStateFilter(queryString) {
+                return (state) => {
+                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            handleSelect(item) {
+                console.log(item);
+            },
+
             handleEdit(index, row) {
-                console.log(index, row);
+
             },
             handleDelete(index, row) {
-                console.log(index, row);
+
             },
             toggleSelection(rows) {
                 if (rows) {
@@ -186,16 +224,13 @@
                                 // 存在重名文件
                                 return this.$confirm(`文件 ${file.name} 已存在，确认覆盖吗？`)
                             } else {
-                                console.log('不存在重名');
                                 return resolve()
                             }
                         })
                         .then(res => {
-                            console.log('确认覆盖');
                             return resolve()
                         })
                         .catch(err => {
-                            console.log(err);
                             return reject()
                         })
                 })
@@ -210,7 +245,6 @@
                 this.$store.commit('app/SET_FILELIST', res.data)
             },
             onUploadErr(res, file, fileList) {
-                console.log(res)
             }
         }
     }

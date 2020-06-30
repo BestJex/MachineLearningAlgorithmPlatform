@@ -9,8 +9,7 @@
               :key="node.label"
               :label="node.label"
               prop="node.name"
-              v-for="node in node_detail"
-            >
+              v-for="node in node_detail">
               <!-- 输入框 -->
               <el-input type="text" @change="changeValue" v-if="node.type==='input'" v-model="node.value"></el-input>
               <!-- 滑动器 -->
@@ -34,8 +33,7 @@
                 @change="changeValue"
                 placeholder="请选择"
                 v-if="node.type=='selectFile'"
-                v-model="node.value"
-              >
+                v-model="node.value">
                 <el-option
                   :key="item.id"
                   :label="item.name"
@@ -143,7 +141,6 @@ export default {
           if (item.select === true && item.target.getType() === 'node') {
             self.status = 'node-selected'
             self.item = item.target
-            console.log(item.target.getModel())
             // 存入vuex
             this.$store.commit(
               'app/SET_SETSELECTEDNODEID',
@@ -196,7 +193,6 @@ export default {
           loading.close()
         })
         .catch(err => {
-          console.error(err)
           loading.close()
         })
     }

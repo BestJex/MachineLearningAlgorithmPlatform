@@ -65,7 +65,6 @@ export default {
             if (self.shouldUpdate.call(self, e)) {
                 graph.setItemState(item, 'selected', true);
             }
-            console.log(item, item.getModel())
             eventBus.$emit('nodeselectchange', { target: item, select: true });
         }
         graph.setAutoPaint(autoPaint);

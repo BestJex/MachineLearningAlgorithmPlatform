@@ -3,11 +3,11 @@ export default {
     // validation
     if (typeof utf8_token !== 'string') throw 'Invalid token specified'
     let arr = utf8_token.split('.')
-    if (arr.length != 3) throw 'Illegal JWT token.'
+    if (arr.length !== 3) throw 'Illegal JWT token.'
     let payload = arr[1]
 
     // decode
-    var decoded = payload.replace(/-/g, "+").replace(/_/g, "/")
+    let decoded = payload.replace(/-/g, "+").replace(/_/g, "/");
     switch (decoded.length % 4) {
       case 0:
         break
@@ -24,7 +24,7 @@ export default {
     // atob
     let result = (input => {
       let str = String(input).replace(/=+$/, '')
-      if (str.length % 4 == 1) throw "The string to be decoded is not correctly encoded."
+      if (str.length % 4 === 1) throw "The string to be decoded is not correctly encoded."
       let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
       for (
         var bc = 0, bs, buffer, idx = 0, output = '';

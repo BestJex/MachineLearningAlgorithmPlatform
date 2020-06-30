@@ -17,7 +17,6 @@ export default {
         };
     },
     onCanvasMouseenter() {
-        // console.log(this.graph.get('canvas'));
         const canvas = document.getElementById('graph-container').children[0]
         canvas.style.cursor = 'crosshair'
         // this.graph.paint();

@@ -87,16 +87,16 @@ export default {
       let detailpannel = document.getElementById('detailpannel')
       let resizer = document.getElementById('detail-resizer')
 
-      var preDetailWidth = this.detailWidth
+      const preDetailWidth = this.detailWidth;
       document.onmousemove = e => {
         this.onResizeMouseMove(e, preDetailWidth, detailpannel, resizer)
       }
 
       document.onmouseup = e => {
         this.isActive = false
-        var nowDetailpannelWidth = parseInt(
-          detailpannel.style.width.replace('px', '')
-        )
+        const nowDetailpannelWidth = parseInt(
+                detailpannel.style.width.replace('px', '')
+        );
         if (nowDetailpannelWidth !== this.detailWidth) {
           this.detailWidth = nowDetailpannelWidth
         }
@@ -147,7 +147,7 @@ export default {
 .detailpannel {
   height: 100%;
   position: absolute;
-  right: 0px;
+  right: 0;
   z-index: 2;
   // background: #f7f9fb;
   background: rgb(246, 249, 252);

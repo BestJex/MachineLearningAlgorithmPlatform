@@ -78,7 +78,6 @@
           title="成组"
         ></i>
         <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-        <!-- <el-button @click="consoleData" type="info">控制台输出数据</el-button> -->
         <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
         <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
         <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
@@ -381,7 +380,6 @@ export default {
       // };
       // // this.command.executeCommand("add", "group", model);
       // this.selectedItem.forEach(item => {
-      //   console.log(item);
       // });
       //this.getPosition(this.selectedItem);
     },
@@ -453,17 +451,14 @@ export default {
         this.graph.setItemState(edge, 'selected', true)
       })
       this.selectedItem = nodes
-      console.log(this.selectedItem)
       this.graph.paint()
     },
 
     consoleData() {
-      var data = this.graph.save()
+      const data = this.graph.save();
       Object.assign(data, { id: 1 })
       // graphApi.uploadJson(data).then(res => {
-      //   console.log(res)
       // })
-      console.log(JSON.stringify(data))
     },
     runProject() {
       let graph = this.graph.save()

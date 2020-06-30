@@ -348,7 +348,6 @@ export default {
           this.$store.commit('app/SET_ISSHOWNODEMANAGE', false)
         })
         .catch(err => {
-          console.log(err)
           this.loading = false
         })
     },
@@ -375,7 +374,6 @@ export default {
       this.fileList = []
     },
     onUploadErr(res, file, fileList) {
-      console.log(res)
       this.loading = false
     }
   }

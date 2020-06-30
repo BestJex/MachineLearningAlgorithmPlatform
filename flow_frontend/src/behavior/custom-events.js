@@ -6,7 +6,7 @@ export default {
     }
   },
   ondblclick(e) {
-    console.log('drag start')
+
   },
   onmouseout(e) {
     this.graph.setMode('default')

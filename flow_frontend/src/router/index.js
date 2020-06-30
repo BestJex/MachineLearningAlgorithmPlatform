@@ -57,6 +57,10 @@ export default new Router({
     {
       path: '/register',
       component: () => import('@/views/register/index'),
-    }
+    },
+    {
+      path: '/retrievePassword',
+      component: () => import('@/views/retrievePassword/index'),
+    },
   ]
 })

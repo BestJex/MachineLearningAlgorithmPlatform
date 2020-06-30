@@ -18,7 +18,8 @@
                     <div class="user_info">
                         <div class="header">
                             <img src="@/assets/img/logo.jpg" alt="" class="head">
-                            <p class="modify">修改头像</p></div>
+                            <!--                            <p class="modify">修改头像</p>-->
+                        </div>
                         <div class="right_c">
                             <div class="nick">
                                 <span class="mod" @click="changeInformation()" v-if="!changeInformationFlag">
@@ -35,7 +36,8 @@
                                         <span v-if="!changeInformationFlag">
                                             {{item.value ? item.value : "不告诉你！"}}
                                         </span>
-                                        <input v-model="item.value" v-if="changeInformationFlag"></input>
+                                        <input v-model="item.value" v-if="changeInformationFlag"
+                                               :disabled="item.id === 1"></input>
                                     </div>
                                 </li>
                             </ul>
@@ -49,6 +51,33 @@
                     <h3 class="acc_t">
                         <strong>项目列表</strong>
                     </h3>
+                </div>
+                <div class="acc_pass_con">
+                    <div style="margin-bottom: 20px;">
+                        <span>等级：</span>
+                        <span>{{userLevel}}</span>
+                        <span style="margin-left: 100px;">已上传文件总数：</span>
+                        <span>{{userFileCount}}</span>
+                        <span style="margin-left: 100px;">已上传文件总大小：</span>
+                        <span>{{(userTotalSize / 1024).toFixed(2)}}KB / {{userLevel + 1}}G</span>
+                    </div>
+                    <el-table
+                            ref="multipleTable"
+                            :data="fileTableData"
+                            tooltip-effect="dark"
+                            style="width: 100%"
+                            :default-sort="{prop: 'buildtime', order: 'descending'}">
+                        <el-table-column prop="buildtime" label="日期" width="200" sortable></el-table-column>
+                        <el-table-column prop="filename" label="文件名" width="200"></el-table-column>
+                        <el-table-column prop="size" label="文件大小" width="200" sortable></el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </div>
             </div>
             <!--修改密码-->
@@ -131,6 +160,8 @@
 </template>
 
 <script>
+    import Message from "element-ui/packages/message/src/main";
+
     export default {
         name: "PersonalCenter",
         data() {
@@ -152,14 +183,23 @@
                     {id: 5, name: "phone", title: "手机", value: ''},
                     {id: 6, name: "mailbox", title: "邮箱", value: ''},
                 ],
+                userLevel: 0,
+                userTotalSize: 0,
+                userFileCount: 0,
 
                 oldPassword: "",
                 newPassword: "",
                 confirmNewPassword: "",
                 changePasswordError: "",
+
+                fileTableData: [],
             };
         },
         methods: {
+            handleDelete(index, row) {
+                console.log('index = ', index);
+            },
+
             asideClick(itemId) {
                 this.asideIndex = itemId;
             },
@@ -190,7 +230,6 @@
                     url: 'http://39.105.21.62/flow/api/user/chapassword',
                     data: changePasswordParam
                 }).then(res => {
-                    console.log(res);
                     this.$message('密码更改成功！');
                 }).catch(err => {
                     this.$message({
@@ -203,6 +242,23 @@
                 this.changeInformationFlag = true;
             },
             saveChangeInformation() {
+                let phone = this.userInfo[3].value;
+                if (!/^1[34578]\d{9}$/.test(phone)) {
+                    Message({
+                        message: "请填写正确的手机号！",
+                        type: "warning",
+                    });
+                    return
+                }
+                let mailbox = this.userInfo[4].value;
+                if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(mailbox)) {
+                    Message({
+                        message: "请填写正确的邮箱！",
+                        type: "warning",
+                    });
+                    return
+                }
+
                 this.changeInformationFlag = false;
                 let changeData = {
                     username: localStorage.getItem('username'),
@@ -217,7 +273,7 @@
                     data: changeData,
                 }).then(res => {
                     this.$message({
-                        message: res,
+                        message: '保存成功！',
                         type: 'success'
                     });
                 }).catch(err => {
@@ -234,9 +290,8 @@
                 method: 'get',
                 url: `http://39.105.21.62/flow/api/user/information?username=${localStorage.getItem('username')}`,
             }).then(res => {
-                console.log(res);
                 this.userInfo[1].value = res.data.data.name;
-                this.userInfo[2].value = res.data.data.gender;
+                this.userInfo[2].value = res.data.data.gender === 2 ? '男' : '女';
                 this.userInfo[3].value = res.data.data.phone;
                 this.userInfo[4].value = res.data.data.mailbox;
             }).catch(err => {
@@ -244,7 +299,40 @@
                     message: err,
                     type: 'error'
                 });
-            })
+            });
+            // 2.获取用户等级、上传文件总数、总文件大小
+            this.axios({
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/fileinf?username=${localStorage.getItem('username')}`,
+            }).then(res => {
+                this.userLevel = res.data.data.userlvl;
+                this.userTotalSize = res.data.data.totalsize;
+                this.userFileCount = res.data.data.filecount;
+            }).catch(err => {
+                this.$message({
+                    message: err,
+                    type: 'error'
+                });
+            });
+            // 3.获取用户所有上传文件
+            this.axios({
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+            }).then(res => {
+                this.fileTableData = Array(res.data.data.list)[0];
+                for (let i = 0; i < this.fileTableData.length; i++) {
+                    let item = this.fileTableData[i];
+                    let TIndex = item.buildtime.indexOf('T');
+                    let pointIndex = item.buildtime.indexOf('.');
+                    item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+                    item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+                }
+            }).catch(err => {
+                this.$message({
+                    message: err,
+                    type: 'error'
+                });
+            });
         }
     }
 </script>
