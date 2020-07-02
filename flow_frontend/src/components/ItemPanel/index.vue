@@ -116,15 +116,19 @@
 </script>
 
 <style lang="scss" scoped>
+    // 隐藏滚动条
     ::-webkit-scrollbar {display:none}
+
     .itempannel {
-        height: 100%;
         position: absolute;
         left: 0;
         z-index: 2;
         background: rgb(246, 249, 252);
         border-right: 1px solid #e6e9ed;
+        /*以下两行代码*/
+        height: 100%;
         overflow: scroll;
+        /*设置超出滚动*/
     }
 
     .itempannel ul {
