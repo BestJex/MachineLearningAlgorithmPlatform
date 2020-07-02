@@ -32,6 +32,14 @@ export default {
             data
         })
     },
+	
+    copyGraph(data) {
+        return request({
+            url: '/graph/copy',
+            method: 'post',
+            data
+        })
+    },
 
     deleteGraphs(data) {
         return request({

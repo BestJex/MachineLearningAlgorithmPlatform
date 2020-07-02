@@ -69,13 +69,14 @@
                 graphApi
                     .getGraphById({graphId: this.id})
                     .then(res => {
-                        this.data = res.data
-                        this.isRunning = this.data.status == 'loading'
-                        this.forEach(this.data)
-                        this.$store.commit('app/SET_MAXID', this.max_id)
-                        this.graph.read(this.data)
+                        this.data = res.data;
+						// console.log(this.data);
+                        this.isRunning = this.data.status == 'loading';
+                        this.forEach(this.data);
+                        this.$store.commit('app/SET_MAXID', this.max_id);
+                        this.graph.read(this.data);
                         if (this.data.nodes.length) {
-                            this.graph.fitView(100)
+                            this.graph.fitView(100);
                         }
                     })
                     .catch(err => {
