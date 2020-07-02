@@ -8,12 +8,13 @@ import VueIconFont from 'vue-icon-font'
 import axios from 'axios'
 import VeLine from 'v-charts/lib/line.common'
 import VeScatter from 'v-charts/lib/scatter.common'
-
+import Contextmenu from 'vue-contextmenujs'
 import './permission'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI,{size:'mini'})
 Vue.use(VueIconFont)
+Vue.use(Contextmenu)
 Vue.component(VeLine.name, VeLine)
 Vue.component(VeScatter.name, VeScatter)
 Vue.prototype.axios = axios

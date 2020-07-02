@@ -283,17 +283,6 @@
 </style>
 
 <style scoped>
-    .itempannel {
-        height: 100%;
-        position: absolute;
-        left: 0;
-        z-index: 2;
-        background: #f7f9fb;
-        width: 230px;
-        padding-top: 8px;
-        border-right: 1px solid #e6e9ed;
-    }
-
     .itempannel ul {
         padding: 0 0 0 16px;
     }

@@ -120,12 +120,8 @@ export default {
 }
 .drag-me {
   cursor: move;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
   &:active {
     cursor: move;
-    cursor: -webkit-grabbing;
-    cursor: -moz-grabbing;
   }
   &:before {
     content: '.';

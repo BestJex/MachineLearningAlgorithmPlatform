@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-                :style="`left: ${itemWidth}px;`"
+                :style="`left: ${itemWidth}px; height: 500px; margin-top: 100px;`"
                 @mousedown="onResizeMouseDown"
                 class="resizer"
                 id="item-resizer"></div>
@@ -116,6 +116,7 @@
 </script>
 
 <style lang="scss" scoped>
+    ::-webkit-scrollbar {display:none}
     .itempannel {
         height: 100%;
         position: absolute;
@@ -123,6 +124,7 @@
         z-index: 2;
         background: rgb(246, 249, 252);
         border-right: 1px solid #e6e9ed;
+        overflow: scroll;
     }
 
     .itempannel ul {

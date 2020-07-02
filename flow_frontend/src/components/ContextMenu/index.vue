@@ -5,8 +5,7 @@
         class="el-select-dropdown__item"
         v-for="menu in menus"
         :key="menu.key"
-        @click="handleClick(menu)"
-      >{{menu.name}}</li>
+        @click="handleClick(menu)">{{menu.name}}</li>
     </ul>
   </div>
 </template>

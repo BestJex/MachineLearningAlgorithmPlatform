@@ -1,7 +1,7 @@
 const getters = {
   isFocusCanvas: state => state.app.is_focus_canvas,
   canvasWidth: state => state.app.canvas_width,
-  canvasHeight: state => state.app.canvas_height,
+  canvasHeight: state => state.app.canvas_height - 62,
   detailWidth: state => state.app.detailpannel_width,
   itemWidth: state => state.app.itempannel_width,
   isAllowDrop: state => state.app.allow_drop,

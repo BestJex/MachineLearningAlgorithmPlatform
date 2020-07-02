@@ -4,7 +4,7 @@
       <context-menu />
       <!--toolbar-->
       <toolbar />
-      <div :style="`height:${container_height}px;`" class="bottom-container">
+      <div class="bottom-container">
         <!--itempannel-->
         <item-panel />
         <!--detailpannel-->
