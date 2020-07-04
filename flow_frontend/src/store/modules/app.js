@@ -117,16 +117,6 @@ const actions = {
     commit('SET_CANVASWIDTH', canvas_width)
     commit('SET_CANVASHEIGHT', canvas_height)
   },
-  getProjectFileList({ commit }, graphId) {
-    fileApi.getProjectFileList({ graphId: graphId }).then(res => {
-      commit('SET_FILELIST', res.data)
-    })
-  },
-  getNodeList({ commit }) {
-    graphApi.getNodeTemplate().then(res => {
-      commit('SET_NODELIST', res.data)
-    })
-  },
   getCategory({ commit }) {
     graphApi.getCategory().then(res => {
       commit('SET_CATEGORY', res.data)

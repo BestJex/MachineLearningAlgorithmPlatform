@@ -80,6 +80,7 @@
 
                 page: null,
                 command: null,
+                nodeList: null,
                 filterText: '',
                 offsetX: 0,
                 clientX: 0,
@@ -89,10 +90,12 @@
             }
         },
         computed: {
-            ...mapGetters(['isAllowDrop', 'nodeList']),
+            ...mapGetters(['isAllowDrop']),
         },
         created() {
             this.bindEvent();
+            // 1.获取左侧树形图
+            this.getTree();
         },
         watch: {
             filterText(val) {
@@ -100,6 +103,21 @@
             },
         },
         methods: {
+            getTree() {
+                this.axios({
+                    method: 'get',
+                    url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
+                }).then(res => {
+                    this.nodeList = res.data.data.path.data;
+                    console.log(res);
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    });
+                });
+            },
+
             handleCheckChange(data, checked, indeterminate) {
                 // console.log(data);
             },
@@ -167,18 +185,19 @@
                     itempannel.style.width = 250 + 'px';
                 } else {
                     itempannel.style.width = 240 + 'px';
-                }
-                if (this.initTree === false) {
-                    this.initTree = true;
-                    console.log(this.nodeList);
-                    for (let i = 0; i < this.nodeList.length; i++) {
-                        this.nodeList[i]['display'] = true;
-                        if (this.nodeList[i].children) {
-                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
-                                this.nodeList[i].children[j]['display'] = true;
-                            }
-                        }
-                    }
+                    // 保存修改的树形图
+                    this.axios({
+                        method: 'post',
+                        url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
+                    }).then(res => {
+                        this.getTree();
+                    }).catch(err => {
+                        this.$message({
+                            message: err,
+                            type: 'error'
+                        });
+                    });
+                    this.getTree();
                 }
             },
 

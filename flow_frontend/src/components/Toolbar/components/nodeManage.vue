@@ -131,8 +131,7 @@
                 :action="`${base_api}script_manage`"
                 :headers="{Authorization: 'JWT ' + token}"
                 class="upload-demo"
-                ref="upload"
-              >
+                ref="upload">
                 <el-button size="small" type="primary">选取脚本</el-button>
               </el-upload>
             </el-form-item>
@@ -146,15 +145,13 @@
         size="small"
         style="margin-top: 12px;"
         type="primary"
-        v-if="this.active != 0"
-      >上 一 步</el-button>
+        v-if="this.active != 0">上 一 步</el-button>
       <el-button
         @click="next"
         size="small"
         style="margin-top: 12px;"
         type="primary"
-        v-if="this.active != this.countStep - 1"
-      >下 一 步</el-button>
+        v-if="this.active != this.countStep - 1">下 一 步</el-button>
       <el-button
         @click="save"
         size="small"

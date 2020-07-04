@@ -57,13 +57,6 @@ export default {
         })
     },
 
-    getNodeTemplate() {
-        return request({
-            url: '/node_template/',
-            method: 'get',
-        })
-    },
-
     runProject(data) {
         return request({
             url: '/run_project',
@@ -71,6 +64,7 @@ export default {
             data
         })
     },
+
     runNode(data) {
         return request({
             url: '/run_node',

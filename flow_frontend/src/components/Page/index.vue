@@ -73,7 +73,7 @@
         created() {
             initBehavors();
             this.getGraph();
-            this.$store.dispatch('app/getProjectFileList', this.id);
+            // this.$store.dispatch('app/getProjectFileList', this.id);
         },
         mounted() {
             this.$nextTick(() => {
@@ -87,7 +87,7 @@
                         {
                             label: "返回(B)",
                             onClick: () => {
-                                console.log("返回(B)");
+                                // console.log("返回(B)");
                             },
                             disabled: false,
                             icon: 'el-icon-back',

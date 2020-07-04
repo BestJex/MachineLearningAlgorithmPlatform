@@ -15,13 +15,6 @@ export default {
             data
         })
     },
-    getProjectFileList(data) {
-        return request({
-            url: '/project_file_list',
-            method: 'GET',
-            params: data
-        })
-    },
     previewCsv(data) {
         return request({
             url: '/preview_csv',

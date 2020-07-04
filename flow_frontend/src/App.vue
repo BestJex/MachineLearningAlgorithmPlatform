@@ -27,8 +27,6 @@
             if (this.token) {
                 WebSocket.initWebSocket()
             }
-            this.$store.dispatch('app/getCategory')
-            this.$store.dispatch('app/getNodeList')
         }
     }
 </script>

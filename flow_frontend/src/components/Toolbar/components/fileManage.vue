@@ -67,7 +67,7 @@
 			}
 		},
 		computed: {
-			...mapGetters(['fileList', 'token']),
+			...mapGetters(['token']),
 			graphId: {
 				get() {
 					return this.$route.params.id || this.$store.getters.graphId

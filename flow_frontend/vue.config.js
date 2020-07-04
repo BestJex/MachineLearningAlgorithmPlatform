@@ -26,6 +26,7 @@ module.exports = {
     outputDir: 'flow',
     assetsDir: 'assets',
     lintOnSave: process.env.NODE_ENV === 'development',
+    crossorigin: 'anonymous',
     productionSourceMap: false,
     devServer: {
         port: port,
@@ -35,13 +36,12 @@ module.exports = {
             errors: true
         },
         proxy: {
-            '/api': { //业务类的接口请求地址，这里的api可以是后端的工程名
+            "/api": {
+                target:'http://39.105.21.62/flow/api',
                 changeOrigin: true,
-                target: 'http://39.105.21.62/'
-            },
-            '/': { //websoket请求接口地址
-                ws: true,
-                target: 'ws://39.105.21.62/'
+                pathRewrite: {
+                    '^/api': ''
+                }
             }
         }
     },
