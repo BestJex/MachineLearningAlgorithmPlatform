@@ -70,46 +70,48 @@
         computed: {
             detailWidth: {
                 get() {
-                    return this.$store.getters.detailWidth
+                    return this.$store.getters.detailWidth;
                 },
                 set(val) {
-                    this.$store.dispatch('app/setDetailPannelWidth', val)
+                    this.$store.dispatch('app/setDetailPannelWidth', val);
                 }
             }
         },
         methods: {
             clickDetailPanel() {
-                this.$store.dispatch('app/setIsFocusCanvas', false)
+                this.$store.dispatch('app/setIsFocusCanvas', false);
             },
-            onResizeMouseDown(e) {
-                this.isActive = true
-                this.startX = e.clientX
 
-                let detailpannel = document.getElementById('detailpannel')
-                let resizer = document.getElementById('detail-resizer')
+            onResizeMouseDown(e) {
+                this.isActive = true;
+                this.startX = e.clientX;
+
+                let detailpannel = document.getElementById('detailpannel');
+                let resizer = document.getElementById('detail-resizer');
 
                 const preDetailWidth = this.detailWidth;
                 document.onmousemove = e => {
-                    this.onResizeMouseMove(e, preDetailWidth, detailpannel, resizer)
+                    this.onResizeMouseMove(e, preDetailWidth, detailpannel, resizer);
                 }
 
                 document.onmouseup = e => {
-                    this.isActive = false
+                    this.isActive = false;
                     const nowDetailpannelWidth = parseInt(
                         detailpannel.style.width.replace('px', '')
                     );
                     if (nowDetailpannelWidth !== this.detailWidth) {
-                        this.detailWidth = nowDetailpannelWidth
+                        this.detailWidth = nowDetailpannelWidth;
                     }
                 }
             },
+
             onResizeMouseMove(e, preDetailWidth, detailpannel, resizer) {
                 if (e.witch === 0) {
-                    this.isActive = false
+                    this.isActive = false;
                 }
 
                 if (this.isActive) {
-                    this.endX = e.clientX
+                    this.endX = e.clientX;
 
                     let nowDetailpannelWidth = parseInt(
                         detailpannel.style.width.replace('px', '')
@@ -119,24 +121,24 @@
                         nowDetailpannelWidth >= this.MIN_DETAIL_WIDTH
                     ) {
                         detailpannel.style.width =
-                            preDetailWidth + this.startX - this.endX + 'px'
-                        resizer.style.right = preDetailWidth + this.startX - this.endX + 'px'
+                            preDetailWidth + this.startX - this.endX + 'px';
+                        resizer.style.right = preDetailWidth + this.startX - this.endX + 'px';
                     }
 
                     nowDetailpannelWidth = parseInt(
                         detailpannel.style.width.replace('px', '')
                     )
-                    let nowResizerRight = parseInt(resizer.style.right.replace('px', ''))
+                    let nowResizerRight = parseInt(resizer.style.right.replace('px', ''));
 
                     if (nowDetailpannelWidth > this.MAX_DETAIL_WIDTH) {
-                        detailpannel.style.width = `${this.MAX_DETAIL_WIDTH}px`
-                        resizer.style.right = `${this.MAX_DETAIL_WIDTH}px`
+                        detailpannel.style.width = `${this.MAX_DETAIL_WIDTH}px`;
+                        resizer.style.right = `${this.MAX_DETAIL_WIDTH}px`;
                     } else if (
                         nowDetailpannelWidth < this.MIN_DETAIL_WIDTH ||
                         nowResizerRight < this.MIN_DETAIL_WIDTH
                     ) {
-                        detailpannel.style.width = `${this.MIN_DETAIL_WIDTH}px`
-                        resizer.style.right = `${this.MIN_DETAIL_WIDTH}px`
+                        detailpannel.style.width = `${this.MIN_DETAIL_WIDTH}px`;
+                        resizer.style.right = `${this.MIN_DETAIL_WIDTH}px`;
                     }
                 }
             }

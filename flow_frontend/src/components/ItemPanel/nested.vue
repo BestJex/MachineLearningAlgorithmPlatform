@@ -47,8 +47,8 @@
         name: 'nested-draggable',
         created() {
             eventBus.$on('afterAddPage', page => {
-                this.page = page
-                this.command = page.command
+                this.page = page;
+                this.command = page.command;
             })
         },
         methods: {
