@@ -13,8 +13,8 @@ class command {
         datas.map(data => {
             let model = data
             if (key === 'add') {
-                store.dispatch('app/uniqueId')
-                model.id = data.type + store.state.app.max_id
+                store.dispatch('app/uniqueId');
+                model.id = data.type + store.state.app.max_id;
             }
             if (key === 'delete') {
                 if (data.getType() === 'node') {

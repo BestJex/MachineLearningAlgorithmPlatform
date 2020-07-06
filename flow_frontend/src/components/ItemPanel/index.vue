@@ -117,7 +117,9 @@
 
 <style lang="scss" scoped>
     // 隐藏滚动条
-    ::-webkit-scrollbar {display:none}
+    ::-webkit-scrollbar {
+        display: none
+    }
 
     .itempannel {
         position: absolute;

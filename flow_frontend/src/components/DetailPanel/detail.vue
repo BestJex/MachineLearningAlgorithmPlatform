@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="pannel" id="node_detailpannel" v-if="status=='node-selected'">
+    <div class="pannel" id="node_detailpannel" v-if="status==='node-selected'">
       <div class="pannel-title">模型详情</div>
       <div class="block-container">
         <el-scrollbar :native="false" :noresize="true" class="scroll-container">
           <el-form class="form" :style="`max-height: ${docHeight - 380}px;`" label-position="top">
             <el-form-item
-              :key="node.label"
-              :label="node.label"
+              :key="node.name"
+              :label="node.name"
               prop="node.name"
               v-for="node in node_detail">
               <!-- 输入框 -->
@@ -18,55 +18,49 @@
                 input-size="mini"
                 show-input
                 v-if="node.type==='slider'"
-                v-model="node.value"
-              ></el-slider>
+                v-model="node.value"></el-slider>
               <!-- 计数器 -->
               <el-input-number
                 @change="changeValue"
                 v-if="node.type==='inputNumber'"
-                v-model="node.value"
-              ></el-input-number>
+                v-model="node.value"></el-input-number>
               <!-- 多选框 -->
               <el-checkbox @change="changeValue" v-if="node.type==='checkbox'" v-model="node.value"></el-checkbox>
               <!-- 选择文件 -->
               <el-select
                 @change="changeValue"
                 placeholder="请选择"
-                v-if="node.type=='selectFile'"
+                v-if="node.type==='selectFile'"
                 v-model="node.value">
                 <el-option
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
-                  v-for="item in fileList"
-                ></el-option>
+                  v-for="item in fileList"></el-option>
               </el-select>
               <!-- 下载文件 -->
               <div style="text-align: center;" v-if="node.type==='download'">
-                <el-button @click="downloadFile" plain type="info">{{ node.label }}</el-button>
+                <el-button @click="downloadFile" plain type="info">{{ node.name }}</el-button>
               </div>
               <!-- 预览文件 -->
-              <detail-preview :node_id="item.getModel().id" v-if="node.type == 'preview'" />
+              <detail-preview :node_id="item.getModel().id" v-if="node.type === 'preview'" />
               <visual-file
                 :node_id="item.getModel().id"
-                v-if="node.type=='visualization'"
-                v-show="!isShowEcharts"
-              />
+                v-if="node.type==='visualization'"
+                v-show="!isShowEcharts"/>
             </el-form-item>
             <el-form-item
               :key="point.id"
               :label="`输出${index}`"
               v-for="(point, index) in point_detail"
-              v-show="point.type === 'output'"
-            >
+              v-show="point.type === 'output'">
               <!-- 入度出度选择器 -->
               <el-select @change="changeValue" placeholder="请选择" v-model="point.func">
                 <el-option
                   :key="item.id"
                   :label="item.value"
                   :value="item.value"
-                  v-for="item in point_options"
-                ></el-option>
+                  v-for="item in point_options"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -146,8 +140,8 @@ export default {
               'app/SET_SETSELECTEDNODEID',
               item.target.getModel().id
             )
-            self.node_detail = item.target.getModel().node_detail
-            self.point_detail = item.target.getModel().point_detail
+            self.node_detail = item.target.getModel().node_detail;
+            self.point_detail = item.target.getModel().point_detail;
           } else {
             self.status = 'canvas-selected'
             this.$store.commit('app/SET_SETSELECTEDNODEID', null)

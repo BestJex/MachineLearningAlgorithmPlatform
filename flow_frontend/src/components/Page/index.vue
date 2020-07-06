@@ -131,6 +131,7 @@
                     this.$router.push('/')
                 })
             },
+
             forEach(json) {
                 for (const val in json) {
                     if (val === 'id' && typeof json[val] === 'string') {
@@ -144,6 +145,7 @@
                     }
                 }
             },
+
             init() {
                 const height = this.canvasHeight;
                 const width = this.canvasWidth;
@@ -152,6 +154,9 @@
                     container: 'graph-container',
                     height: height,
                     width: width,
+                    defaultNode: {
+                        type: 'modelRect',
+                    },
                     modes: {
                         // 支持的 behavior
                         default: this.supportBehavior,
@@ -168,7 +173,6 @@
                 })
                 const {editor, command} = this.$parent
                 editor.emit('afterAddPage', {graph: this.graph, command})
-
                 this.readData()
             },
             readData() {
@@ -180,7 +184,6 @@
             clickCanvas() {
                 this.$store.dispatch('app/setIsFocusCanvas', true)
             },
-            // eslint-disable-next-line no-unused-vars
             handleDrop(e) {
                 this.$store.commit('app/SET_ALLOWDROP', true)
             }

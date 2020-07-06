@@ -61,6 +61,7 @@
     import eventBus from '@/utils/eventBus'
     import item from '@/statics/item'
     import {mapGetters} from 'vuex'
+    import qs from 'qs'
 
     export default {
         data() {
@@ -109,7 +110,6 @@
                     url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
                 }).then(res => {
                     this.nodeList = res.data.data.path.data;
-                    console.log(res);
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -186,9 +186,14 @@
                 } else {
                     itempannel.style.width = 240 + 'px';
                     // 保存修改的树形图
+                    let data = {
+                        graph_id: this.$route.params.id,
+                        nodeList: JSON.stringify(this.nodeList),
+                    }
                     this.axios({
                         method: 'post',
-                        url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
+                        url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/updatetree`,
+                        data: data,
                     }).then(res => {
                         this.getTree();
                     }).catch(err => {
@@ -197,7 +202,6 @@
                             type: 'error'
                         });
                     });
-                    this.getTree();
                 }
             },
 
@@ -213,6 +217,13 @@
                 this.clientY = e.clientY;
             },
 
+            /**
+             * 拖拽结束时（可能未成功）触发的事件
+             * @param node：被拖拽节点对应的 Node
+             * @param _node：结束拖拽时最后进入的节点（可能为空）
+             * @param p：被拖拽节点的放置位置（before、after、inner）
+             * @param e：event
+             */
             handleElDragEnd(node, _node, p, e) {
                 if (this.isAllowDrop) {
                     const item = JSON.parse(JSON.stringify(node.data));
@@ -224,7 +235,14 @@
                         const xy = graph.getPointByClient(e.x, e.y);
                         data.x = xy.x;
                         data.y = xy.y;
-                        data.size = item.size.split('*').map(Number);
+                        data.node_detail = [];
+                        data.name = node.data.name;
+                        data.label = node.data.name;
+                        for (const [key, value] of Object.entries(node.data.information.Parametersattibute)) {
+                            value.label = value.name;
+                            data.node_detail.push(value);
+                        }
+                        data.shape = "customNode";
                         data.type = 'node';
                         this.command.executeCommand('add', [data]);
                     }
@@ -232,6 +250,11 @@
                 }
             },
 
+            /**
+             *
+             * @param node
+             * @returns {boolean}
+             */
             allowDrag(node) {
                 return !node.data.is_menu;
             },
@@ -241,27 +264,27 @@
             },
 
             handleDragStart(node, ev) {
-                console.log('drag start', node);
+                // console.log('drag start', node);
             },
 
             handleDragEnter(draggingNode, dropNode, ev) {
-                console.log('tree drag enter: ', dropNode.label);
+                // console.log('tree drag enter: ', dropNode.label);
             },
 
             handleDragLeave(draggingNode, dropNode, ev) {
-                console.log('tree drag leave: ', dropNode.label);
+                // console.log('tree drag leave: ', dropNode.label);
             },
 
             handleDragOver(draggingNode, dropNode, ev) {
-                console.log('tree drag over: ', dropNode.label);
+                // console.log('tree drag over: ', dropNode.label);
             },
 
             handleDragEnd(draggingNode, dropNode, dropType, ev) {
-                console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+                // console.log('tree drag end: ', dropNode && dropNode.label, dropType);
             },
 
             handleDrop(draggingNode, dropNode, dropType, ev) {
-                console.log('tree drop: ', dropNode.label, dropType);
+                // console.log('tree drop: ', dropNode.label, dropType);
             },
 
             bindEvent() {
