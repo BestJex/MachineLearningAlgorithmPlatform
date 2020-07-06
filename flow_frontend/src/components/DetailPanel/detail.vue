@@ -6,20 +6,20 @@
                 <el-scrollbar :native="false" :noresize="true" class="scroll-container">
                     <el-form class="form" :style="`max-height: ${docHeight - 380}px;`" label-position="top">
                         <el-form-item
-                                :key="node.name"
-                                :label="node.name"
-                                prop="node.name"
+                                :label="node.label"
+                                prop="node.label"
                                 v-for="node in node_detail">
                             <!-- 输入框 -->
                             <el-input
+                                    :label="node.label"
                                     type="text"
                                     @change="changeValue"
-                                    v-if="node.type==='input'"
+                                    v-if="node.type==='object'"
                                     v-model="node.value"></el-input>
                             <!-- int类型输入框 -->
                             <el-input-number
                                     @change="changeValue"
-                                    v-if="node.type==='int'"
+                                    v-if="node.type === 'int' || node.name === 'name'"
                                     type="number"
                                     v-model="node.value"
                                     :placeholder="node.default"></el-input-number>
@@ -49,7 +49,6 @@
                                     v-if="node.type==='selectFile'"
                                     v-model="node.value">
                                 <el-option
-                                        :key="item.id"
                                         :label="item.name"
                                         :value="item.id"
                                         v-for="item in fileList"></el-option>
@@ -61,7 +60,6 @@
                                     v-if="node.type==='selection'"
                                     v-model="node.value">
                                 <el-option
-                                        :key="item"
                                         :label="item"
                                         :value="item"
                                         v-for="item in node.selection"></el-option>
@@ -84,23 +82,21 @@
                                     v-if="node.type==='visualization'"
                                     v-show="!isShowEcharts"/>
                         </el-form-item>
-                        <el-form-item
-                                :key="point.id"
-                                :label="`输出${index}`"
-                                v-for="(point, index) in point_detail"
-                                v-show="point.type === 'output'">
-                            <!-- 入度出度选择器 -->
-                            <el-select
-                                    @change="changeValue"
-                                    placeholder="请选择"
-                                    v-model="point.func">
-                                <el-option
-                                        :key="item.id"
-                                        :label="item.value"
-                                        :value="item.value"
-                                        v-for="item in point_options"></el-option>
-                            </el-select>
-                        </el-form-item>
+<!--                        <el-form-item-->
+<!--                                :label="`输出${index}`"-->
+<!--                                v-for="(point, index) in point_detail"-->
+<!--                                v-show="point.type === 'output'">-->
+<!--                            &lt;!&ndash; 入度出度选择器 &ndash;&gt;-->
+<!--                            <el-select-->
+<!--                                    @change="changeValue"-->
+<!--                                    placeholder="请选择"-->
+<!--                                    v-model="point.func">-->
+<!--                                <el-option-->
+<!--                                        :label="item.value"-->
+<!--                                        :value="item.value"-->
+<!--                                        v-for="item in point_options"></el-option>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
                     </el-form>
                 </el-scrollbar>
             </div>
@@ -212,6 +208,11 @@
                 }
                 this.graph.update(this.item, model);
             },
+
+            /**
+             * 画布添加网格
+             * @param value
+             */
             changeGridState(value) {
                 if (value) {
                     this.grid = new Grid();

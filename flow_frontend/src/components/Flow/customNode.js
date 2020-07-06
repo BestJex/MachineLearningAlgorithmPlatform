@@ -14,7 +14,7 @@ const customNode = {
             labelPosition: 'center',    // 文本相对于图形的位置，默认值为 center
 
             /**
-             *绘制节点，包含文本
+             * 绘制节点，包含文本
              * @param  {Object} cfg 节点的配置项
              * @param  {G.Group} group 节点的容器
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
@@ -22,19 +22,19 @@ const customNode = {
             draw(cfg, group) {
                 let size = cfg.size;
                 if (!size) {
-                    size = [170, 34]
+                    size = [170, 34];
                 }
                 const name = cfg.name;
                 const label = cfg.label;
                 // 此处必须是NUMBER 不然bbox不正常
-                const width = parseInt(size[0])
-                const height = parseInt(size[1])
+                const width = parseInt(size[0]);
+                const height = parseInt(size[1]);
                 const color = "#1890ff";
                 // 此处必须有偏移 不然drag-node错位
-                const offsetX = -width / 2
-                const offsetY = -height / 2
-                store.dispatch('app/uniqueId')
-                const mainId = 'rect' + store.state.app.max_id
+                const offsetX = -width / 2;
+                const offsetY = -height / 2;
+                store.dispatch('app/uniqueId');
+                const mainId = 'rect' + store.state.app.max_id;
                 const shape = group.addShape("rect", {
                     attrs: {
                         id: mainId,

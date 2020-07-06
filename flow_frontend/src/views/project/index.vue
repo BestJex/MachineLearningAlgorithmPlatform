@@ -210,15 +210,10 @@
 					})
 			},
 			copyProjects() {
-				// // console.log(JSON.stringify(this.multipleSelection));
-				// this.$confirm('此操作将复制该项目, 是否继续?', '提示', {
-				// 	confirmButtonText: '确 定',
-				// 	cancelButtonText: '取 消',
-				// 	type: 'warning'
-				// }).then(() => {
 					this.axios({
 						method: 'post',
 						url: 'http://39.105.21.62/flow/api/graph/copy/',
+						withCredentials: true,
 						data: {projectIds: this.multipleSelection},
 					}).then(res => {
 						Notification({

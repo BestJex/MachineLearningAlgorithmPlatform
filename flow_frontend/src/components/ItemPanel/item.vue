@@ -225,6 +225,7 @@
              * @param e：event
              */
             handleElDragEnd(node, _node, p, e) {
+                // console.log(node);
                 if (this.isAllowDrop) {
                     const item = JSON.parse(JSON.stringify(node.data));
                     item.template_id = item.id;
@@ -236,11 +237,20 @@
                         data.x = xy.x;
                         data.y = xy.y;
                         data.node_detail = [];
+                        data.point_detail = [];
                         data.name = node.data.name;
                         data.label = node.data.name;
+                        // 加载输入节点
+                        for (const [key, value] of Object.entries(node.data.information.inputattibute)) {
+                            data.point_detail.push(value);
+                        }
+                        // 加载参数列表
                         for (const [key, value] of Object.entries(node.data.information.Parametersattibute)) {
-                            value.label = value.name;
                             data.node_detail.push(value);
+                        }
+                        // 加载输出节点
+                        for (const [key, value] of Object.entries(node.data.information.outputattibute)) {
+                            data.point_detail.push(value);
                         }
                         data.shape = "customNode";
                         data.type = 'node';

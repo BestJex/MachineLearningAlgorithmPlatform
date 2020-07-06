@@ -74,6 +74,7 @@
             initBehavors();
             this.getGraph();
             // this.$store.dispatch('app/getProjectFileList', this.id);
+            document.body.style.overflow="hidden";
         },
         mounted() {
             this.$nextTick(() => {
