@@ -1,5 +1,18 @@
 <template>
     <div>
+        <div
+                class="pannel"
+                id="canvas_detailpannel"
+                v-if="status==='canvas-selected'">
+            <div class="pannel-title">画布</div>
+            <div class="block-container">
+                <el-checkbox
+                        @change="changeGridState"
+                        v-model="showGrid">
+                    网格对齐
+                </el-checkbox>
+            </div>
+        </div>
         <div class="pannel" id="node_detailpannel" v-if="status==='node-selected'">
             <div class="pannel-title">模型详情</div>
             <div class="block-container">
@@ -14,12 +27,12 @@
                                     :label="node.label"
                                     type="text"
                                     @change="changeValue"
-                                    v-if="node.type==='object'"
+                                    v-if="node.type==='object' || node.type==='str'"
                                     v-model="node.value"></el-input>
                             <!-- int类型输入框 -->
                             <el-input-number
                                     @change="changeValue"
-                                    v-if="node.type === 'int' || node.name === 'name'"
+                                    v-if="node.type === 'int' || node.name === 'name' || node.type === 'RandomState'"
                                     type="number"
                                     v-model="node.value"
                                     :placeholder="node.default"></el-input-number>
@@ -99,19 +112,6 @@
 <!--                        </el-form-item>-->
                     </el-form>
                 </el-scrollbar>
-            </div>
-        </div>
-        <div
-                class="pannel"
-                id="canvas_detailpannel"
-                v-if="status==='canvas-selected'">
-            <div class="pannel-title">画布</div>
-            <div class="block-container">
-                <el-checkbox
-                        @change="changeGridState"
-                        v-model="showGrid">
-                    网格对齐
-                </el-checkbox>
             </div>
         </div>
     </div>

@@ -9,10 +9,16 @@
                 @click="handleOperation()"></el-button>
         <el-button
                 v-show="operation"
-                type="info"
-                icon="el-icon-view"
+                type="success"
+                icon="el-icon-circle-plus-outline"
                 circle
-                @click="hideNodes()"></el-button>
+                @click="addNodes()"></el-button>
+<!--        <el-button-->
+<!--                v-show="operation"-->
+<!--                type="info"-->
+<!--                icon="el-icon-view"-->
+<!--                circle-->
+<!--                @click="hideNodes()"></el-button>-->
         <el-button
                 v-show="operation"
                 type="danger"
@@ -28,7 +34,6 @@
         <hr>
         <el-tree
                 ref="tree"
-                node-key="id"
                 class="filter-tree"
                 default-expand-all
                 :data="nodeList"
@@ -78,11 +83,10 @@
                     children: 'children',
                     label: 'name',
                 },
-
+                filterText: '',
                 page: null,
                 command: null,
                 nodeList: null,
-                filterText: '',
                 offsetX: 0,
                 clientX: 0,
                 offsetY: 0,
@@ -104,6 +108,9 @@
             },
         },
         methods: {
+            /**
+             * 获取左侧树形图
+             */
             getTree() {
                 this.axios({
                     method: 'get',
@@ -122,62 +129,9 @@
                 // console.log(data);
             },
 
-            hideNodes() {
-                let arr = this.$refs.tree.getCheckedNodes();
-                let res = []
-                for (let i = 0; i < arr.length; i++) {
-                    res.push(arr[i].$treeNodeId);
-                }
-                for (let index = 0; index < res.length; index++) {
-                    let item = res[index];
-                    for (let i = 0; i < this.nodeList.length; i++) {
-                        if (this.nodeList[i].$treeNodeId === item) {
-                            this.nodeList[i].display = !this.nodeList[i].display;
-                            continue;
-                        }
-                        if (this.nodeList[i].children) {
-                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
-                                if (this.nodeList[i].children[j].$treeNodeId === item) {
-                                    this.nodeList[i].children[j].display = !this.nodeList[i].children[j].display;
-                                }
-                            }
-                        }
-                    }
-                }
-                this.$forceUpdate();
-            },
-
-            remove(node, data) {
-                const parent = node.parent;
-                const children = parent.data.children || parent.data;
-                const index = children.findIndex(d => d.id === data.id);
-                children.splice(index, 1);
-            },
-
-            deleteNodes() {
-                let arr = this.$refs.tree.getCheckedNodes();
-                let res = []
-                for (let i = 0; i < arr.length; i++) {
-                    res.push(arr[i].$treeNodeId);
-                }
-                for (let index = 0; index < res.length; index++) {
-                    let item = res[index];
-                    for (let i = 0; i < this.nodeList.length; i++) {
-                        if (this.nodeList[i].$treeNodeId === item) {
-                            this.nodeList.splice(i, 1);
-                            continue;
-                        }
-                        if (this.nodeList[i].children) {
-                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
-                                if (this.nodeList[i].children[j].$treeNodeId === item) {
-                                    this.nodeList[i].children.splice(j, 1);
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-
+            /**
+             * 操作节点
+             */
             handleOperation() {
                 this.operation = !this.operation;
                 let itempannel = document.getElementById('itempannel');
@@ -205,9 +159,54 @@
                 }
             },
 
+            /**
+             * 树形控件节点过滤
+             */
             filterNode(value, data) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data.name.indexOf(value) !== -1;
+            },
+
+            /**
+             * 新增节点
+             */
+            addNodes() {
+
+            },
+
+            /**
+             * 隐藏节点
+             */
+            hideNodes() {
+                let checkArr = this.$refs.tree.getCheckedNodes();
+                console.log(checkArr);
+            },
+
+            /**
+             * 删除节点
+             */
+            deleteNodes() {
+                let arr = this.$refs.tree.getCheckedNodes();
+                let res = []
+                for (let i = 0; i < arr.length; i++) {
+                    res.push(arr[i].$treeNodeId);
+                }
+                for (let index = 0; index < res.length; index++) {
+                    let item = res[index];
+                    for (let i = 0; i < this.nodeList.length; i++) {
+                        if (this.nodeList[i].$treeNodeId === item) {
+                            this.nodeList.splice(i, 1);
+                            continue;
+                        }
+                        if (this.nodeList[i].children) {
+                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
+                                if (this.nodeList[i].children[j].$treeNodeId === item) {
+                                    this.nodeList[i].children.splice(j, 1);
+                                }
+                            }
+                        }
+                    }
+                }
             },
 
             handleElDragStart(node, e) {
@@ -261,7 +260,7 @@
             },
 
             /**
-             *
+             * 判断节点是否可拖拽，只有非菜单节点可以拖拽
              * @param node
              * @returns {boolean}
              */

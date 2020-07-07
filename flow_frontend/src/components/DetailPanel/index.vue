@@ -30,30 +30,7 @@
                 item: {},
                 node: {},
                 grid: null,
-
-                // 后端结点配置项
-                node_detail: [
-                    {
-                        type: 'input',
-                        name: 'name',
-                        label: '名称',
-                        value: '动画开始节点'
-                    },
-                    {
-                        type: 'input',
-                        name: 'path',
-                        label: '路径',
-                        value: 'C:/Users/Chris/Document'
-                    },
-                    {
-                        type: 'slider',
-                        name: 'size',
-                        label: '大小',
-                        value: 0
-                    }
-                ],
                 form: {},
-
                 // 可拉伸侧边栏
                 isActive: false,
                 startX: 0,
