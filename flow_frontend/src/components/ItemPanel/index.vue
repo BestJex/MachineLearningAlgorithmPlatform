@@ -65,9 +65,9 @@
 
                 document.onmouseup = e => {
                     this.isActive = false
-                    var nowItempannelWidth = parseInt(
+                    const nowItempannelWidth = parseInt(
                         itempannel.style.width.replace('px', '')
-                    )
+                    );
                     if (nowItempannelWidth !== this.itemWidth) {
                         this.itemWidth = nowItempannelWidth
                     }

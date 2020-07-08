@@ -5,6 +5,7 @@ class command {
     editor = null;
     undoList = [];
     redoList = [];
+
     constructor(editor) {
         this.editor = editor;
     };
@@ -37,15 +38,14 @@ class command {
                 eventBus.$emit('nodeselectchange', { select: false })
             }
             list.push(model)
-
             this.doCommand(key, model)
-
         });
+
         this.undoList.push({ key, datas: list })
         if(key==='delete'){
-            this.redoList =[]
+            this.redoList =[];
         }
-        this.editor.emit(key, { undoList: this.undoList, redoList: this.redoList })
+        this.editor.emit(key, { undoList: this.undoList, redoList: this.redoList });
     };
 
     doCommand(key, data) {
@@ -63,106 +63,104 @@ class command {
     };
 
     add(type, item) {
-        this.editor.add(type, item)
+        this.editor.add(type, item);
     };
 
     update(item, model) {
-        this.editor.update(item, model)
+        this.editor.update(item, model);
     };
 
     remove(item) {
-        this.editor.remove(item)
+        this.editor.remove(item);
     };
 
     undo() {
-        const undoData = this.undoList.pop()
-        const edgeList = []
-        const list = []
+        const undoData = this.undoList.pop();
+        const edgeList = [];
+        const list = [];
         for (let i = 0; i < undoData.datas.length; i++) {
-            const data = undoData.datas[i]
+            const data = undoData.datas[i];
             if (data.type === 'edge') {
-                edgeList.push(data)
-                continue
+                edgeList.push(data);
+                continue;
             }
-            list.push(data)
-            this.doundo(undoData.key, data)
+            list.push(data);
+            this.doundo(undoData.key, data);
         }
         for (let i = 0; i < edgeList.length; i++) {
-            const edge = edgeList[i]
+            const edge = edgeList[i];
             if (edge.source.destroyed) {
-                edge.source = edge.sourceId
+                edge.source = edge.sourceId;
 
             }
             if (edge.target.destroyed) {
-                edge.target = edge.targetId
+                edge.target = edge.targetId;
             }
-            list.push(edge)
-            this.doundo(undoData.key, edge)
+            list.push(edge);
+            this.doundo(undoData.key, edge);
         }
-        this.redoList.push({ key: undoData.key, datas: list })
-        this.editor.emit(undoData.key, { undoList: this.undoList, redoList: this.redoList })
+        this.redoList.push({ key: undoData.key, datas: list });
+        this.editor.emit(undoData.key, { undoList: this.undoList, redoList: this.redoList });
     };
 
     doundo(key, data) {
         switch (key) {
             case 'add':
-                this.remove(data)
+                this.remove(data);
                 break;
             case "update":
-                this.update(data.item, data.oldModel)
-                break
+                this.update(data.item, data.oldModel);
+                break;
             case "delete":
-                this.add(data.type, data)
-                break
+                this.add(data.type, data);
+                break;
         }
     };
 
     redo() {
-        const redoData = this.redoList.pop()
-        const list = []
-        const edgeList = []
+        const redoData = this.redoList.pop();
+        const list = [];
+        const edgeList = [];
         for (let i = 0; i < redoData.datas.length; i++) {
-            const data = redoData.datas[i]
+            const data = redoData.datas[i];
             if (data.type === 'edge') {
-                edgeList.push(data)
-                continue
+                edgeList.push(data);
+                continue;
             }
-            list.push(data)
-            this.doredo(redoData.key, data)
+            list.push(data);
+            this.doredo(redoData.key, data);
         }
         for (let i = 0; i < edgeList.length; i++) {
-            const edge = edgeList[i]
+            const edge = edgeList[i];
             if (edge.source.destroyed) {
-                edge.source = edge.sourceId
-
+                edge.source = edge.sourceId;
             }
             if (edge.target.destroyed) {
-                edge.target = edge.targetId
+                edge.target = edge.targetId;
             }
-            list.push(edge)
-            this.doredo(redoData.key, edge)
+            list.push(edge);
+            this.doredo(redoData.key, edge);
         }
-        this.undoList.push({ key: redoData.key, datas: list })
-
-        this.editor.emit(redoData.key, { undoList: this.undoList, redoList: this.redoList })
+        this.undoList.push({ key: redoData.key, datas: list });
+        this.editor.emit(redoData.key, { undoList: this.undoList, redoList: this.redoList });
     };
 
     doredo(key, data) {
         switch (key) {
             case 'add':
-                this.add(data.type, data)
+                this.add(data.type, data);
                 break;
             case "update":
-                this.update(data.item, data.newModel)
-                break
+                this.update(data.item, data.newModel);
+                break;
             case "delete":
-                this.remove(data)
-                break
+                this.remove(data);
+                break;
         }
     };
 
     delete(item) {
-        this.executeCommand('delete', [item])
+        this.executeCommand('delete', [item]);
     };
 }
 

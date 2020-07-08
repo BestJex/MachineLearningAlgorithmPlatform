@@ -287,14 +287,11 @@
                     })
                     let graph = this.graph.save()
                     Object.assign(graph, {id: this.graphId});
-                    // console.log(JSON.stringify(graph));
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
                     };
-                    console.log(data);
                     graphApi.sendGraph(data).then(res => {
-                        // 通知成功
                         Notification({
                             title: '成功',
                             message: '保存成功',
@@ -304,7 +301,7 @@
                     }).then(() => {
                         return graphApi.getGraphById({graphid: this.graphId})
                     }).then(res => {
-                        var data = res.data
+                        const data = res.data.data;
                         this.forEach(data)
                         this.$store.commit('app/SET_MAXID', this.max_id)
                         this.graph.read(data)
@@ -369,7 +366,6 @@
                         } else {
                             item.toFront()
                         }
-
                         this.graph.paint()
                     })
                 }
@@ -385,7 +381,7 @@
                 this.graph.setMode('multiSelect')
             },
             handleAddGroup() {
-                //TODO 这部分等阿里更新Group之后添加
+                // TODO 这部分等阿里更新Group之后添加
                 // const model = {
                 //   id: "group" + store.state.app.max_id,
                 //   title: "新建分组"
@@ -520,13 +516,12 @@
 <style scoped>
     .toolbar {
         box-sizing: border-box;
-        padding: 8px 0px;
+        padding: 8px 0;
         width: 100%;
         border: 1px solid #e9e9e9;
         height: 42px;
         z-index: 3;
-        box-shadow: 0px 8px 12px 0px rgba(0, 52, 107, 0.04);
-        /* position: absolute; */
+        box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
     }
 
     .toolbar .command:nth-of-type(1) {
@@ -537,7 +532,7 @@
         box-sizing: border-box;
         width: 27px;
         height: 27px;
-        margin: 0px 6px;
+        margin: 0 6px;
         border-radius: 2px;
         padding-left: 4px;
         display: inline-block;

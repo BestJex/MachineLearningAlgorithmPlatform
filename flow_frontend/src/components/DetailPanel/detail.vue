@@ -178,13 +178,11 @@
                         if (item.select === true && item.target.getType() === 'node') {
                             self.status = 'node-selected';
                             self.item = item.target;
-                            // 存入vuex
                             this.$store.commit(
                                 'app/SET_SETSELECTEDNODEID',
                                 item.target.getModel().id
                             );
                             self.node_detail = item.target.getModel().node_detail;
-                            // console.log(self.node_detail);
                             self.point_detail = item.target.getModel().point_detail;
                         } else {
                             self.status = 'canvas-selected';
@@ -228,13 +226,17 @@
                     text: '保存中',
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.8)'
-                })
+                });
                 let graph = this.graph.save();
                 Object.assign(graph, {id: this.graphId});
-                graphApi.sendGraph({graph: JSON.stringify(graph)}).then(res => {
+                let data = {
+                    graphid: this.graphId,
+                    graph: JSON.stringify(graph),
+                };
+                graphApi.sendGraph(data).then(res => {
                     loading.close()
                 }).catch(err => {
-                    console.log(err);
+                    console.error(err);
                     loading.close();
                 })
             }

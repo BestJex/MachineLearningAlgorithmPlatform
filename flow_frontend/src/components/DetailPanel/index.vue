@@ -41,9 +41,11 @@
                 MIN_DETAIL_WIDTH: 180
             }
         },
+
         components: {
             detail
         },
+
         computed: {
             detailWidth: {
                 get() {
@@ -54,6 +56,7 @@
                 }
             }
         },
+
         methods: {
             clickDetailPanel() {
                 this.$store.dispatch('app/setIsFocusCanvas', false);

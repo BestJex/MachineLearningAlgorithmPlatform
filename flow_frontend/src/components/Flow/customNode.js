@@ -1,9 +1,9 @@
-import G6 from "@antv/g6/build/g6"
+import store from "@/store"
 import {uniqueId} from '@/utils'
+import G6 from "@antv/g6/build/g6"
 import Shape from '@antv/g/src/shapes'
 import okSvg from '@/assets/icons/ok.svg'
 import loadingSvg from '@/assets/icons/loading.svg'
-import store from "@/store"
 
 const customNode = {
     init() {
@@ -11,16 +11,6 @@ const customNode = {
          * 自定义节点 customNode
          */
         G6.registerNode("customNode", {
-            labelPosition: 'center',    // 文本相对于图形的位置，默认值为 center
-
-            options: {
-                style: {},
-                stateStyles: {
-                    hover: {},
-                    selected: {},
-                },
-            },
-
             /**
              * 绘制节点，包含文本
              * @param  {Object} cfg 节点的配置项
@@ -28,15 +18,8 @@ const customNode = {
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
              */
             draw(cfg, group) {
-                let size = cfg.size;
-                if (!size) {
-                    size = [170, 34];
-                }
-                const name = cfg.name;
-                const label = cfg.label;
-                // 此处必须是NUMBER 不然bbox不正常
-                const width = parseInt(size[0]);
-                const height = parseInt(size[1]);
+                const width = 170;
+                const height = 34;
                 const color = "#1890ff";
                 // 此处必须有偏移 不然drag-node错位
                 const offsetX = -width / 2;
@@ -48,26 +31,17 @@ const customNode = {
                         id: mainId,
                         x: offsetX,
                         y: offsetY,
-                        name: name,
-                        label: label,
                         width: width,
                         height: height,
                         stroke: "#ced4d9",
                         fill: '#fff',//此处必须有fill 不然不能触发事件
-                        radius: 4
+                        radius: 4,
                     },
                 });
                 group.addShape("rect", {
                     attrs: {
                         x: offsetX,
                         y: offsetY,
-                        name: name,
-                        label: label,
-                        labelCfg: {
-                            style: {
-                                fill: '#000',
-                            },
-                        },
                         width: 4,
                         height: height,
                         fill: color,
@@ -79,8 +53,6 @@ const customNode = {
                     attrs: {
                         x: offsetX + 16,
                         y: offsetY + 8,
-                        name: name,
-                        label: label,
                         width: 20,
                         height: 16,
                         img: cfg.image,
@@ -92,8 +64,6 @@ const customNode = {
                         attrs: {
                             x: offsetX + width - 32,
                             y: offsetY + 8,
-                            name: name,
-                            label: label,
                             width: 16,
                             height: 16,
                             parent: mainId,
@@ -106,8 +76,6 @@ const customNode = {
                         attrs: {
                             x: offsetX,
                             y: offsetY,
-                            name: name,
-                            label: label,
                             width: width,
                             height: height,
                             fill: '#fff',
@@ -118,8 +86,6 @@ const customNode = {
                         attrs: {
                             x: offsetX,
                             y: offsetY,
-                            name: name,
-                            label: label,
                             width: width,
                             height: height,
                             img: cfg.backImage,
@@ -135,8 +101,6 @@ const customNode = {
                                 id: 'label' + store.state.app.max_id,
                                 x: offsetX + width / 2,
                                 y: offsetY + height / 2,
-                                name: name,
-                                label: label,
                                 textAlign: "center",
                                 textBaseline: "middle",
                                 text: detail.value,
@@ -151,20 +115,18 @@ const customNode = {
                         let x, y = 0
                         if (point.type === 'input') {
                             // 添加入度
-                            y = 0
-                            x = width * point.proportion
-                            store.dispatch('app/uniqueId')
-                            const outId = store.state.app.max_id
-                            store.dispatch('app/uniqueId')
-                            const id = point.id ? point.id : 'circle' + store.state.app.max_id
+                            y = 0;
+                            x = width * point.proportion;
+                            store.dispatch('app/uniqueId');
+                            const outId = store.state.app.max_id;
+                            store.dispatch('app/uniqueId');
+                            const id = point.id ? point.id : 'circle' + store.state.app.max_id;
                             group.addShape('circle', {
                                 attrs: {
                                     id: 'circle' + outId,
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
-                                    name: name,
-                                    label: label,
                                     r: 10,
                                     isInPointOut: true,
                                     func: point.func,
@@ -177,8 +139,6 @@ const customNode = {
                                     id: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
-                                    name: name,
-                                    label: label,
                                     r: 3,
                                     isInPoint: true,
                                     func: point.func,
@@ -203,8 +163,6 @@ const customNode = {
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
-                                    name: name,
-                                    label: label,
                                     r: 10,
                                     isOutPointOut: true,
                                     func: point.func,
@@ -218,8 +176,6 @@ const customNode = {
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY + 15,
-                                    name: name,
-                                    label: label,
                                     isOutPointText: true,
                                     textAlign: 'center',
                                     textBaseline: 'bottom',
@@ -233,8 +189,6 @@ const customNode = {
                                     id: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
-                                    name: name,
-                                    label: label,
                                     r: 3,
                                     isOutPoint: true,
                                     func: point.func,
@@ -258,14 +212,14 @@ const customNode = {
              * @param  {Node} node 节点
              */
             setState(name, value, node) {
-                const group = node.getContainer()
-                const shape = group.get("children")[0] // 顺序根据 draw 时确定
+                const group = node.getContainer();
+                const shape = group.get("children")[0]; // 顺序根据 draw 时确定
 
                 const children = group.findAll(g => {
-                    return g._attrs.parent === shape._attrs.id
+                    return g._attrs.parent === shape._attrs.id;
                 })
                 const circles = group.findAll(circle => {
-                    return circle._attrs.isInPoint || circle._attrs.isOutPoint
+                    return circle._attrs.isInPoint || circle._attrs.isOutPoint;
                 })
                 const selectStyles = () => {
                     shape.attr("fill", "#f3f9ff")

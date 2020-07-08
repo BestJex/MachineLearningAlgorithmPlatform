@@ -1,8 +1,8 @@
-import G6 from "@antv/g6/build/g6";
-import {uniqueId} from '@/utils'
+import store from "@/store"
+import { uniqueId } from '@/utils'
+import G6 from "@antv/g6/build/g6"
 
 const MIN_ARROW_SIZE = 3
-import store from "@/store"
 
 const customEdge = {
     init() {
@@ -58,13 +58,11 @@ const customEdge = {
                     cfg.target = cfg.targetNode
                 }
                 if (!cfg.target.x) {
-
                     targetNode = cfg.target.getModel()
                     end = {x: targetNode.x + cfg.end.x, y: targetNode.y + cfg.end.y}
                 } else {
                     end = cfg.target
                 }
-
                 let path = []
                 let hgap = Math.abs(end.x - start.x)
                 if (end.x > start.x) {
@@ -131,12 +129,12 @@ const customEdge = {
                 })
 
                 // 绘画label
-                let sourcePoint
+                let sourcePoint;
                 sourceNode.point_detail.forEach(pd => {
-                    if (pd.id == cfg.startPointId) {
+                    if (pd.id === cfg.startPointId) {
                         sourcePoint = pd
                     }
-                })
+                });
                 group.addShape('text', {
                     attrs: {
                         text: sourcePoint.name,
@@ -158,9 +156,9 @@ const customEdge = {
             afterDraw(cfg, group) {
                 if (cfg.source.getModel().isDoingStart && cfg.target.getModel().isDoingEnd) {
                     const shape = group.get('children')[0];
-                    const length = shape.getTotalLength(); // G 增加了 totalLength 的接口
+                    const length = shape.getTotalLength();
                     let totalArray = [];
-                    for (var i = 0; i < length; i += interval) {
+                    for (let i = 0; i < length; i += interval) {
                         totalArray = totalArray.concat(lineDash);
                     }
                     let index = 0;
@@ -198,9 +196,9 @@ const customEdge = {
                     case "selected":
                     case "hover":
                         if (value) {
-                            selectStyles()
+                            selectStyles();
                         } else {
-                            unSelectStyles()
+                            unSelectStyles();
                         }
                         break;
                 }
@@ -220,25 +218,25 @@ const customEdge = {
             draw(cfg, group) {
                 let sourceNode, targetNode, start, end
                 if (!cfg.source.x) {
-                    sourceNode = cfg.source.getModel()
-                    start = {x: sourceNode.x + cfg.start.x, y: sourceNode.y + cfg.start.y}
+                    sourceNode = cfg.source.getModel();
+                    start = {x: sourceNode.x + cfg.start.x, y: sourceNode.y + cfg.start.y};
                 } else {
-                    start = cfg.source
+                    start = cfg.source;
                 }
                 if (!cfg.target.x) {
-                    targetNode = cfg.target.getModel()
-                    end = {x: targetNode.x + cfg.end.x, y: targetNode.y + cfg.end.y}
+                    targetNode = cfg.target.getModel();
+                    end = {x: targetNode.x + cfg.end.x, y: targetNode.y + cfg.end.y};
                 } else {
-                    end = cfg.target
+                    end = cfg.target;
                 }
 
-                let path = []
+                let path = [];
                 path = [
                     ['M', start.x, start.y],
                     ['L', end.x, end.y]
-                ]
-                store.dispatch('app/uniqueId')
-                const keyShape = group.addShape('path', {
+                ];
+                store.dispatch('app/uniqueId');
+                return group.addShape('path', {
                     attrs: {
                         id: 'edge' + store.state.app.max_id,
                         path: path,
@@ -246,8 +244,7 @@ const customEdge = {
                         strokeOpacity: 0.9,
                         lineDash: [5, 5]
                     }
-                });
-                return keyShape
+                })
             },
         });
     }

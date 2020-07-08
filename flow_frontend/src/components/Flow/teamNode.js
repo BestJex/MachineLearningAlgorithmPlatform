@@ -1,8 +1,8 @@
-import G6 from "@antv/g6/build/g6";
+import store from "@/store"
 import {uniqueId} from '@/utils'
+import G6 from "@antv/g6/build/g6";
 import openSvg from '@/assets/icons/open.svg'
 import closeSvg from '@/assets/icons/close.svg'
-import store from "@/store"
 
 const teamNode = {
     init() {
@@ -23,7 +23,6 @@ const teamNode = {
                         id: mainId,
                         x: offsetX,
                         y: offsetY,
-                        label: 'label',
                         width: width,
                         height: height + top,
                         stroke: "#ced4d9",
