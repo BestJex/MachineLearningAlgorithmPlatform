@@ -41,6 +41,7 @@
                 ],
             }
         },
+
         computed: {
             ...mapGetters(['canvasHeight', 'canvasWidth', 'itemWidth', 'detailWidth']),
             id: {
@@ -62,6 +63,7 @@
                 }
             },
         },
+
         watch: {
             canvasWidth: function (val) {
                 this.graph.changeSize(val, this.canvasHeight);
@@ -70,17 +72,20 @@
                 this.graph.changeSize(this.canvasWidth, val);
             }
         },
+
         created() {
             initBehavors();
             this.getGraph();
             // this.$store.dispatch('app/getProjectFileList', this.id);
             document.body.style.overflow="hidden";
         },
+
         mounted() {
             this.$nextTick(() => {
                 this.init();
             })
         },
+
         methods: {
             onContextmenu(event) {
                 this.$contextmenu({
@@ -114,8 +119,8 @@
             },
 
             getGraph() {
-                graphApi.getGraphById({graphId: this.id}).then(res => {
-                    this.data = res.data;
+                graphApi.getGraphById({graphid: this.id}).then(res => {
+                    this.data = res.data.data;
                     this.isRunning = this.data.status === 'loading';
                     this.forEach(this.data);
                     this.$store.commit('app/SET_MAXID', this.max_id);
@@ -155,11 +160,7 @@
                     container: 'graph-container',
                     height: height,
                     width: width,
-                    defaultNode: {
-                        type: 'modelRect',
-                    },
                     modes: {
-                        // 支持的 behavior
                         default: this.supportBehavior,
                         moveCanvas: ['drag-canvas'],
                         multiSelect: [
@@ -169,22 +170,25 @@
                             }
                         ],
                         addEdge: ['add-edge']
-                        // moveNode: ['drag-item']
                     }
-                })
+                });
+
                 const {editor, command} = this.$parent
                 editor.emit('afterAddPage', {graph: this.graph, command})
                 this.readData()
             },
+
             readData() {
                 let data = this.data
                 if (data) {
                     this.graph.read(data)
                 }
             },
+
             clickCanvas() {
                 this.$store.dispatch('app/setIsFocusCanvas', true)
             },
+
             handleDrop(e) {
                 this.$store.commit('app/SET_ALLOWDROP', true)
             }

@@ -23,6 +23,7 @@ const teamNode = {
                         id: mainId,
                         x: offsetX,
                         y: offsetY,
+                        label: 'label',
                         width: width,
                         height: height + top,
                         stroke: "#ced4d9",

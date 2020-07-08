@@ -4,11 +4,13 @@ class Node extends Object {
         this.id = params.id
 
         for (let key in params) {
-            this[key] = params[key] || 0
+            this[key] = params[key] || 0;
         }
         this.size = [170, 34];
-        this.parent = params.parent;  // 所属组
-        this.index = params.index; // 渲染层级
+        this.label = "label";
+        this.name = "name";
+        this.parent = params.parent;    // 所属组
+        this.index = params.index;      // 渲染层级
     }
 }
 

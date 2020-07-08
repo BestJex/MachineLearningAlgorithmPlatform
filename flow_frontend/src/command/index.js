@@ -3,15 +3,16 @@ import eventBus from "@/utils/eventBus"
 import store from "@/store"
 class command {
     editor = null;
-    undoList = []
-    redoList = []
+    undoList = [];
+    redoList = [];
     constructor(editor) {
         this.editor = editor;
-    }
+    };
+
     executeCommand(key, datas) {
         const list = []
         datas.map(data => {
-            let model = data
+            let model = data;
             if (key === 'add') {
                 store.dispatch('app/uniqueId');
                 model.id = data.type + store.state.app.max_id;
@@ -45,7 +46,8 @@ class command {
             this.redoList =[]
         }
         this.editor.emit(key, { undoList: this.undoList, redoList: this.redoList })
-    }
+    };
+
     doCommand(key, data) {
         switch (key) {
             case 'add':
@@ -58,16 +60,20 @@ class command {
                 this.remove(data)
                 break
         }
-    }
+    };
+
     add(type, item) {
         this.editor.add(type, item)
-    }
+    };
+
     update(item, model) {
         this.editor.update(item, model)
-    }
+    };
+
     remove(item) {
         this.editor.remove(item)
-    }
+    };
+
     undo() {
         const undoData = this.undoList.pop()
         const edgeList = []
@@ -95,7 +101,8 @@ class command {
         }
         this.redoList.push({ key: undoData.key, datas: list })
         this.editor.emit(undoData.key, { undoList: this.undoList, redoList: this.redoList })
-    }
+    };
+
     doundo(key, data) {
         switch (key) {
             case 'add':
@@ -108,7 +115,8 @@ class command {
                 this.add(data.type, data)
                 break
         }
-    }
+    };
+
     redo() {
         const redoData = this.redoList.pop()
         const list = []
@@ -137,7 +145,8 @@ class command {
         this.undoList.push({ key: redoData.key, datas: list })
 
         this.editor.emit(redoData.key, { undoList: this.undoList, redoList: this.redoList })
-    }
+    };
+
     doredo(key, data) {
         switch (key) {
             case 'add':
@@ -150,10 +159,11 @@ class command {
                 this.remove(data)
                 break
         }
-    }
+    };
+
     delete(item) {
         this.executeCommand('delete', [item])
-    }
+    };
 }
 
 export default command;

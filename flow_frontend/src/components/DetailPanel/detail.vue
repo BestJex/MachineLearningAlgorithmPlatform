@@ -184,7 +184,7 @@
                                 item.target.getModel().id
                             );
                             self.node_detail = item.target.getModel().node_detail;
-                            console.log(self.node_detail);
+                            // console.log(self.node_detail);
                             self.point_detail = item.target.getModel().point_detail;
                         } else {
                             self.status = 'canvas-selected';
@@ -221,6 +221,7 @@
                     this.graph.removePlugin(this.grid);
                 }
             },
+
             saveDetail() {
                 const loading = this.$loading({
                     lock: true,
@@ -228,12 +229,13 @@
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.8)'
                 })
-                let graph = this.graph.save()
-                Object.assign(graph, {id: this.graphId})
+                let graph = this.graph.save();
+                Object.assign(graph, {id: this.graphId});
                 graphApi.sendGraph({graph: JSON.stringify(graph)}).then(res => {
                     loading.close()
                 }).catch(err => {
-                    loading.close()
+                    console.log(err);
+                    loading.close();
                 })
             }
         }

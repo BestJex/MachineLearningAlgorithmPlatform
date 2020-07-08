@@ -97,12 +97,12 @@
                     </el-dropdown-menu>
                 </el-dropdown>
 
-              <el-drawer
-                      :visible.sync="drawer"
-                      :direction="direction"
-                      :with-header="false">
-                <span>我来啦!</span>
-              </el-drawer>
+                <el-drawer
+                        :visible.sync="drawer"
+                        :direction="direction"
+                        :with-header="false">
+                    <span>我来啦!</span>
+                </el-drawer>
 
             </div>
         </transition>
@@ -159,8 +159,8 @@
                 isShowFileManagement: false,
                 max_id: 0,
 
-              drawer: false,
-              direction: 'btt',
+                drawer: false,
+                direction: 'btt',
             }
         },
         computed: {
@@ -275,6 +275,7 @@
                     }
                 }
             },
+
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -285,40 +286,41 @@
                         background: 'rgba(0, 0, 0, 0.8)'
                     })
                     let graph = this.graph.save()
-                    Object.assign(graph, {id: this.graphId})
-                    graphApi
-                        .sendGraph({graph: JSON.stringify(graph)})
-                        .then(res => {
-                            // 通知成功
-                            Notification({
-                                title: '成功',
-                                message: '保存成功',
-                                type: 'success',
-                                duration: 3000
-                            })
+                    Object.assign(graph, {id: this.graphId});
+                    // console.log(JSON.stringify(graph));
+                    let data = {
+                        graphid: this.graphId,
+                        graph: JSON.stringify(graph),
+                    };
+                    console.log(data);
+                    graphApi.sendGraph(data).then(res => {
+                        // 通知成功
+                        Notification({
+                            title: '成功',
+                            message: '保存成功',
+                            type: 'success',
+                            duration: 3000
                         })
-                        .then(() => {
-                            return graphApi.getGraphById({graphId: this.graphId})
+                    }).then(() => {
+                        return graphApi.getGraphById({graphid: this.graphId})
+                    }).then(res => {
+                        var data = res.data
+                        this.forEach(data)
+                        this.$store.commit('app/SET_MAXID', this.max_id)
+                        this.graph.read(data)
+                        if (data.nodes.length) {
+                            this.graph.fitView(100)
+                        }
+                        loading.close()
+                    }).catch(err => {
+                        loading.close()
+                        Notification({
+                            title: '错误',
+                            message: err,
+                            type: 'error',
+                            duration: 3000
                         })
-                        .then(res => {
-                            var data = res.data
-                            this.forEach(data)
-                            this.$store.commit('app/SET_MAXID', this.max_id)
-                            this.graph.read(data)
-                            if (data.nodes.length) {
-                                this.graph.fitView(100)
-                            }
-                            loading.close()
-                        })
-                        .catch(err => {
-                            loading.close()
-                            Notification({
-                                title: '错误',
-                                message: err,
-                                type: 'error',
-                                duration: 3000
-                            })
-                        })
+                    })
                 }
             },
             handleDelete() {

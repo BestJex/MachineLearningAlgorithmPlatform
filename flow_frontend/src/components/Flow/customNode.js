@@ -13,6 +13,14 @@ const customNode = {
         G6.registerNode("customNode", {
             labelPosition: 'center',    // 文本相对于图形的位置，默认值为 center
 
+            options: {
+                style: {},
+                stateStyles: {
+                    hover: {},
+                    selected: {},
+                },
+            },
+
             /**
              * 绘制节点，包含文本
              * @param  {Object} cfg 节点的配置项
@@ -42,22 +50,18 @@ const customNode = {
                         y: offsetY,
                         name: name,
                         label: label,
-                        labelCfg: {
-                            style: {
-                                fill: '#666',
-                            },
-                        },
                         width: width,
                         height: height,
                         stroke: "#ced4d9",
                         fill: '#fff',//此处必须有fill 不然不能触发事件
                         radius: 4
-                    }
-                })
+                    },
+                });
                 group.addShape("rect", {
                     attrs: {
                         x: offsetX,
                         y: offsetY,
+                        name: name,
                         label: label,
                         labelCfg: {
                             style: {
@@ -69,30 +73,32 @@ const customNode = {
                         fill: color,
                         parent: mainId,
                         radius: [4, 0, 0, 4]
-                    }
+                    },
                 })
                 group.addShape("image", {
                     attrs: {
                         x: offsetX + 16,
                         y: offsetY + 8,
+                        name: name,
                         label: label,
                         width: 20,
                         height: 16,
                         img: cfg.image,
                         parent: mainId
-                    }
+                    },
                 })
                 if (cfg.status) {
                     group.addShape("image", {
                         attrs: {
                             x: offsetX + width - 32,
                             y: offsetY + 8,
+                            name: name,
                             label: label,
                             width: 16,
                             height: 16,
                             parent: mainId,
                             img: cfg.status === 'complete' ? okSvg : cfg.status === 'loading' ? loadingSvg : ''
-                        }
+                        },
                     })
                 }
                 if (cfg.backImage) {
@@ -100,6 +106,7 @@ const customNode = {
                         attrs: {
                             x: offsetX,
                             y: offsetY,
+                            name: name,
                             label: label,
                             width: width,
                             height: height,
@@ -111,6 +118,7 @@ const customNode = {
                         attrs: {
                             x: offsetX,
                             y: offsetY,
+                            name: name,
                             label: label,
                             width: width,
                             height: height,
@@ -127,6 +135,7 @@ const customNode = {
                                 id: 'label' + store.state.app.max_id,
                                 x: offsetX + width / 2,
                                 y: offsetY + height / 2,
+                                name: name,
                                 label: label,
                                 textAlign: "center",
                                 textBaseline: "middle",
@@ -154,6 +163,7 @@ const customNode = {
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
+                                    name: name,
                                     label: label,
                                     r: 10,
                                     isInPointOut: true,
@@ -167,6 +177,7 @@ const customNode = {
                                     id: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
+                                    name: name,
                                     label: label,
                                     r: 3,
                                     isInPoint: true,
@@ -192,6 +203,7 @@ const customNode = {
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
+                                    name: name,
                                     label: label,
                                     r: 10,
                                     isOutPointOut: true,
@@ -206,6 +218,7 @@ const customNode = {
                                     parent: id,
                                     x: x + offsetX,
                                     y: y + offsetY + 15,
+                                    name: name,
                                     label: label,
                                     isOutPointText: true,
                                     textAlign: 'center',
@@ -220,6 +233,7 @@ const customNode = {
                                     id: id,
                                     x: x + offsetX,
                                     y: y + offsetY,
+                                    name: name,
                                     label: label,
                                     r: 3,
                                     isOutPoint: true,

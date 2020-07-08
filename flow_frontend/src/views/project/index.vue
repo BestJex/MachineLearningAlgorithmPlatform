@@ -25,7 +25,8 @@
 					<el-table-column type="selection" width="55" />
 					<el-table-column label="项目名">
 						<template slot-scope="scope">
-							<el-link @click="$router.push({path: `/graph/${scope.row.id}`})">{{ scope.row.project_name }}
+							<el-link @click="$router.push({path: `/graph/${scope.row.id}`})">
+								{{ scope.row.project_name }}
 							</el-link>
 						</template>
 					</el-table-column>

@@ -18,12 +18,11 @@
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
-                  v-for="item in categories"
-                ></el-option>
+                  v-for="item in categories"></el-option>
               </el-select>
             </el-form-item>
             <!-- 编辑模板 -->
-            <el-form-item label="结点详情" v-show="active == 1">
+            <el-form-item label="结点详情" v-show="active === 1">
               <div class="detail-container">
                 <div :key="index" class="detail" v-for="(nodeDetail, index) in form.nodeDetails">
                   <el-divider v-if="index != 0"></el-divider>
@@ -296,7 +295,7 @@ export default {
       }
     },
     save() {
-      if (this.filename == '') {
+      if (this.filename === '') {
         this.$message.warning(`存在空缺值`)
         return
       }

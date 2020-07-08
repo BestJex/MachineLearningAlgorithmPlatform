@@ -19,7 +19,7 @@ export default {
 
     getGraphById(data) {
         return request({
-            url: '/graph/',
+            url: '/loadgraph',
             method: 'get',
             params: data
         })
@@ -51,8 +51,8 @@ export default {
 
     sendGraph(data) {
         return request({
-            url: `/graph/`,
-            method: 'put',
+            url: `/savegraph`,
+            method: 'post',
             data
         })
     },
@@ -72,6 +72,7 @@ export default {
             data
         })
     },
+
     getCategory() {
         return request({
             url: '/category/',

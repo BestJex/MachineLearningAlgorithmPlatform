@@ -238,7 +238,7 @@
                         data.node_detail = [];
                         data.point_detail = [];
                         data.name = node.data.name;
-                        data.label = node.data.name;
+                        data.label = node.data.label;
                         // 加载输入节点
                         for (const [key, value] of Object.entries(node.data.information.inputattibute)) {
                             data.point_detail.push(value);
