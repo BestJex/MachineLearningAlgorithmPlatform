@@ -32,18 +32,18 @@ module.exports = {
             libraryExport: 'default'
         },
     },
-    // Vue CLI 内部的 webpack 配置是通过 webpack-chain 维护
+    // 接收一个基于 webpack-chain 的 ChainableConfig 实例，对内部的 webpack 配置进行更细粒度的修改
     chainWebpack: config => {
-        config.plugins.delete('preload') // TODO: need test
-        config.plugins.delete('prefetch') // TODO: need test
-        config.module.rule('svg').exclude.add(resolve('src/icons')).end()
+        config.plugins.delete('preload');   // TODO: need test
+        config.plugins.delete('prefetch');  // TODO: need test
+        config.module.rule('svg').exclude.add(resolve('src/icons')).end();
         config.module.rule('icons').test(/\.svg$/).include.add(resolve('src/icons')).end().use('svg-sprite-loader').loader('svg-sprite-loader').options({
             symbolId: 'icon-[name]'
-        }).end()
+        }).end();
         config.module.rule('vue').use('vue-loader').loader('vue-loader').tap(options => {
             options.compilerOptions.preserveWhitespace = true
             return options
-        }).end()
-        config.when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'))
+        }).end();
+        config.when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'));
     }
 }
