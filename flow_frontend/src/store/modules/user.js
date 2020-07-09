@@ -7,8 +7,6 @@ import jwt from '@/utils/jwt'
 const state = {
   token: auth.getToken(),
   userId: auth.getToken() ? jwt.payload_decode(auth.getToken()).userId : 0,
-  // userId:  0,
-  // username: localStorage.getItem('username'),
   username: auth.getToken() ? jwt.payload_decode(auth.getToken()).username : ''
 }
 

@@ -1,13 +1,11 @@
 <template>
     <div id="app">
         <Header></Header>
-        <!-- <G6Editor mode="edit"></G6Editor> -->
         <router-view/>
     </div>
 </template>
 
 <script>
-    import G6Editor from './components/G6Editor'
     import ResizeMixin from './mixin/ResizeHandler'
     import WebSocket from './mixin/socket'
     import {mapGetters} from 'vuex';
@@ -16,7 +14,6 @@
     export default {
         name: 'app',
         components: {
-            G6Editor,
             Header,
         },
         mixins: [ResizeMixin, WebSocket],
