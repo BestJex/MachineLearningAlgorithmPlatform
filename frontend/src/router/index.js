@@ -5,27 +5,12 @@ import layout from "@/components/layout";
 Vue.use(Router);
 
 export default new Router({
-    mode: 'hash',
+    mode: 'history',
     routes: [
         {
             path: '*',
             name: 'NotFound',
             redirect: '/project',
-        },
-        {
-            path: '/login',
-            name: 'Login',
-            component: () => import('@/components/User/Login'),
-        },
-        {
-            path: '/register',
-            name: 'Register',
-            component: () => import('@/components/User/Register'),
-        },
-        {
-            path: '/retrieve',
-            name: 'Retrieve',
-            component: () => import('@/components/User/Retrieve'),
         },
         {
             path: '/',
@@ -56,6 +41,21 @@ export default new Router({
                 path: ':id',
                 component: () => import('@/components/User/Information'),
             }]
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('@/components/User/Login'),
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import('@/components/User/Register'),
+        },
+        {
+            path: '/retrieve',
+            name: 'Retrieve',
+            component: () => import('@/components/User/Retrieve'),
         },
     ]
 })

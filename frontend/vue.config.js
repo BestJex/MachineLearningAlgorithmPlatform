@@ -5,7 +5,6 @@ function resolve(dir) {
 }
 
 module.exports = {
-    // publicPath: '/flow/',
     outputDir: 'flow',      // build 生成文件的目录，若已存在则会被先清除，传入 --no-clean 可关闭该行为
     assetsDir: 'assets',    // 放置生成的静态资源 (js、css、img、fonts) 的目录，相对于 outputDir
     lintOnSave: process.env.NODE_ENV !== 'production',  // 生产构建时禁用 eslint-loader

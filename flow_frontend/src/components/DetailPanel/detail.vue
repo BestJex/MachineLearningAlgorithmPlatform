@@ -78,9 +78,8 @@
                                         v-for="item in node.selection"></el-option>
                             </el-select>
                             <!-- 下载文件 -->
-                            <div
-                                    style="text-align: center;"
-                                    v-if="node.type==='download'">
+                            <div style="text-align: center;"
+                                 v-if="node.type==='download'">
                                 <el-button
                                         @click="downloadFile"
                                         plain

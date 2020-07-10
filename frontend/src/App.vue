@@ -6,23 +6,32 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+    import webSocket from "@/config/webSocket";
     import Header from "@/components/Currency/Header";
 
     export default {
         name: 'App',
         components: {
-            Header
+            Header,
+        },
+        mixins: [webSocket],
+        computed: {
+            ...mapGetters(['token'])
+        },
+        created() {
+            this.initWebSocket();
+        },
+        methods: {
+            initWebSocket() {
+                if (this.token) {
+                    webSocket.initWebSocket();
+                }
+            }
         }
     }
 </script>
 
 <style>
-    #app {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-    }
+
 </style>

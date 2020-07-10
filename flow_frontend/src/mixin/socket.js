@@ -7,7 +7,7 @@ let graph = null
 export default {
     beforeMount() {
         eventBus.$on('afterAddPage', page => {
-            graph = page.graph
+            graph = page.graph;
         })
     },
     initWebSocket() {
@@ -18,8 +18,10 @@ export default {
         this.websock.onclose = this.websocketClose;
     },
     websocketOnOpen() {
+
     },
     websocketOnError() {
+
     },
     websocketOnMessage(res) {
         const msg = JSON.parse(res.data).msg;

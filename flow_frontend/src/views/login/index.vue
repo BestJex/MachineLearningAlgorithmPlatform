@@ -104,7 +104,7 @@
                                         <el-input v-model="formRetrievePassword.code"
                                                   prefix-icon="el-icon-picture-outline-round"
                                                   style="width: 40%; float: left; margin-left: 22px"></el-input>
-                                        <img :src="base64CodeVerificationCode" alt="" @click="changeVerificationCode()">
+                                        <img :src="base64CodeVerificationCode" alt="" @click="getCaptcha()">
                                     </el-form-item>
 
                                     <!-- 验证手机号 button -->
@@ -135,7 +135,7 @@
                 if (!value) {
                     return cb(new Error("用户名不能为空！"));
                 } else {
-                    cb(); // 将判断传递给后面
+                    cb();
                 }
             };
             let checkPassword = (rule, value, cb) => {
@@ -224,10 +224,6 @@
                     });
                 })
             },
-            changeVerificationCode() {
-                this.getCaptcha();
-            },
-
             retrievePassword() {
                 this.isRetrievePassword = true;
             },
@@ -287,7 +283,7 @@
                         type: 'error'
                     });
                 })
-            }
+            },
         },
         created() {
             this.getCaptcha();

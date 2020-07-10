@@ -22,7 +22,7 @@
         },
         created() {
             if (this.token) {
-                WebSocket.initWebSocket()
+                WebSocket.initWebSocket();
             }
         }
     }

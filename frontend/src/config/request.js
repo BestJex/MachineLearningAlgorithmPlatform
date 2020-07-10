@@ -1,7 +1,8 @@
 import axios from 'axios';
+import store from "@/store";
 import jwt from "@/utils/jwt";
+import router from '@/router';
 import auth from "@/utils/auth";
-import router from '@/router'
 import apiConfig from '@/config/api';
 import Message from "element-ui/packages/message/src/main";
 
@@ -23,7 +24,7 @@ request.interceptors.request.use(
                 router.push('/login');
                 return Promise.reject({
                     response: {data: "signature expire"}
-                })
+                });
             }
             config.headers['Authorization'] = 'JWT ' + auth.getToken();
         }

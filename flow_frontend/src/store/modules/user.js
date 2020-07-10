@@ -23,7 +23,6 @@ const mutations = {
 }
 
 const actions = {
-  // 登录
   Login({ commit }, data) {
     return new Promise((resolve, reject) => {
       userApi.login(data).then(res => {
@@ -44,7 +43,6 @@ const actions = {
       })
     })
   },
-
   Register({ commit }, data) {
     return new Promise((resolve, reject) => {
       userApi.register(data).then(res => {
@@ -65,7 +63,6 @@ const actions = {
       })
     })
   },
-
   Logout({ commit }) {
     return new Promise((resolve, reject) => {
       auth.removeToken()

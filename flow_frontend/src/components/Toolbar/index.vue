@@ -285,12 +285,13 @@
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.8)'
                     })
-                    let graph = this.graph.save()
+                    let graph = this.graph.save();
                     Object.assign(graph, {id: this.graphId});
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
                     };
+                    console.log(data);
                     graphApi.sendGraph(data).then(res => {
                         Notification({
                             title: '成功',

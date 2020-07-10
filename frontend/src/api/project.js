@@ -50,7 +50,7 @@ export default {
             data
         })
     },
-    getGraphs(data) {
+    getProjects(data) {
         return request({
             url: '/graph/',
             method: 'get',
@@ -78,7 +78,7 @@ export default {
             data
         })
     },
-    deleteGraphs(data) {
+    deleteProjects(data) {
         return request({
             url: '/graph/multiple_delete/',
             method: 'delete',

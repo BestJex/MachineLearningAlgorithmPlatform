@@ -5,42 +5,42 @@ export default {
         return request({
             url: '/user/captcha',
             method: 'get',
-            data
+            params: data,
         })
     },
     login(data) {
         return request({
             url: '/user/login',
             method: 'post',
-            data
+            data,
         })
     },
     register(data) {
         return request({
             url: '/user/register',
             method: 'post',
-            data
+            data,
         })
     },
     retrieve(data) {
         return request({
             url: '/user/chapassword',
             method: 'post',
-            data
+            data,
         })
     },
     information(data) {
         return request({
             url: '/user/information',
             method: 'get',
-            data
+            data,
         })
     },
     changeInformation(data) {
         return request({
             url: '/user/chainformation',
             method: 'get',
-            data
+            data,
         })
     },
 }

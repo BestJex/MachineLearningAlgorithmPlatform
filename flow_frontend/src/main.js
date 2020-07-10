@@ -11,17 +11,16 @@ import VeScatter from 'v-charts/lib/scatter.common'
 import Contextmenu from 'vue-contextmenujs'
 import './permission'
 
-Vue.config.productionTip = false
-Vue.use(ElementUI,{size:'mini'})
-Vue.use(VueIconFont)
-Vue.use(Contextmenu)
-Vue.component(VeLine.name, VeLine)
-Vue.component(VeScatter.name, VeScatter)
-Vue.prototype.axios = axios
+Vue.config.productionTip = false;
+Vue.use(ElementUI,{size:'mini'});
+Vue.use(VueIconFont);
+Vue.use(Contextmenu);
+Vue.component(VeLine.name, VeLine);
+Vue.component(VeScatter.name, VeScatter);
+Vue.prototype.axios = axios;
 
 new Vue({
   render: h => h(App),
   router,
   store
 }).$mount('#app')
-

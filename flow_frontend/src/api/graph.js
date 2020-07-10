@@ -13,7 +13,7 @@ export default {
         return request({
             url: '/graph/',
             method: 'get',
-            params: data
+            params: data,
         })
     },
 
@@ -21,7 +21,7 @@ export default {
         return request({
             url: '/loadgraph',
             method: 'get',
-            params: data
+            params: data,
         })
     },
 
@@ -29,7 +29,7 @@ export default {
         return request({
             url: '/graph/',
             method: 'post',
-            data
+            data,
         })
     },
 	

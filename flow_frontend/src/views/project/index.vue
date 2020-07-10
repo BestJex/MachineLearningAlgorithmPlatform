@@ -85,7 +85,6 @@
 		name: 'Project',
 		data() {
 			return {
-				// 查询类
 				listQuery: {
 					page: 1,
 					page_size: 10
