@@ -75,82 +75,27 @@
 				  title="成组"
 				></i>
 				<i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
+				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
 				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
 				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
 				<el-button @click="runProject" type="success">运行项目</el-button>
-				<el-button @click="drawer = true" type="success">运行信息</el-button>
+				<el-button @click="getTerminal" type="success">运行信息</el-button>
 
-				<el-dropdown size="mini" split-button type="info" style="float: right; margin-right: 10px;">
-					导出
+				<el-dropdown style="float: right; margin-right: 10px;">
+					<el-button type="primary">
+						生成代码<i class="el-icon-arrow-down el-icon--right"></i>
+					</el-button>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>
-							<el-link target="_blank" :href="pythonFilePath" :underline="false">
-								导出.py文件
-							</el-link>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<el-link target="_blank" :href="jsonFilePath" :underline="false">
-								导出.json文件
-							</el-link>
-						</el-dropdown-item>
+						<el-dropdown-item>导出.py文件</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-
-				<el-drawer
+			<!-- 	<el-drawer
 					:visible.sync="drawer"
 					:direction="direction"
 					:with-header="false">
 
-					<div class="terminal-top">
-						<div class="a" v-if="terminalOpen === 0">
-							<span>变量名</span>
-							<span>变量类型</span>
-							<span>变量值</span>
-						</div>
-						<div class="b" v-if="terminalOpen === 1">
-							<span>ln</span>
-							<span>代码</span>
-						</div>
-						<div class="c" v-if="terminalOpen === 2"><span>实时数据(每分钟采样一次) 硬盘 0GB/100GB</span></div>
-					</div>
-					<div class="terminal-body">
-						<div v-if="terminalOpen === 0" class="a"></div>
-						<div v-if="terminalOpen === 1" class="b"></div>
-						<div v-if="terminalOpen === 2" class="c">
-							<el-row>
-								<el-col :span="4">
-									<div class="body-left">
-										<div class="a">
-											<p>CPU</p>
-											<p>5%</p>
-										</div>
-										<div class="a">
-											<p>内存</p>
-											<p>0.16GB/8GB</p>
-										</div>
-									</div>
-								</el-col>
-								<el-col :span="20">
-									<div class="body-right">ddd</div>
-								</el-col>
-							</el-row>
-						</div>
-					</div>
-					<div class="terminal-foot">
-						<div class="foot-left">命令模式</div>
-						<div class="foot-right">
-							<div class="actions" :style="{backgroundColor: terminalOpen === 0 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(0)">变量监控
-							</div>
-							<div class="actions" :style="{backgroundColor: terminalOpen === 1 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(1)">运行历史
-							</div>
-							<div class="actions" :style="{backgroundColor: terminalOpen === 2 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(2)">性能监控
-							</div>
-						</div>
-					</div>
-				</el-drawer>
+					
+				</el-drawer> -->
 
 			</div>
 		</transition>
@@ -185,6 +130,7 @@
     import { uniqueId, getBox } from '@/utils'
     import graphApi from '@/api/graph'
     import { mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
@@ -209,7 +155,6 @@
 
                 drawer: false,
                 direction: 'btt',
-                terminalOpen: 0
             }
         },
         computed: {
@@ -312,18 +257,19 @@
                 if (this.redoList.length > 0) this.command.redo()
             },
             forEach(json) {
-                for (let val in json) {
-                    if (val === 'id' && typeof json.val === 'string') {
+                for (var val in json) {
+                    if (val === 'id' && typeof json[val] === 'string') {
                         this.max_id = Math.max(
                             this.max_id,
-                            parseInt(json.val.replace(/[^0-9]/gi, ''))
+                            parseInt(json[val].replace(/[^0-9]/gi, ''))
                         )
                     }
-                    if (typeof json.val == 'object' && json.val !== null) {
-                        this.forEach(json.val);
+                    if (typeof json[val] == 'object' && json[val] !== null) {
+                        this.forEach(json[val])
                     }
                 }
             },
+
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -331,7 +277,7 @@
                         lock: true,
                         text: '保存中',
                         spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.8)',
+                        background: 'rgba(0, 0, 0, 0.8)'
                     })
                     let graph = this.graph.save()
                     Object.assign(graph, { id: this.graphId })
@@ -345,56 +291,56 @@
                             title: '成功',
                             message: '保存成功',
                             type: 'success',
-                            duration: 3000,
-                        });
+                            duration: 3000
+                        })
                     }).then(() => {
-                        return graphApi.getGraphById({graphid: this.graphId});
+                        return graphApi.getGraphById({ graphid: this.graphId })
                     }).then(res => {
-                        const data = res.data.data;
-                        this.forEach(data);
-                        this.$store.commit('app/SET_MAXID', this.max_id);
-                        this.graph.read(data);
+                        const data = res.data.data
+                        this.forEach(data)
+                        this.$store.commit('app/SET_MAXID', this.max_id)
+                        this.graph.read(data)
                         if (data.nodes.length) {
-                            this.graph.fitView(100);
+                            this.graph.fitView(100)
                         }
-                        loading.close();
+                        loading.close()
                     }).catch(err => {
                         loading.close()
                         Notification({
                             title: '错误',
                             message: err,
                             type: 'error',
-                            duration: 3000,
+                            duration: 3000
                         })
                     })
                 }
             },
             handleDelete() {
                 if (this.selectedItem.length > 0) {
-                    this.command.executeCommand('delete', this.selectedItem);
-                    this.selectedItem = [];
+                    this.command.executeCommand('delete', this.selectedItem)
+                    this.selectedItem = []
                 }
             },
             getFormatPadding() {
-                return Util.formatPadding(this.graph.get('fitViewPadding'));
+                return Util.formatPadding(this.graph.get('fitViewPadding'))
             },
             getViewCenter() {
-                const padding = this.getFormatPadding();
-                const graph = this.graph;
-                const width = this.graph.get('width');
-                const height = graph.get('height');
+                const padding = this.getFormatPadding()
+                const graph = this.graph
+                const width = this.graph.get('width')
+                const height = graph.get('height')
                 return {
                     x: (width - padding[2] - padding[3]) / 2 + padding[3],
                     y: (height - padding[0] - padding[2]) / 2 + padding[0]
-                };
+                }
             },
             handleZoomIn() {
-                const currentZoom = this.graph.getZoom();
-                this.graph.zoomTo(currentZoom + 0.5, this.getViewCenter());
+                const currentZoom = this.graph.getZoom()
+                this.graph.zoomTo(currentZoom + 0.5, this.getViewCenter())
             },
             handleZoomOut() {
-                const currentZoom = this.graph.getZoom();
-                this.graph.zoomTo(currentZoom - 0.5, this.getViewCenter());
+                const currentZoom = this.graph.getZoom()
+                this.graph.zoomTo(currentZoom - 0.5, this.getViewCenter())
             },
             handleToBack() {
                 if (this.selectedItem && this.selectedItem.length > 0) {
@@ -556,11 +502,12 @@
                     })
             },
             addNode() {
-            
             },
-            terminalTrans(i) {
-                this.terminalOpen = i
-            }
+			
+			getTerminal() {
+				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+			}
+           
         }
     }
 </script>
