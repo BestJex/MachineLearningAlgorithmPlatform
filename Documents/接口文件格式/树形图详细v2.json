@@ -1,0 +1,396 @@
+{
+  "data": [
+    {
+      "name": "python",
+      "children": [
+        {
+          "name": "houlin",
+          "children": [
+            {
+              "name": "AdaBoostClassifier",
+              "id": 45,
+              "information": {
+                "name": "AdaBoostClassifier",
+                "id": 45,
+                "templateid": 34,
+                "Parametersattibute": {
+                  "base_estimator": {
+                    "name": "base_estimator",
+                    "number": 1,
+                    "type": "object",
+                    "default": "DecisionTreeClassifier(max_depth=1)",
+                    "selection": "No",
+                    "restriction": []
+                  },
+                  "n_estimators": {
+                    "name": "n_estimators",
+                    "number": 2,
+                    "type": "int",
+                    "default": "50",
+                    "selection": "No",
+                    "restriction": [
+                      ">0"
+                    ]
+                  },
+                  "learning_rate": {
+                    "name": "learning_rate",
+                    "number": 3,
+                    "type": "float",
+                    "default": "50",
+                    "selection": "No",
+                    "restriction": [
+                      ">0",
+                      "<=1"
+                    ]
+                  },
+                  "algorithm": {
+                    "name": "algorithm",
+                    "number": 4,
+                    "type": "selection",
+                    "default": "SAMME.R",
+                    "selection": [
+                      "SAMME.R",
+                      "SAMME"
+                    ],
+                    "restriction": [
+                      "selection"
+                    ]
+                  },
+                  "random_state": {
+                    "name": "random_state",
+                    "number": 5,
+                    "type": "RandomState",
+                    "default": "No",
+                    "selection": "No",
+                    "restriction": []
+                  },
+                  "modelname": {
+                    "name": "modelname",
+                    "number": 8,
+                    "type": "str",
+                    "default": "No",
+                    "selection": "No",
+                    "restriction": []
+                  }
+                },
+                "inputattibute": {
+                  "traindata_X": {
+                    "name": "traindata_X",
+                    "type": "pandas.core.frame.DataFrame",
+                    "number": 6,
+                    "proportion": 0.33
+                  },
+                  "traindata_y": {
+                    "name": "traindata_y",
+                    "type": "pandas.core.series.Series",
+                    "number": 7,
+                    "proportion": 0.67
+                  }
+                },
+                "outputattibute": {
+                  "model": {
+                    "name": "model",
+                    "type": "model",
+                    "disable": "No",
+                    "proportion": 0.5
+                  }
+                }
+              }
+            }
+          ],
+          "id": 3,
+          "is_menu": true
+        },
+        {
+          "name": "123",
+          "id": 5,
+          "is_menu": true,
+          "children": [
+            {
+              "name": "AdaBoostClassifier",
+              "id": 49,
+              "information": {
+                "name": "AdaBoostClassifier",
+                "id": 49,
+                "templateid": 38,
+                "Parametersattibute": {
+                  "base_estimator": {
+                    "name": "base_estimator",
+                    "number": 1,
+                    "type": "object",
+                    "default": "DecisionTreeClassifier(max_depth=1)",
+                    "selection": "No",
+                    "restriction": []
+                  },
+                  "n_estimators": {
+                    "name": "n_estimators",
+                    "number": 2,
+                    "type": "int",
+                    "default": "50",
+                    "selection": "No",
+                    "restriction": [
+                      ">0"
+                    ]
+                  },
+                  "learning_rate": {
+                    "name": "learning_rate",
+                    "number": 3,
+                    "type": "float",
+                    "default": "50",
+                    "selection": "No",
+                    "restriction": [
+                      ">0",
+                      "<=1"
+                    ]
+                  },
+                  "algorithm": {
+                    "name": "algorithm",
+                    "number": 4,
+                    "type": "selection",
+                    "default": "SAMME.R",
+                    "selection": [
+                      "SAMME.R",
+                      "SAMME"
+                    ],
+                    "restriction": [
+                      "selection"
+                    ]
+                  },
+                  "random_state": {
+                    "name": "random_state",
+                    "number": 5,
+                    "type": "RandomState",
+                    "default": "No",
+                    "selection": "No",
+                    "restriction": []
+                  },
+                  "modelname": {
+                    "name": "modelname",
+                    "number": 8,
+                    "type": "str",
+                    "default": "No",
+                    "selection": "No",
+                    "restriction": []
+                  }
+                },
+                "inputattibute": {
+                  "traindata_X": {
+                    "name": "traindata_X",
+                    "type": "pandas.core.frame.DataFrame",
+                    "number": 6,
+                    "proportion": 0.33
+                  },
+                  "traindata_y": {
+                    "name": "traindata_y",
+                    "type": "pandas.core.series.Series",
+                    "number": 7,
+                    "proportion": 0.67
+                  }
+                },
+                "outputattibute": {
+                  "model": {
+                    "name": "model",
+                    "type": "model",
+                    "disable": "No",
+                    "proportion": 0.5
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "id": 2,
+      "is_menu": true
+    },
+    {
+      "name": "AdaBoostClassifier",
+      "id": 46,
+      "information": {
+        "name": "AdaBoostClassifier",
+        "id": 46,
+        "templateid": 35,
+        "Parametersattibute": {
+          "base_estimator": {
+            "name": "base_estimator",
+            "number": 1,
+            "type": "object",
+            "default": "DecisionTreeClassifier(max_depth=1)",
+            "selection": "No",
+            "restriction": []
+          },
+          "n_estimators": {
+            "name": "n_estimators",
+            "number": 2,
+            "type": "int",
+            "default": "50",
+            "selection": "No",
+            "restriction": [
+              ">0"
+            ]
+          },
+          "learning_rate": {
+            "name": "learning_rate",
+            "number": 3,
+            "type": "float",
+            "default": "50",
+            "selection": "No",
+            "restriction": [
+              ">0",
+              "<=1"
+            ]
+          },
+          "algorithm": {
+            "name": "algorithm",
+            "number": 4,
+            "type": "selection",
+            "default": "SAMME.R",
+            "selection": [
+              "SAMME.R",
+              "SAMME"
+            ],
+            "restriction": [
+              "selection"
+            ]
+          },
+          "random_state": {
+            "name": "random_state",
+            "number": 5,
+            "type": "RandomState",
+            "default": "No",
+            "selection": "No",
+            "restriction": []
+          },
+          "modelname": {
+            "name": "modelname",
+            "number": 8,
+            "type": "str",
+            "default": "No",
+            "selection": "No",
+            "restriction": []
+          }
+        },
+        "inputattibute": {
+          "traindata_X": {
+            "name": "traindata_X",
+            "type": "pandas.core.frame.DataFrame",
+            "number": 6,
+            "proportion": 0.33
+          },
+          "traindata_y": {
+            "name": "traindata_y",
+            "type": "pandas.core.series.Series",
+            "number": 7,
+            "proportion": 0.67
+          }
+        },
+        "outputattibute": {
+          "model": {
+            "name": "model",
+            "type": "model",
+            "disable": "No",
+            "proportion": 0.5
+          }
+        }
+      }
+    },
+    {
+      "name": "123",
+      "id": 4,
+      "is_menu": true,
+      "children": [
+        {
+          "name": "AdaBoostClassifier",
+          "id": 48,
+          "information": {
+            "name": "AdaBoostClassifier",
+            "id": 48,
+            "templateid": 37,
+            "Parametersattibute": {
+              "base_estimator": {
+                "name": "base_estimator",
+                "number": 1,
+                "type": "object",
+                "default": "DecisionTreeClassifier(max_depth=1)",
+                "selection": "No",
+                "restriction": []
+              },
+              "n_estimators": {
+                "name": "n_estimators",
+                "number": 2,
+                "type": "int",
+                "default": "50",
+                "selection": "No",
+                "restriction": [
+                  ">0"
+                ]
+              },
+              "learning_rate": {
+                "name": "learning_rate",
+                "number": 3,
+                "type": "float",
+                "default": "50",
+                "selection": "No",
+                "restriction": [
+                  ">0",
+                  "<=1"
+                ]
+              },
+              "algorithm": {
+                "name": "algorithm",
+                "number": 4,
+                "type": "selection",
+                "default": "SAMME.R",
+                "selection": [
+                  "SAMME.R",
+                  "SAMME"
+                ],
+                "restriction": [
+                  "selection"
+                ]
+              },
+              "random_state": {
+                "name": "random_state",
+                "number": 5,
+                "type": "RandomState",
+                "default": "No",
+                "selection": "No",
+                "restriction": []
+              },
+              "modelname": {
+                "name": "modelname",
+                "number": 8,
+                "type": "str",
+                "default": "No",
+                "selection": "No",
+                "restriction": []
+              }
+            },
+            "inputattibute": {
+              "traindata_X": {
+                "name": "traindata_X",
+                "type": "pandas.core.frame.DataFrame",
+                "number": 6,
+                "proportion": 0.33
+              },
+              "traindata_y": {
+                "name": "traindata_y",
+                "type": "pandas.core.series.Series",
+                "number": 7,
+                "proportion": 0.67
+              }
+            },
+            "outputattibute": {
+              "model": {
+                "name": "model",
+                "type": "model",
+                "disable": "No",
+                "proportion": 0.5
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

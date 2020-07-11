@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ae58bd50-ab54-4ced-8967-98ea54cc4597" name="NankaiUniversityArtificialIntelligenceOpenPlatform">
+        <fileTransfer rootFolder="/usr/flow_frontend" accessType="SFTP" host="39.105.21.62" port="22" sshConfigId="e8d08a32-283c-41e2-a858-682db2300b57" sshConfig="root@39.105.21.62:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

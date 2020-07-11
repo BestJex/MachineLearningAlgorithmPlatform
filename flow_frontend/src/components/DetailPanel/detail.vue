@@ -195,6 +195,7 @@
                             );
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
+                            // console.log(self.node_detail);
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);
@@ -206,11 +207,13 @@
                     })
                 })
             },
+
             downloadFile() {
                 location.href = `${configJS.BASE_API}download_file?graphId=${this.graphId}&nodeId=${
                     this.item.getModel().id
                 }`;
             },
+
             changeValue(e) {
                 const model = {
                     node_detail: this.node_detail

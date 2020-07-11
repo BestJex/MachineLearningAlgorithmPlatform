@@ -62,7 +62,7 @@
                           class="custom-tree-node"
                           slot-scope="{ node, data }">
                       <span v-show="!operation">{{ node.label }}</span>
-                      <el-input v-model="node.label" v-show="operation"></el-input>
+                      <el-input v-model="data.name" v-show="operation"></el-input>
                   </span>
         </el-tree>
         <el-dialog
@@ -78,7 +78,7 @@
             <el-button
                     @click="recoveryTreeNode()"
                     size="small"
-                    style="margin-top: 20px; margin-left: 450px;"
+                    style="margin-top: 20px; margin-left: 80%;"
                     type="success">确认
             </el-button>
         </el-dialog>
@@ -91,8 +91,9 @@
             <el-button
                     @click="appendNodes()"
                     size="small"
-                    style="margin-top: 20px; margin-left: 450px;"
-                    type="success">确认
+                    style="margin-top: 20px; margin-left: 80%;"
+                    type="success">
+                确认
             </el-button>
         </el-dialog>
     </div>
@@ -170,6 +171,20 @@
                     url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
                 }).then(res => {
                     this.nodeList = res.data.data.path.data;
+                    for (let i = 0; i < this.nodeList.length; i++) {
+                        this.nodeList[i].label = this.nodeList[i].name;
+                        if (this.nodeList[i].children) {
+                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
+                                this.nodeList[i].children[j].label = this.nodeList[i].children[j].name;
+                                if (this.nodeList[i].children[j].children) {
+                                    for (let k = 0; k < this.nodeList[i].children[j].children.length; k++) {
+                                        this.nodeList[i].children[j].children[k].label = this.nodeList[i].children[j].children[k].name;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    console.log(this.nodeList);
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -344,8 +359,6 @@
                         data.y = xy.y;
                         data.node_detail = [];
                         data.point_detail = [];
-                        data.name = node.data.name;
-                        data.label = node.data.name;
                         data.description = null;
                         data.status = "init";
                         // 加载输入节点
@@ -362,6 +375,7 @@
                         }
                         data.shape = "customNode";
                         data.type = 'node';
+                        data.status = 'init';
                         this.command.executeCommand('add', [data]);
                     }
                     this.$store.commit('app/SET_ALLOWDROP', false);
@@ -451,7 +465,7 @@
         color: rgba(0, 0, 0, 0.65);
         border-radius: 4px;
         width: 160px;
-        height: 28px;
+        height: 30px;
         line-height: 26px;
         padding-left: 8px;
         border: 1px solid rgba(0, 0, 0, 0);
