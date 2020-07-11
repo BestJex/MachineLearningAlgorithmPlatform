@@ -26,7 +26,7 @@ const state = {
   is_show_echarts: false,
 
   max_id: 0,
-  graph_id: 0
+  graph_id: 0,    terminal_display: 'none'
 }
 
 const mutations = {
@@ -89,7 +89,7 @@ const mutations = {
   },
   SET_GRAPHID: (state, graph_id) => {
     state.graph_id = graph_id
-  }
+  },  SET_TERMINALDISPLAY: (state, terminal_display) => {	  state.terminal_display = terminal_display  }
 }
 
 const actions = {
