@@ -4,7 +4,7 @@
                 class="pannel"
                 id="canvas_detailpannel"
                 v-if="status==='canvas-selected'">
-            <div class="pannel-title">画布</div>
+            <div class="pannel-title">面板</div>
             <div class="block-container">
                 <el-checkbox
                         @change="changeGridState"

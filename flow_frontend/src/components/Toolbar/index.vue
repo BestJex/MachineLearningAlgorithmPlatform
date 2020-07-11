@@ -75,7 +75,6 @@
 				  title="成组"
 				></i>
 				<i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
 				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
 				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
 				<el-button @click="runProject" type="success">运行项目</el-button>
