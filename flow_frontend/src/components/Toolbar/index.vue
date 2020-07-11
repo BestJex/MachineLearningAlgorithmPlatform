@@ -1,151 +1,200 @@
 <template>
-    <div class="toolbar">
-        <transition name="el-zoom-in-center">
-            <div :class="{'delay-5': !isRunning}" v-show="!isRunning">
-                <link
-                        href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
-                        rel="stylesheet"
-                        type="text/css"/>
-                <i
-                        :class="undoList.length>0?'':'disable'"
-                        @click="handleUndo"
-                        class="command iconfont icon-undo"
-                        title="撤销"></i>
-                <i
-                        :class="redoList.length>0?'':'disable'"
-                        @click="handleRedo"
-                        class="command iconfont icon-redo"
-                        title="重做"></i>
-                <span class="separator"></span>
-                <!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
-                <i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
-                <i
-                        :class="selectedItem.length?'':'disable'"
-                        @click="handleDelete"
-                        class="command iconfont icon-delete-o"
-                        data-command="delete"
-                        title="删除"></i>
-                <span class="separator"></span>
-                <i
-                        @click="handleZoomIn"
-                        class="command iconfont icon-zoom-in-o"
-                        data-command="zoomIn"
-                        title="放大"></i>
-                <i
-                        @click="handleZoomOut"
-                        class="command iconfont icon-zoom-out-o"
-                        data-command="zoomOut"
-                        title="缩小"></i>
-                <i
-                        @click="handleAutoZoom"
-                        class="command iconfont icon-fit"
-                        data-command="autoZoom"
-                        title="适应画布"></i>
-                <i
-                        @click="handleResetZoom"
-                        class="command iconfont icon-actual-size-o"
-                        data-command="resetZoom"
-                        title="实际尺寸"></i>
-                <span class="separator"></span>
-                <i
-                        :class="selectedItem.length?'':'disable'"
-                        @click="handleToBack"
-                        class="command iconfont icon-to-back"
-                        data-command="toBack"
-                        title="层级后置"></i>
-                <i
-                        :class="selectedItem.length?'':'disable'"
-                        @click="handleToFront"
-                        class="command iconfont icon-to-front"
-                        data-command="toFront"
-                        title="层级前置"></i>
-                <span class="separator"></span>
-                <span class="separator"></span>
-                <i
-                        :class="multiSelect?'disable':''"
-                        @click="handleMuiltSelect"
-                        class="command iconfont icon-select"
-                        data-command="multiSelect"
-                        title="多选"></i>
-                <!-- <i
-                  :class="addGroup?'':'disable'"
-                  @click="handleAddGroup"
-                  class="command iconfont icon-group"
-                  data-command="addGroup"
-                  title="成组"
-                ></i>
-                <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-                <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
-                <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
-                <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-                <el-button @click="runProject" type="success">运行项目</el-button>
-                <el-button @click="drawer = true" type="success">运行信息</el-button>
+	<div class="toolbar">
+		<transition name="el-zoom-in-center">
+			<div :class="{'delay-5': !isRunning}" v-show="!isRunning">
+				<link
+					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+					rel="stylesheet"
+					type="text/css"/>
+				<i
+					:class="undoList.length>0?'':'disable'"
+					@click="handleUndo"
+					class="command iconfont icon-undo"
+					title="撤销"></i>
+				<i
+					:class="redoList.length>0?'':'disable'"
+					@click="handleRedo"
+					class="command iconfont icon-redo"
+					title="重做"></i>
+				<span class="separator"></span>
+				<!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
+				<i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
+				<i
+					:class="selectedItem.length?'':'disable'"
+					@click="handleDelete"
+					class="command iconfont icon-delete-o"
+					data-command="delete"
+					title="删除"></i>
+				<span class="separator"></span>
+				<i
+					@click="handleZoomIn"
+					class="command iconfont icon-zoom-in-o"
+					data-command="zoomIn"
+					title="放大"></i>
+				<i
+					@click="handleZoomOut"
+					class="command iconfont icon-zoom-out-o"
+					data-command="zoomOut"
+					title="缩小"></i>
+				<i
+					@click="handleAutoZoom"
+					class="command iconfont icon-fit"
+					data-command="autoZoom"
+					title="适应画布"></i>
+				<i
+					@click="handleResetZoom"
+					class="command iconfont icon-actual-size-o"
+					data-command="resetZoom"
+					title="实际尺寸"></i>
+				<span class="separator"></span>
+				<i
+					:class="selectedItem.length?'':'disable'"
+					@click="handleToBack"
+					class="command iconfont icon-to-back"
+					data-command="toBack"
+					title="层级后置"></i>
+				<i
+					:class="selectedItem.length?'':'disable'"
+					@click="handleToFront"
+					class="command iconfont icon-to-front"
+					data-command="toFront"
+					title="层级前置"></i>
+				<span class="separator"></span>
+				<span class="separator"></span>
+				<i
+					:class="multiSelect?'disable':''"
+					@click="handleMuiltSelect"
+					class="command iconfont icon-select"
+					data-command="multiSelect"
+					title="多选"></i>
+				<!-- <i
+				  :class="addGroup?'':'disable'"
+				  @click="handleAddGroup"
+				  class="command iconfont icon-group"
+				  data-command="addGroup"
+				  title="成组"
+				></i>
+				<i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
+				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
+				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
+				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
+				<el-button @click="runProject" type="success">运行项目</el-button>
+				<el-button @click="drawer = true" type="success">运行信息</el-button>
 
-                <el-dropdown size="mini" split-button type="info" style="float: right; margin-right: 10px;">
-                    导出
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>
-                            <el-link target="_blank" :href="pythonFilePath" :underline="false">
-                                导出.py文件
-                            </el-link>
-                        </el-dropdown-item>
-                        <el-dropdown-item>
-                            <el-link target="_blank" :href="jsonFilePath" :underline="false">
-                                导出.json文件
-                            </el-link>
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+				<el-dropdown size="mini" split-button type="info" style="float: right; margin-right: 10px;">
+					导出
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>
+							<el-link target="_blank" :href="pythonFilePath" :underline="false">
+								导出.py文件
+							</el-link>
+						</el-dropdown-item>
+						<el-dropdown-item>
+							<el-link target="_blank" :href="jsonFilePath" :underline="false">
+								导出.json文件
+							</el-link>
+						</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
 
-                <el-drawer
-                        :visible.sync="drawer"
-                        :direction="direction"
-                        :with-header="false">
-                    <span>我来啦!</span>
-                </el-drawer>
+				<el-drawer
+					:visible.sync="drawer"
+					:direction="direction"
+					:with-header="false">
 
-            </div>
-        </transition>
-        <transition name="el-zoom-in-center">
-            <div
-                    :class="{'delay-4': isRunning, 'delay-0': !isRunning}"
-                    style="text-align: center;"
-                    v-show="isRunning">
-                <span>正在运行</span>
-            </div>
-        </transition>
-        <el-dialog
-                :append-to-body="true"
-                :visible.sync="isShowFileManagement"
-                custom-class="preview-dialog"
-                title="文件管理">
-            <file-manage :graph="graph"></file-manage>
-        </el-dialog>
-        <el-dialog
-                :append-to-body="true"
-                :visible.sync="isShowNodeManage"
-                custom-class="preview-dialog"
-                title="新增结点">
-            <node-manage/>
-        </el-dialog>
-    </div>
+					<div class="terminal-top">
+						<div class="a" v-if="terminalOpen === 0">
+							<span>变量名</span>
+							<span>变量类型</span>
+							<span>变量值</span>
+						</div>
+						<div class="b" v-if="terminalOpen === 1">
+							<span>ln</span>
+							<span>代码</span>
+						</div>
+						<div class="c" v-if="terminalOpen === 2"><span>实时数据(每分钟采样一次) 硬盘 0GB/100GB</span></div>
+					</div>
+					<div class="terminal-body">
+						<div v-if="terminalOpen === 0" class="a"></div>
+						<div v-if="terminalOpen === 1" class="b"></div>
+						<div v-if="terminalOpen === 2" class="c">
+							<el-row>
+								<el-col :span="4">
+									<div class="body-left">
+										<div class="a">
+											<p>CPU</p>
+											<p>5%</p>
+										</div>
+										<div class="a">
+											<p>内存</p>
+											<p>0.16GB/8GB</p>
+										</div>
+									</div>
+								</el-col>
+								<el-col :span="20">
+									<div class="body-right">ddd</div>
+								</el-col>
+							</el-row>
+						</div>
+					</div>
+					<div class="terminal-foot">
+						<div class="foot-left">命令模式</div>
+						<div class="foot-right">
+							<div class="actions" :style="{backgroundColor: terminalOpen === 0 ? `#BFD1E2` : ``}"
+								 @click="terminalTrans(0)">变量监控
+							</div>
+							<div class="actions" :style="{backgroundColor: terminalOpen === 1 ? `#BFD1E2` : ``}"
+								 @click="terminalTrans(1)">运行历史
+							</div>
+							<div class="actions" :style="{backgroundColor: terminalOpen === 2 ? `#BFD1E2` : ``}"
+								 @click="terminalTrans(2)">性能监控
+							</div>
+						</div>
+					</div>
+				</el-drawer>
+
+			</div>
+		</transition>
+		<transition name="el-zoom-in-center">
+			<div
+				:class="{'delay-4': isRunning, 'delay-0': !isRunning}"
+				style="text-align: center;"
+				v-show="isRunning">
+				<span>正在运行</span>
+			</div>
+		</transition>
+		<el-dialog
+			:append-to-body="true"
+			:visible.sync="isShowFileManagement"
+			custom-class="preview-dialog"
+			title="文件管理">
+			<file-manage :graph="graph"></file-manage>
+		</el-dialog>
+		<el-dialog
+			:append-to-body="true"
+			:visible.sync="isShowNodeManage"
+			custom-class="preview-dialog"
+			title="新增结点">
+			<node-manage/>
+		</el-dialog>
+	</div>
 </template>
 
 <script>
     import eventBus from '@/utils/eventBus'
     import Util from '@antv/g6/src/util'
-    import {uniqueId, getBox} from '@/utils'
+    import { uniqueId, getBox } from '@/utils'
     import graphApi from '@/api/graph'
-    import {mapGetters} from 'vuex'
-    import {Notification} from 'element-ui'
+    import { mapGetters } from 'vuex'
+    import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
 
     export default {
         data() {
             return {
-                jsonFilePath: "",
-                pythonFilePath: "",
+                jsonFilePath: '',
+                pythonFilePath: '',
 
                 page: {},
                 graph: {},
@@ -161,6 +210,7 @@
 
                 drawer: false,
                 direction: 'btt',
+                terminalOpen: 0
             }
         },
         computed: {
@@ -197,12 +247,12 @@
         },
         watch: {
             selectedItem(val) {
-                this.addGroup = !!(val && val.length > 1);
+                this.addGroup = !!(val && val.length > 1)
             }
         },
         methods: {
             init() {
-                const {editor, command} = this.$parent
+                const { editor, command } = this.$parent
                 this.editor = editor
                 this.command = command
             },
@@ -285,13 +335,13 @@
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.8)'
                     })
-                    let graph = this.graph.save();
-                    Object.assign(graph, {id: this.graphId});
+                    let graph = this.graph.save()
+                    Object.assign(graph, { id: this.graphId })
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
-                    };
-                    console.log(data);
+                    }
+                    console.log(data)
                     graphApi.sendGraph(data).then(res => {
                         Notification({
                             title: '成功',
@@ -300,9 +350,9 @@
                             duration: 3000
                         })
                     }).then(() => {
-                        return graphApi.getGraphById({graphid: this.graphId})
+                        return graphApi.getGraphById({ graphid: this.graphId })
                     }).then(res => {
-                        const data = res.data.data;
+                        const data = res.data.data
                         this.forEach(data)
                         this.$store.commit('app/SET_MAXID', this.max_id)
                         this.graph.read(data)
@@ -464,16 +514,16 @@
             },
 
             consoleData() {
-                const data = this.graph.save();
-                Object.assign(data, {id: 1})
+                const data = this.graph.save()
+                Object.assign(data, { id: 1 })
                 // graphApi.uploadJson(data).then(res => {
                 // })
             },
             runProject() {
                 let graph = this.graph.save()
-                Object.assign(graph, {id: this.graphId})
+                Object.assign(graph, { id: this.graphId })
                 graphApi
-                    .runProject({graph: JSON.stringify(graph)})
+                    .runProject({ graph: JSON.stringify(graph) })
                     .then(res => {
                         console.log('正在运行')
                         this.isRunning = true
@@ -490,9 +540,9 @@
             },
             runNode() {
                 let graph = this.graph.save()
-                Object.assign(graph, {id: this.graphId})
+                Object.assign(graph, { id: this.graphId })
                 graphApi
-                    .runNode({graph: JSON.stringify(graph), nodeId: this.selectedNodeId})
+                    .runNode({ graph: JSON.stringify(graph), nodeId: this.selectedNodeId })
                     .then(res => {
                         console.log('正在运行')
                         this.isRunning = true
@@ -508,61 +558,161 @@
                     })
             },
             addNode() {
+            },
+            terminalTrans(i) {
+                this.terminalOpen = i
             }
         }
     }
 </script>
 
 
-<style scoped>
-    .toolbar {
-        box-sizing: border-box;
-        padding: 8px 0;
-        width: 100%;
-        border: 1px solid #e9e9e9;
-        height: 42px;
-        z-index: 3;
-        box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
-    }
+<style lang="scss" scoped>
+	.toolbar {
+		box-sizing: border-box;
+		padding: 8px 0;
+		width: 100%;
+		border: 1px solid #e9e9e9;
+		height: 42px;
+		z-index: 3;
+		box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
+	}
 
-    .toolbar .command:nth-of-type(1) {
-        margin-left: 24px;
-    }
+	.toolbar .command:nth-of-type(1) {
+		margin-left: 24px;
+	}
 
-    .toolbar .command {
-        box-sizing: border-box;
-        width: 27px;
-        height: 27px;
-        margin: 0 6px;
-        border-radius: 2px;
-        padding-left: 4px;
-        display: inline-block;
-        border: 1px solid rgba(2, 2, 2, 0);
-    }
+	.toolbar .command {
+		box-sizing: border-box;
+		width: 27px;
+		height: 27px;
+		margin: 0 6px;
+		border-radius: 2px;
+		padding-left: 4px;
+		display: inline-block;
+		border: 1px solid rgba(2, 2, 2, 0);
+	}
 
-    .toolbar .command:hover {
-        cursor: pointer;
-        border: 1px solid #e9e9e9;
-    }
+	.toolbar .command:hover {
+		cursor: pointer;
+		border: 1px solid #e9e9e9;
+	}
 
-    .toolbar .disable {
-        color: rgba(0, 0, 0, 0.25);
-    }
+	.toolbar .disable {
+		color: rgba(0, 0, 0, 0.25);
+	}
 
-    .toolbar .separator {
-        margin: 4px;
-        border-left: 1px solid #e9e9e9;
-    }
+	.toolbar .separator {
+		margin: 4px;
+		border-left: 1px solid #e9e9e9;
+	}
 
-    .delay-0 {
-        transition: none;
-    }
+	.delay-0 {
+		transition: none;
+	}
 
-    .delay-4 {
-        transition-delay: 0.4s;
-    }
+	.delay-4 {
+		transition-delay: 0.4s;
+	}
 
-    .delay-5 {
-        transition-delay: 0.1s;
-    }
+	.delay-5 {
+		transition-delay: 0.1s;
+	}
+
+	.terminal-top {
+		position: absolute;
+		top: 0;
+		padding: 5px 8px 7px 8px;
+		width: 100%;
+		background-color: rgb(246, 249, 252);
+		font-size: 12px;
+
+		.a {
+			width: 41%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.b {
+			width: 20%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+	}
+
+	.terminal-body {
+		margin-top: 27px;
+		height: 215px;
+
+		.a {
+			overflow-y: scroll;
+		}
+
+		.b {
+			overflow-y: scroll;
+		}
+
+		.c {
+			overflow: hidden;
+		}
+
+	}
+
+	.terminal-foot {
+		position: absolute;
+		bottom: 0;
+		display: flex;
+		justify-content: space-between;
+		padding: 0 15px 0 15px;
+		width: 100%;
+		background-color: rgb(232, 237, 243);
+		font-size: 12px;
+
+		.foot-left {
+			margin: auto 0;
+			color: #A655EF;
+			overflow: hidden;
+		}
+
+		.foot-right {
+			display: flex;
+			justify-content: flex-end;
+
+			.actions {
+				padding: 10px 18px;
+				cursor: pointer;
+			}
+
+			.actions:hover {
+				background-color: #BFD1E2;
+			}
+
+		}
+	}
+
+	.body-left {
+		background-color: rgb(232, 237, 243);
+		height: 35vh;
+
+		.a {
+			overflow: hidden;
+			background-color: rgb(191, 209, 226);
+			display: flex;
+			justify-content: left;
+
+			p {
+				line-height: 14px;
+				font-size: 12px;
+				padding: 0 8px 0 20px;
+			}
+
+		}
+
+	}
+
+	.body-right {
+		background-color: rgb(191, 209, 226);
+		height: 35vh
+	}
 </style>
