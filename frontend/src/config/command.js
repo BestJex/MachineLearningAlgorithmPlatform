@@ -1,6 +1,5 @@
-import { uniqueId } from '@/utils'
-import eventBus from "@/utils/eventBus"
-import store from "@/store"
+import store from "@/store";
+import eventBus from "@/mixin/eventBus";
 
 class command {
     editor = null;
@@ -9,71 +8,71 @@ class command {
 
     constructor(editor) {
         this.editor = editor;
-    };
+    }
 
     executeCommand(key, datas) {
         const list = []
         datas.map(data => {
             let model = data;
             if (key === 'add') {
-                store.dispatch('app/uniqueId');
-                model.id = data.type + store.state.app.max_id;
+                store.dispatch('project/uniqueId');
+                model.id = data.type + store.state.project.maxId;
             }
             if (key === 'delete') {
                 if (data.getType() === 'node') {
-                    const edges = data.getEdges()
-                    model = data.getModel()
-                    model.type = data.getType()
-                    model.id = data.get('id')
+                    const edges = data.getEdges();
+                    model = data.getModel();
+                    model.type = data.getType();
+                    model.id = data.get('id');
                     edges.forEach(edge => {
-                        let edgeModel = edge.getModel()
-                        edgeModel.type = 'edge'
-                        edgeModel.id = edge.get('id')
-                        list.push(edgeModel)
+                        let edgeModel = edge.getModel();
+                        edgeModel.type = 'edge';
+                        edgeModel.id = edge.get('id');
+                        list.push(edgeModel);
                     })
                 } else if (data.getType() === 'edge') {
-                    model = data.getModel()
-                    model.type = data.getType()
-                    model.id = data.get('id')
+                    model = data.getModel();
+                    model.type = data.getType();
+                    model.id = data.get('id');
                 }
-                eventBus.$emit('nodeselectchange', { select: false })
+                eventBus.$emit('nodeselectchange', { select: false });
             }
-            list.push(model)
-            this.doCommand(key, model)
+            list.push(model);
+            this.doCommand(key, model);
         });
 
-        this.undoList.push({ key, datas: list })
+        this.undoList.push({ key, datas: list });
         if(key==='delete'){
             this.redoList =[];
         }
         this.editor.emit(key, { undoList: this.undoList, redoList: this.redoList });
-    };
+    }
 
     doCommand(key, data) {
         switch (key) {
             case 'add':
-                this.add(data.type, data)
+                this.add(data.type, data);
                 break;
             case "update":
-                this.update(data.item, data.newModel)
-                break
+                this.update(data.item, data.newModel);
+                break;
             case "delete":
-                this.remove(data)
-                break
+                this.remove(data);
+                break;
         }
-    };
+    }
 
     add(type, item) {
         this.editor.add(type, item);
-    };
+    }
 
     update(item, model) {
         this.editor.update(item, model);
-    };
+    }
 
     remove(item) {
         this.editor.remove(item);
-    };
+    }
 
     undo() {
         const undoData = this.undoList.pop();
@@ -102,7 +101,7 @@ class command {
         }
         this.redoList.push({ key: undoData.key, datas: list });
         this.editor.emit(undoData.key, { undoList: this.undoList, redoList: this.redoList });
-    };
+    }
 
     doundo(key, data) {
         switch (key) {
@@ -116,7 +115,7 @@ class command {
                 this.add(data.type, data);
                 break;
         }
-    };
+    }
 
     redo() {
         const redoData = this.redoList.pop();
@@ -144,7 +143,7 @@ class command {
         }
         this.undoList.push({ key: redoData.key, datas: list });
         this.editor.emit(redoData.key, { undoList: this.undoList, redoList: this.redoList });
-    };
+    }
 
     doredo(key, data) {
         switch (key) {
@@ -158,11 +157,11 @@ class command {
                 this.remove(data);
                 break;
         }
-    };
+    }
 
     delete(item) {
         this.executeCommand('delete', [item]);
-    };
+    }
 }
 
 export default command;

@@ -6,32 +6,24 @@
 </template>
 
 <script>
-    import Minimap from '@antv/g6/build/minimap'
-    import eventBus from '@/utils/eventBus'
-    import {mapGetters} from 'vuex'
+    import eventBus from "@/mixin/eventBus";
+    import MiniMap from "@antv/g6/es/plugins/minimap";
 
     export default {
+        name: "miniMap",
         data() {
             return {
                 minimap: null,
-                graph: null
+                graph: null,
+                detailWidth: 200,
+                canvasWidth: 0,
+                canvasHeight: 0,
             }
         },
-        computed: {
-            ...mapGetters(['detailWidth', 'canvasWidth', 'canvasHeight'])
-        },
-        watch: {
-            // detailWidth(width) {
-            //   let height = Math.floor((width * this.canvasHeight) / this.canvasWidth)
-            //   const cfgs = {
-            //     size: [width, height],
-            //     container: 'minimap'
-            //   }
-            //   this.minimap = new Minimap({ ...cfgs })
-            // }
-        },
         created() {
-            this.bindEvent()
+            this.bindEvent();
+            this.canvasWidth = document.documentElement.clientWidth - 400;
+            this.canvasHeight = document.documentElement.clientHeight - 100;
         },
         mounted() {
             this.$nextTick(() => {
@@ -45,9 +37,9 @@
                 height = 150
                 const cfgs = {
                     size: [width, height],
-                    container: 'minimap'
+                    container: 'minimap',
                 }
-                this.minimap = new Minimap({...cfgs})
+                this.minimap = new MiniMap({...cfgs});
             },
             bindEvent() {
                 eventBus.$on('afterAddPage', page => {
@@ -61,7 +53,7 @@
                 }
                 this.graph.addPlugin(this.minimap)
             }
-        }
+        },
     }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 600px">
         <div
                 :style="`right:${detailWidth}px;`"
                 @mousedown="onResizeMouseDown"
@@ -7,7 +7,6 @@
                 id="detail-resizer"></div>
         <div
                 :style="`width:${detailWidth}px;`"
-                @mousedown="clickDetailPanel"
                 class="detailpannel"
                 id="detailpannel">
             <detail/>
@@ -16,9 +15,13 @@
 </template>
 
 <script>
-    import detail from './detail'
+    import detail from "@/components/Editor/components/DetailPanel/components/detail";
 
     export default {
+        name: "index",
+        components: {
+            detail,
+        },
         data() {
             return {
                 status: 'canvas-selected',
@@ -33,33 +36,14 @@
                 isActive: false,
                 startX: 0,
                 endX: 0,
+                detailWidth: 200,
                 DEFAULT_DETAIL_WIDTH: 200,
                 DEFAULT_RESIZER_RIGHT: 200,
                 MAX_DETAIL_WIDTH: 400,
                 MIN_DETAIL_WIDTH: 180
             }
         },
-
-        components: {
-            detail
-        },
-
-        computed: {
-            detailWidth: {
-                get() {
-                    return this.$store.getters.detailWidth;
-                },
-                set(val) {
-                    this.$store.dispatch('app/setDetailPannelWidth', val);
-                }
-            }
-        },
-
         methods: {
-            clickDetailPanel() {
-                this.$store.dispatch('app/setIsFocusCanvas', false);
-            },
-
             onResizeMouseDown(e) {
                 this.isActive = true;
                 this.startX = e.clientX;
@@ -72,7 +56,7 @@
                     this.onResizeMouseMove(e, preDetailWidth, detailpannel, resizer);
                 }
 
-                document.onmouseup = e => {
+                document.onmouseup = () => {
                     this.isActive = false;
                     const nowDetailpannelWidth = parseInt(
                         detailpannel.style.width.replace('px', '')
@@ -84,7 +68,7 @@
             },
 
             onResizeMouseMove(e, preDetailWidth, detailpannel, resizer) {
-                if (e.witch === 0) {
+                if (e.width === 0) {
                     this.isActive = false;
                 }
 
@@ -120,7 +104,7 @@
                     }
                 }
             }
-        }
+        },
     }
 </script>
 
@@ -130,7 +114,6 @@
         position: absolute;
         right: 0;
         z-index: 2;
-        // background: #f7f9fb;
         background: rgb(246, 249, 252);
         width: 200px;
         border-left: 1px solid #e6e9ed;
@@ -162,8 +145,8 @@
         cursor: col-resize;
         position: absolute;
         width: 10px;
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 0;
         z-index: 99;
 
         &:hover {
@@ -174,7 +157,7 @@
                             transparent 100%
             );
             background-size: 50px 100%;
-            background-position: 0px 50%;
+            background-position: 0 50%;
         }
     }
 </style>

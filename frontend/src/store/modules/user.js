@@ -71,7 +71,7 @@ const actions = {
             commit('setUserId', 0);
             commit('setToken', null);
             resolve();
-        })
+        });
     },
 }
 

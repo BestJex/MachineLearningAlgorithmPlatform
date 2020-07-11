@@ -178,7 +178,6 @@
 			<node-manage/>
 		</el-dialog>
 	</div>
-</template>
 
 <script>
     import eventBus from '@/utils/eventBus'
@@ -313,19 +312,18 @@
                 if (this.redoList.length > 0) this.command.redo()
             },
             forEach(json) {
-                for (var val in json) {
-                    if (val === 'id' && typeof json[val] === 'string') {
+                for (let val in json) {
+                    if (val === 'id' && typeof json.val === 'string') {
                         this.max_id = Math.max(
                             this.max_id,
-                            parseInt(json[val].replace(/[^0-9]/gi, ''))
+                            parseInt(json.val.replace(/[^0-9]/gi, ''))
                         )
                     }
-                    if (typeof json[val] == 'object' && json[val] !== null) {
-                        this.forEach(json[val])
+                    if (typeof json.val == 'object' && json.val !== null) {
+                        this.forEach(json.val);
                     }
                 }
             },
-
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -333,7 +331,7 @@
                         lock: true,
                         text: '保存中',
                         spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.8)'
+                        background: 'rgba(0, 0, 0, 0.8)',
                     })
                     let graph = this.graph.save()
                     Object.assign(graph, { id: this.graphId })
@@ -347,56 +345,56 @@
                             title: '成功',
                             message: '保存成功',
                             type: 'success',
-                            duration: 3000
-                        })
+                            duration: 3000,
+                        });
                     }).then(() => {
-                        return graphApi.getGraphById({ graphid: this.graphId })
+                        return graphApi.getGraphById({graphid: this.graphId});
                     }).then(res => {
-                        const data = res.data.data
-                        this.forEach(data)
-                        this.$store.commit('app/SET_MAXID', this.max_id)
-                        this.graph.read(data)
+                        const data = res.data.data;
+                        this.forEach(data);
+                        this.$store.commit('app/SET_MAXID', this.max_id);
+                        this.graph.read(data);
                         if (data.nodes.length) {
-                            this.graph.fitView(100)
+                            this.graph.fitView(100);
                         }
-                        loading.close()
+                        loading.close();
                     }).catch(err => {
                         loading.close()
                         Notification({
                             title: '错误',
                             message: err,
                             type: 'error',
-                            duration: 3000
+                            duration: 3000,
                         })
                     })
                 }
             },
             handleDelete() {
                 if (this.selectedItem.length > 0) {
-                    this.command.executeCommand('delete', this.selectedItem)
-                    this.selectedItem = []
+                    this.command.executeCommand('delete', this.selectedItem);
+                    this.selectedItem = [];
                 }
             },
             getFormatPadding() {
-                return Util.formatPadding(this.graph.get('fitViewPadding'))
+                return Util.formatPadding(this.graph.get('fitViewPadding'));
             },
             getViewCenter() {
-                const padding = this.getFormatPadding()
-                const graph = this.graph
-                const width = this.graph.get('width')
-                const height = graph.get('height')
+                const padding = this.getFormatPadding();
+                const graph = this.graph;
+                const width = this.graph.get('width');
+                const height = graph.get('height');
                 return {
                     x: (width - padding[2] - padding[3]) / 2 + padding[3],
                     y: (height - padding[0] - padding[2]) / 2 + padding[0]
-                }
+                };
             },
             handleZoomIn() {
-                const currentZoom = this.graph.getZoom()
-                this.graph.zoomTo(currentZoom + 0.5, this.getViewCenter())
+                const currentZoom = this.graph.getZoom();
+                this.graph.zoomTo(currentZoom + 0.5, this.getViewCenter());
             },
             handleZoomOut() {
-                const currentZoom = this.graph.getZoom()
-                this.graph.zoomTo(currentZoom - 0.5, this.getViewCenter())
+                const currentZoom = this.graph.getZoom();
+                this.graph.zoomTo(currentZoom - 0.5, this.getViewCenter());
             },
             handleToBack() {
                 if (this.selectedItem && this.selectedItem.length > 0) {
@@ -558,6 +556,7 @@
                     })
             },
             addNode() {
+            
             },
             terminalTrans(i) {
                 this.terminalOpen = i

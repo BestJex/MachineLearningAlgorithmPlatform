@@ -106,10 +106,11 @@ export default {
             data
         })
     },
-    getCategory() {
+    getTree(data) {
         return request({
-            url: '/category/',
-            method: 'get'
+            url: '/node_template/',
+            method: 'get',
+            params: data
         })
-    },
+    }
 }
