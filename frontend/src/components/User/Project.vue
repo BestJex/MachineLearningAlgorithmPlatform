@@ -190,7 +190,7 @@
                                 title: '成功',
                                 message: '创建项目成功',
                                 type: 'success',
-                                duration: 3000
+                                duration: 3000,
                             });
                             this.getUserProjects();
                             this.isShowDialog = false;
@@ -201,7 +201,7 @@
                                 title: '错误',
                                 message: err.data,
                                 type: 'error',
-                                duration: 3000
+                                duration: 3000,
                             });
                         });
                     }

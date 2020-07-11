@@ -172,7 +172,6 @@
                             this.loading = false;
                             this.$router.push({path: '/project'});
                             localStorage.setItem("username", user.username);
-                            location.reload();
                         }).catch(error => {
                             console.log("Login: ", error);
                             this.loading = false;

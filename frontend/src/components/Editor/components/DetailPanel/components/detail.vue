@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "treeNode"
+        name: "detail"
     }
 </script>
 

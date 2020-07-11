@@ -14,8 +14,6 @@
                    class="command iconfont icon-redo"
                    title="重做"></i>
                 <span class="separator"></span>
-                <!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
-                <i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
                 <i :class="selectedItem.length?'':'disable'"
                    @click="handleDelete"
                    class="command iconfont icon-delete-o"
@@ -56,42 +54,54 @@
                    class="command iconfont icon-select"
                    data-command="multiSelect"
                    title="多选"></i>
-                <!-- <i
-                  :class="addGroup?'':'disable'"
-                  @click="handleAddGroup"
-                  class="command iconfont icon-group"
-                  data-command="addGroup"
-                  title="成组"
-                ></i>
-                <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-                <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
-                <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
-                <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-                <el-button @click="runProject" type="success">运行项目</el-button>
-                <el-button @click="drawer = true" type="success">运行信息</el-button>
-
-                <el-dropdown size="mini" split-button type="info" style="float: right; margin-right: 10px;">
+                <el-button @click="isShowNodeManage = true"
+                           type="primary">
+                    新增结点
+                </el-button>
+                <el-button @click="isShowFileManagement = true"
+                           type="primary">
+                    项目文件管理
+                </el-button>
+                <el-button :disabled="selectedNodeId==null"
+                           @click="runNode"
+                           type="success">
+                    运行结点
+                </el-button>
+                <el-button @click="runProject"
+                           type="success">
+                    运行项目
+                </el-button>
+                <el-button @click="drawer = true"
+                           type="success">
+                    运行信息
+                </el-button>
+                <el-dropdown size="mini"
+                             split-button
+                             type="info"
+                             style="float: right; margin-right: 10px;">
                     导出
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>
-                            <el-link target="_blank" :href="pythonFilePath" :underline="false">
+                            <el-link target="_blank"
+                                     :href="pythonFilePath"
+                                     :underline="false">
                                 导出.py文件
                             </el-link>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <el-link target="_blank" :href="jsonFilePath" :underline="false">
+                            <el-link target="_blank"
+                                     :href="jsonFilePath"
+                                     :underline="false">
                                 导出.json文件
                             </el-link>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
-
                 <el-drawer :visible.sync="drawer"
                            :direction="direction"
                            :with-header="false">
                     <span>我来啦!</span>
                 </el-drawer>
-
             </div>
         </transition>
         <transition name="el-zoom-in-center">
@@ -107,78 +117,60 @@
                    title="文件管理">
             <file-manage :graph="graph"></file-manage>
         </el-dialog>
-        <el-dialog :append-to-body="true"
-                   :visible.sync="isShowNodeManage"
-                   custom-class="preview-dialog"
-                   title="新增结点">
-            <node-manage/>
-        </el-dialog>
     </div>
 </template>
 
 <script>
-    import eventBus from '@/utils/eventBus'
-    import Util from '@antv/g6/src/util'
-    import {uniqueId, getBox} from '@/utils'
-    import graphApi from '@/api/graph'
-    import {mapGetters} from 'vuex'
-    import {Notification} from 'element-ui'
-    import fileManage from './components/fileManage'
-    import nodeManage from './components/nodeManage'
+    import {mapGetters} from 'vuex';
+    import command from "@/config/command";
+    import projectApi from "@/api/project";
+    import eventBus from "@/mixin/eventBus";
+    import {Notification} from 'element-ui';
+    import fileManage from "@/components/Editor/components/Toolbar/components/fileManage";
 
     export default {
+        name: "Toolbar",
+        components: {
+            fileManage,
+        },
         data() {
             return {
-                jsonFilePath: "",
-                pythonFilePath: "",
-
                 page: {},
                 graph: {},
+                max_id: 0,
                 redoList: [],
                 undoList: [],
                 editor: null,
                 command: null,
-                selectedItem: [],
-                multiSelect: false,
-                addGroup: false,
-                isShowFileManagement: false,
-                max_id: 0,
-
                 drawer: false,
+                addGroup: false,
                 direction: 'btt',
+                selectedItem: [],
+                jsonFilePath: "",
+                pythonFilePath: "",
+                multiSelect: false,
+                isShowFileManagement: false,
             }
         },
         computed: {
             ...mapGetters(['isAllowSave', 'selectedNodeId']),
             isRunning: {
                 get() {
-                    return this.$store.state.app.is_running
+                    return this.$store.state.project.isRunning;
                 },
                 set(val) {
-                    this.$store.commit('app/SET_ISRUNNING', val)
-                }
-            },
-            isShowNodeManage: {
-                get() {
-                    return this.$store.state.app.is_show_node_manage
+                    this.$store.commit('project/SetIsRunning', val);
                 },
-                set(val) {
-                    this.$store.commit('app/SET_ISSHOWNODEMANAGE', val)
-                }
             },
             graphId: {
                 get() {
-                    return this.$route.params.id || this.$store.getters.graphId
+                    return this.$route.params.id;
                 }
-            }
-        },
-        components: {
-            fileManage,
-            nodeManage
+            },
         },
         created() {
-            this.init()
-            this.bindEvent()
+            this.initEditor();
+            this.bindEvent();
         },
         watch: {
             selectedItem(val) {
@@ -186,66 +178,68 @@
             }
         },
         methods: {
-            init() {
-                const {editor, command} = this.$parent
-                this.editor = editor
-                this.command = command
+            initEditor() {
+                this.command = command;
             },
+
             bindEvent() {
-                let self = this
                 eventBus.$on('afterAddPage', page => {
-                    self.page = page
-                    self.graph = self.page.graph
-                })
+                    this.page = page;
+                    this.graph = this.page.graph;
+                });
                 eventBus.$on('add', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
-                })
+                    this.redoList = data.redoList;
+                    this.undoList = data.undoList;
+                });
                 eventBus.$on('update', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
-                })
+                    this.redoList = data.redoList;
+                    this.undoList = data.undoList;
+                });
                 eventBus.$on('delete', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
-                })
+                    this.redoList = data.redoList;
+                    this.undoList = data.undoList;
+                });
                 eventBus.$on('updateItem', item => {
-                    this.command.executeCommand('update', [item])
-                })
+                    this.command.executeCommand('update', [item]);
+                });
                 eventBus.$on('addItem', item => {
-                    this.command.executeCommand('add', [item])
-                })
+                    this.command.executeCommand('add', [item]);
+                });
                 eventBus.$on('nodeselectchange', () => {
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
+                    this.selectedItem = this.graph.findAllByState('node', 'selected');
                     this.selectedItem = this.selectedItem.concat(
                         ...this.graph.findAllByState('edge', 'selected')
-                    )
-                })
+                    );
+                });
                 eventBus.$on('deleteItem', () => {
-                    this.handleDelete()
-                })
+                    this.handleDelete();
+                });
                 eventBus.$on('muliteSelectEnd', () => {
-                    this.multiSelect = false
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
-                })
+                    this.multiSelect = false;
+                    this.selectedItem = this.graph.findAllByState('node', 'selected');
+                });
                 eventBus.$on('undo', () => {
-                    this.handleUndo()
-                })
+                    this.handleUndo();
+                });
                 eventBus.$on('redo', () => {
-                    this.handleRedo()
-                })
+                    this.handleRedo();
+                });
                 eventBus.$on('save', () => {
-                    this.handleSave()
-                })
+                    this.handleSave();
+                });
                 eventBus.$on('selectAll', () => {
-                    this.handleSelectAll()
-                })
+                    this.handleSelectAll();
+                });
             },
             handleUndo() {
-                if (this.undoList.length > 0) this.command.undo()
+                if (this.undoList.length > 0) {
+                    this.command.undo();
+                }
             },
             handleRedo() {
-                if (this.redoList.length > 0) this.command.redo()
+                if (this.redoList.length > 0) {
+                    this.command.redo();
+                }
             },
             forEach(json) {
                 for (let val in json) {
@@ -262,21 +256,20 @@
             },
             handleSave() {
                 if (this.isAllowSave) {
-                    this.$store.commit('app/SET_ALLOWSAVE', false)
+                    this.$store.commit('project/SetAllowSave', false)
                     const loading = this.$loading({
                         lock: true,
                         text: '保存中',
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.8)',
-                    })
+                    });
                     let graph = this.graph.save();
                     Object.assign(graph, {id: this.graphId});
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
                     };
-                    console.log(data);
-                    graphApi.sendGraph(data).then(res => {
+                    projectApi.sendGraph(data).then(() => {
                         Notification({
                             title: '成功',
                             message: '保存成功',
@@ -284,24 +277,24 @@
                             duration: 3000,
                         });
                     }).then(() => {
-                        return graphApi.getGraphById({graphid: this.graphId});
-                    }).then(res => {
-                        const data = res.data.data;
+                        return projectApi.getGraphById({graphid: this.graphId});
+                    }).then(response => {
+                        const data = response.data.data;
                         this.forEach(data);
-                        this.$store.commit('app/SET_MAXID', this.max_id);
+                        this.$store.commit('project/SetMaxId', this.maxId);
                         this.graph.read(data);
                         if (data.nodes.length) {
                             this.graph.fitView(100);
                         }
                         loading.close();
                     }).catch(err => {
-                        loading.close()
+                        loading.close();
                         Notification({
                             title: '错误',
                             message: err,
                             type: 'error',
                             duration: 3000,
-                        })
+                        });
                     })
                 }
             },
@@ -310,9 +303,6 @@
                     this.command.executeCommand('delete', this.selectedItem);
                     this.selectedItem = [];
                 }
-            },
-            getFormatPadding() {
-                return Util.formatPadding(this.graph.get('fitViewPadding'));
             },
             getViewCenter() {
                 const padding = this.getFormatPadding();
@@ -365,139 +355,40 @@
                 this.multiSelect = true
                 this.graph.setMode('multiSelect')
             },
-            handleAddGroup() {
-                // TODO 这部分等阿里更新Group之后添加
-                // const model = {
-                //   id: "group" + store.state.app.max_id,
-                //   title: "新建分组"
-                // };
-                // // this.command.executeCommand("add", "group", model);
-                // this.selectedItem.forEach(item => {
-                // });
-                //this.getPosition(this.selectedItem);
-            },
-            getPosition(items) {
-                const boxList = []
-                items.forEach(item => {
-                    const box = item.getBBox()
-                    boxList.push(getBox(box.x, box.y, box.width, box.height))
-                })
-                let minX1, minY1, MaxX2, MaxY2
-                boxList.forEach(box => {
-                    if (typeof minX1 == 'undefined') {
-                        minX1 = box.x1
-                    }
-                    if (typeof minY1 == 'undefined') {
-                        minY1 = box.y1
-                    }
-                    if (typeof MaxX2 == 'undefined') {
-                        MaxX2 = box.x2
-                    }
-                    if (typeof MaxY2 == 'undefined') {
-                        MaxY2 = box.y2
-                    }
-                    if (minX1 > box.x1) {
-                        minX1 = box.x1
-                    }
-                    if (minY1 > box.y1) {
-                        minY1 = box.y1
-                    }
-                    if (MaxX2 < box.x2) {
-                        MaxX2 = box.x2
-                    }
-                    if (MaxY2 < box.y2) {
-                        MaxY2 = box.y2
-                    }
-                })
-                this.$store.dispatch('app/uniqueId')
-                const width = MaxX2 - minX1,
-                    height = MaxY2 - minY1,
-                    x = minX1 + width / 2,
-                    y = minY1 + height / 2,
-                    id = 'team' + this.$store.state.app.max_id
-                const model = {
-                    id: id,
-                    width,
-                    height,
-                    x,
-                    y,
-                    shape: 'teamNode'
-                }
-                this.command.executeCommand('add', model)
-                // const item = this.graph.findById(id);
-                // item.get("group").toBack();
-                // const edgeGroup = this.graph.get("edgeGroup");
-                // edgeGroup.toFront();
-                // this.graph.paint();
-            },
-            handleSelectAll() {
-                const nodes = this.graph.findAll('node', node => {
-                    return true
-                })
-                Util.each(nodes, node => {
-                    this.graph.setItemState(node, 'selected', true)
-                })
-                const edges = this.graph.findAll('edge', edge => {
-                    return true
-                })
-                Util.each(edges, edge => {
-                    this.graph.setItemState(edge, 'selected', true)
-                })
-                this.selectedItem = nodes
-                this.graph.paint()
-            },
-
-            consoleData() {
-                const data = this.graph.save();
-                Object.assign(data, {id: 1})
-                // graphApi.uploadJson(data).then(res => {
-                // })
-            },
             runProject() {
                 let graph = this.graph.save()
                 Object.assign(graph, {id: this.graphId})
-                graphApi
-                    .runProject({graph: JSON.stringify(graph)})
-                    .then(res => {
-                        console.log('正在运行')
-                        this.isRunning = true
+                projectApi.runProject({graph: JSON.stringify(graph)}).then(() => {
+                    console.log('正在运行')
+                    this.isRunning = true
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err.data,
+                        type: 'error',
+                        duration: 3000,
                     })
-                    .catch(err => {
-                        Notification({
-                            title: '错误',
-                            message: err.data,
-                            type: 'error',
-                            duration: 3000
-                        })
-                        this.isRunning = false
-                    })
+                    this.isRunning = false;
+                });
             },
             runNode() {
-                let graph = this.graph.save()
-                Object.assign(graph, {id: this.graphId})
-                graphApi
-                    .runNode({graph: JSON.stringify(graph), nodeId: this.selectedNodeId})
-                    .then(res => {
-                        console.log('正在运行')
-                        this.isRunning = true
-                    })
-                    .catch(err => {
-                        Notification({
-                            title: '错误',
-                            message: err.data,
-                            type: 'error',
-                            duration: 3000
-                        })
-                        this.isRunning = false
-                    })
+                let graph = this.graph.save();
+                Object.assign(graph, {id: this.graphId});
+                projectApi.runNode({graph: JSON.stringify(graph), nodeId: this.selectedNodeId}).then(() => {
+                    this.isRunning = true
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err.data,
+                        type: 'error',
+                        duration: 3000,
+                    });
+                    this.isRunning = false;
+                });
             },
-            addNode() {
-                
-            }
         }
     }
 </script>
-
 
 <style scoped>
     .toolbar {
@@ -518,9 +409,10 @@
         box-sizing: border-box;
         width: 27px;
         height: 27px;
-        margin: 0 6px;
+        margin: 0 5px;
         border-radius: 2px;
-        padding-left: 4px;
+        padding-left: 5px;
+        padding-top: 5px;
         display: inline-block;
         border: 1px solid rgba(2, 2, 2, 0);
     }

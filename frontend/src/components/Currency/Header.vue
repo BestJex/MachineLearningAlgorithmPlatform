@@ -5,7 +5,7 @@
                 <el-link>首页</el-link>
             </el-menu-item>
             <el-menu-item index="2">
-                <router-link to="Project">
+                <router-link to="/project">
                     项目中心
                 </router-link>
             </el-menu-item>
@@ -62,7 +62,6 @@
                     });
                 });
                 localStorage.removeItem('username');
-                location.reload();
             },
 
             // eslint-disable-next-line no-unused-vars
@@ -75,7 +74,7 @@
 
 <style scoped>
     a {
-
+        text-decoration: none;
     }
 
     .user-avatar {

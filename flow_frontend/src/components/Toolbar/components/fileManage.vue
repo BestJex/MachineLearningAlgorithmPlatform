@@ -52,7 +52,6 @@
 		data() {
 			return {
 				tabPosition: 'left',
-				// 从服务端搜索数据
 				restaurants: [],
 				state: '',
 				timeout: null,
