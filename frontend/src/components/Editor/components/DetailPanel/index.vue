@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 600px">
         <div
                 :style="`right:${detailWidth}px;`"
                 @mousedown="onResizeMouseDown"
@@ -19,20 +19,29 @@
 
     export default {
         name: "index",
+        components: {
+            detail,
+        },
         data() {
             return {
-                endX: 0,
-                startX: 0,
+                status: 'canvas-selected',
+                showGrid: false,
+                page: {},
+                graph: {},
                 item: {},
+                node: {},
                 grid: null,
+                form: {},
+                // 可拉伸侧边栏
                 isActive: false,
+                startX: 0,
+                endX: 0,
                 detailWidth: 200,
+                DEFAULT_DETAIL_WIDTH: 200,
+                DEFAULT_RESIZER_RIGHT: 200,
                 MAX_DETAIL_WIDTH: 400,
                 MIN_DETAIL_WIDTH: 180
             }
-        },
-        components: {
-            detail,
         },
         methods: {
             onResizeMouseDown(e) {
@@ -59,7 +68,7 @@
             },
 
             onResizeMouseMove(e, preDetailWidth, detailpannel, resizer) {
-                if (e.witch === 0) {
+                if (e.width === 0) {
                     this.isActive = false;
                 }
 
@@ -94,12 +103,12 @@
                         resizer.style.right = `${this.MIN_DETAIL_WIDTH}px`;
                     }
                 }
-            },
-        }
+            }
+        },
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .detailpannel {
         height: 100%;
         position: absolute;
@@ -140,15 +149,15 @@
         bottom: 0;
         z-index: 99;
 
-    &:hover {
-         background-image: radial-gradient(
-                 ellipse at center center,
-                 rgba(0, 0, 0, 0.2) 0%,
-                 transparent 70%,
-                 transparent 100%
-         );
-         background-size: 50px 100%;
-         background-position: 0 50%;
-     }
+        &:hover {
+            background-image: radial-gradient(
+                            ellipse at center center,
+                            rgba(0, 0, 0, 0.2) 0%,
+                            transparent 70%,
+                            transparent 100%
+            );
+            background-size: 50px 100%;
+            background-position: 0 50%;
+        }
     }
 </style>

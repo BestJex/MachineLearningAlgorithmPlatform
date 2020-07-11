@@ -59,7 +59,7 @@
                             <el-select
                                     @change="changeValue"
                                     placeholder="请选择"
-                                    v-if="node.type==='selectFile'"
+                                    v-if="node.type==='file'"
                                     v-model="node.value">
                                 <el-option
                                         :label="item.name"
@@ -94,21 +94,6 @@
                                     v-if="node.type==='visualization'"
                                     v-show="!isShowEcharts"/>
                         </el-form-item>
-<!--                        <el-form-item-->
-<!--                                :label="`输出${index}`"-->
-<!--                                v-for="(point, index) in point_detail"-->
-<!--                                v-show="point.type === 'output'">-->
-<!--                            &lt;!&ndash; 入度出度选择器 &ndash;&gt;-->
-<!--                            <el-select-->
-<!--                                    @change="changeValue"-->
-<!--                                    placeholder="请选择"-->
-<!--                                    v-model="point.func">-->
-<!--                                <el-option-->
-<!--                                        :label="item.value"-->
-<!--                                        :value="item.value"-->
-<!--                                        v-for="item in point_options"></el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-form-item>-->
                     </el-form>
                 </el-scrollbar>
             </div>

@@ -5,9 +5,7 @@
             <div class="bottom-container">
                 <Tree/>
                 <DetailPanel/>
-<!--                <minimap/>-->
-<!--                &lt;!&ndash;page&ndash;&gt;-->
-<!--                <page/>-->
+                <MiniMap/>
             </div>
         </div>
 <!--        <Flow/>-->
@@ -18,6 +16,7 @@
     import Tree from "@/components/Editor/components/Tree/index";
     import Toolbar from "@/components/Editor/components/Toolbar/index";
     import DetailPanel from "@/components/Editor/components/DetailPanel/index";
+    import MiniMap from "@/components/Editor/components/DetailPanel/components/miniMap";
 
     export default {
         name: "index",
@@ -25,6 +24,7 @@
             Toolbar,
             Tree,
             DetailPanel,
+            MiniMap,
         },
     }
 </script>
