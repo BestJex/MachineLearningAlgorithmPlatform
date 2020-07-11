@@ -3,9 +3,9 @@ import request from '@/utils/request'
 export default {
     deleteFile(data) {
         return request({
-            url: '/upload_file',
-            method: 'delete',
-            params: data
+            url: '/filedelete',
+            method: 'post',
+            data
         })
     },
     isFilenamehValid(data) {

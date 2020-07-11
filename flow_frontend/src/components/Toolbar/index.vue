@@ -178,6 +178,7 @@
 			<node-manage/>
 		</el-dialog>
 	</div>
+</template>
 
 <script>
     import eventBus from '@/utils/eventBus'

@@ -65,7 +65,7 @@
 				restaurants: [],
 				state: '',
 				timeout: null,
-
+				fileList:[],
 				fileTableData: [],
 				multipleSelection: [],
 				uploadData: {
@@ -95,35 +95,38 @@
 			}
 		},
 		created() {
-			// 1.获取文件列表
-			this.uploadData.graphId = this.graphId;
-			let projectId = this.$route.params.id;
-			this.axios({
-				method: 'get',
-				url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-			}).then(res => {
-				this.fileTableData = Array(res.data.data.list)[0];
-				for (let i = 0; i < this.fileTableData.length; i++) {
-					let item = this.fileTableData[i];
-					if (item.graphid.toString() !== projectId) {
-						this.fileTableData.splice(i, 1);
-					}
-					let TIndex = item.buildtime.indexOf('T');
-					let pointIndex = item.buildtime.indexOf('.');
-					item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
-					item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
-				}
-			}).catch(err => {
-				this.$message({
-					message: err,
-					type: 'error'
-				});
-			});
+			this.getFileList();
 		},
 		mounted() {
 			this.restaurants = this.loadAll();
 		},
 		methods: {
+			getFileList() {
+				this.uploadData.graphId = this.graphId;
+				let projectId = this.$route.params.id;
+				this.axios({
+					method: 'get',
+					url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+				}).then(res => {
+					this.fileTableData = Array(res.data.data.list)[0];
+					for (let i = 0; i < this.fileTableData.length; i++) {
+						let item = this.fileTableData[i];
+						if (item.graphid.toString() !== projectId) {
+							this.fileTableData.splice(i, 1);
+						}
+						let TIndex = item.buildtime.indexOf('T');
+						let pointIndex = item.buildtime.indexOf('.');
+						item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+						item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+					}
+				}).catch(err => {
+					this.$message({
+						message: err,
+						type: 'error'
+					});
+				});
+			},
+
 			loadAll() {
 				let fileListLength = this.fileTableData.length;
 				let fileArray = Array(fileListLength);
@@ -157,7 +160,7 @@
 			},
 			handleDelete(index, row) {
 				fileApi.deleteFile({
-					id: row.id
+					filelist: [row.id]
 				}).then(res => {
 					Notification({
 						title: '成功',
@@ -165,7 +168,8 @@
 						type: 'success',
 						duration: 3000
 					})
-					this.$store.commit('app/SET_FILELIST', res.data)
+					this.$store.commit('app/SET_FILELIST', res.data);
+					this.getFileList();
 				}).catch(error => {
 					this.$message({
 						message: err,

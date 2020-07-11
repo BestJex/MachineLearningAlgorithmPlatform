@@ -55,7 +55,8 @@
                   <span
                           class="custom-tree-node"
                           slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                      <span v-show="!operation">{{ node.label }}</span>
+                      <el-input v-model="node.label" v-show="operation"></el-input>
                   </span>
         </el-tree>
         <el-dialog
@@ -63,7 +64,7 @@
                 :visible.sync="isShowTreeNodeManage"
                 custom-class="preview-dialog"
                 title="恢复结点">
-<!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
+            <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
             <div style="margin: 15px 0;"></div>
             <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
                 <el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
@@ -72,7 +73,8 @@
                     @click="recoveryTreeNode()"
                     size="small"
                     style="margin-top: 20px; margin-left: 450px;"
-                    type="success">确认</el-button>
+                    type="success">确认
+            </el-button>
         </el-dialog>
     </div>
 </template>
@@ -222,7 +224,7 @@
                     graphid: this.$route.params.id,
                     checked: [],
                 };
-                for (let i = 0; i < this.cities.length; i++){
+                for (let i = 0; i < this.cities.length; i++) {
                     for (let j = 0; j < this.checkedCities.length; j++) {
                         if (this.cities[i].name === this.checkedCities[j]) {
                             data.checked.push(this.cities[i]);
