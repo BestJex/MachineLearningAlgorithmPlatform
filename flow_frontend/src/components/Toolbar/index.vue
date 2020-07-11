@@ -79,79 +79,23 @@
 				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
 				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
 				<el-button @click="runProject" type="success">运行项目</el-button>
-				<el-button @click="drawer = true" type="success">运行信息</el-button>
+				<el-button @click="getTerminal" type="success">运行信息</el-button>
 
-				<el-dropdown size="mini" split-button type="info" style="float: right; margin-right: 10px;">
-					导出
+				<el-dropdown style="float: right; margin-right: 10px;">
+					<el-button type="primary">
+						生成代码<i class="el-icon-arrow-down el-icon--right"></i>
+					</el-button>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>
-							<el-link target="_blank" :href="pythonFilePath" :underline="false">
-								导出.py文件
-							</el-link>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<el-link target="_blank" :href="jsonFilePath" :underline="false">
-								导出.json文件
-							</el-link>
-						</el-dropdown-item>
+						<el-dropdown-item>导出.py文件</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-
-				<el-drawer
+			<!-- 	<el-drawer
 					:visible.sync="drawer"
 					:direction="direction"
 					:with-header="false">
 
-					<div class="terminal-top">
-						<div class="a" v-if="terminalOpen === 0">
-							<span>变量名</span>
-							<span>变量类型</span>
-							<span>变量值</span>
-						</div>
-						<div class="b" v-if="terminalOpen === 1">
-							<span>ln</span>
-							<span>代码</span>
-						</div>
-						<div class="c" v-if="terminalOpen === 2"><span>实时数据(每分钟采样一次) 硬盘 0GB/100GB</span></div>
-					</div>
-					<div class="terminal-body">
-						<div v-if="terminalOpen === 0" class="a"></div>
-						<div v-if="terminalOpen === 1" class="b"></div>
-						<div v-if="terminalOpen === 2" class="c">
-							<el-row>
-								<el-col :span="4">
-									<div class="body-left">
-										<div class="a">
-											<p>CPU</p>
-											<p>5%</p>
-										</div>
-										<div class="a">
-											<p>内存</p>
-											<p>0.16GB/8GB</p>
-										</div>
-									</div>
-								</el-col>
-								<el-col :span="20">
-									<div class="body-right">ddd</div>
-								</el-col>
-							</el-row>
-						</div>
-					</div>
-					<div class="terminal-foot">
-						<div class="foot-left">命令模式</div>
-						<div class="foot-right">
-							<div class="actions" :style="{backgroundColor: terminalOpen === 0 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(0)">变量监控
-							</div>
-							<div class="actions" :style="{backgroundColor: terminalOpen === 1 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(1)">运行历史
-							</div>
-							<div class="actions" :style="{backgroundColor: terminalOpen === 2 ? `#BFD1E2` : ``}"
-								 @click="terminalTrans(2)">性能监控
-							</div>
-						</div>
-					</div>
-				</el-drawer>
+					
+				</el-drawer> -->
 
 			</div>
 		</transition>
@@ -185,7 +129,7 @@
     import Util from '@antv/g6/src/util'
     import { uniqueId, getBox } from '@/utils'
     import graphApi from '@/api/graph'
-    import { mapGetters } from 'vuex'
+    import { mapGetters } from 'vuex'	import { mapState } from 'vuex'
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
@@ -210,7 +154,6 @@
 
                 drawer: false,
                 direction: 'btt',
-                terminalOpen: 0
             }
         },
         computed: {
@@ -558,10 +501,8 @@
                     })
             },
             addNode() {
-            },
-            terminalTrans(i) {
-                this.terminalOpen = i
-            }
+            },						getTerminal() {				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')			}
+           
         }
     }
 </script>
@@ -619,100 +560,5 @@
 		transition-delay: 0.1s;
 	}
 
-	.terminal-top {
-		position: absolute;
-		top: 0;
-		padding: 5px 8px 7px 8px;
-		width: 100%;
-		background-color: rgb(246, 249, 252);
-		font-size: 12px;
-
-		.a {
-			width: 41%;
-			display: flex;
-			justify-content: space-between;
-		}
-
-		.b {
-			width: 20%;
-			display: flex;
-			justify-content: space-between;
-		}
-
-	}
-
-	.terminal-body {
-		margin-top: 27px;
-		height: 215px;
-
-		.a {
-			overflow-y: scroll;
-		}
-
-		.b {
-			overflow-y: scroll;
-		}
-
-		.c {
-			overflow: hidden;
-		}
-
-	}
-
-	.terminal-foot {
-		position: absolute;
-		bottom: 0;
-		display: flex;
-		justify-content: space-between;
-		padding: 0 15px 0 15px;
-		width: 100%;
-		background-color: rgb(232, 237, 243);
-		font-size: 12px;
-
-		.foot-left {
-			margin: auto 0;
-			color: #A655EF;
-			overflow: hidden;
-		}
-
-		.foot-right {
-			display: flex;
-			justify-content: flex-end;
-
-			.actions {
-				padding: 10px 18px;
-				cursor: pointer;
-			}
-
-			.actions:hover {
-				background-color: #BFD1E2;
-			}
-
-		}
-	}
-
-	.body-left {
-		background-color: rgb(232, 237, 243);
-		height: 35vh;
-
-		.a {
-			overflow: hidden;
-			background-color: rgb(191, 209, 226);
-			display: flex;
-			justify-content: left;
-
-			p {
-				line-height: 14px;
-				font-size: 12px;
-				padding: 0 8px 0 20px;
-			}
-
-		}
-
-	}
-
-	.body-right {
-		background-color: rgb(191, 209, 226);
-		height: 35vh
-	}
+	
 </style>

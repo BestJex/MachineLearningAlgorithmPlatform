@@ -8,7 +8,7 @@
                 :id="pageId"
                 class="graph-container"
                 style="position: relative; height: 100%;"
-                @contextmenu.prevent="onContextmenu"></div>
+                @contextmenu.prevent="onContextmenu">				<div :style="{display: this.$store.state.app.terminal_display}">					<Terminal/>				</div>													</div>
     </div>
 </template>
 
@@ -17,9 +17,9 @@
     import {initBehavors} from '@/behavior'
     import {mapGetters} from 'vuex'
     import graphApi from '@/api/graph'
-    import {Message} from 'element-ui'
+    import {Message} from 'element-ui'	import Terminal from '../Terminal'
 
-    export default {
+    export default {		components: {			Terminal		},
         data() {
             return {
                 pageId: 'graph-container',
@@ -38,7 +38,7 @@
                     'hover-edge',
                     'keyboard',
                     'add-menu',
-                ],
+                ],								
             }
         },
 
@@ -189,10 +189,10 @@
 
             handleDrop(e) {
                 this.$store.commit('app/SET_ALLOWDROP', true)
-            }
+            },						
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>		
 </style>

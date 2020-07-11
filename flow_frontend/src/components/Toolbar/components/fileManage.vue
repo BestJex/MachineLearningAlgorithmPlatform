@@ -6,9 +6,9 @@
 					批量删除
 				</el-button>
 				<el-button @click="toggleSelection()" size="small" type="primary">取消选择</el-button>
-				<el-table ref="multipleTable" :data="fileTableData.filter(data => !search || data.filename.includes(search))"
-				 tooltip-effect="dark" style="width: 100%" :default-sort="{prop: 'buildtime', order: 'descending'}"
-				 @selection-change="handleSelectionChange">
+				<el-table ref="multipleTable" :data="/* eslint-disable */ fileTableData.filter(data => !search || data.filename.includes(search))"
+				 tooltip-effect="dark" style="width: 100%;" :default-sort="{prop: 'buildtime', order: 'descending'}"
+				 @selection-change="handleSelectionChange" max-height="180">
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="buildtime" label="日期" width="150" sortable></el-table-column>
 					<el-table-column prop="filename" label="文件名" width="100"></el-table-column>
@@ -37,7 +37,7 @@
 	</div>
 </template>
 
-<script>
+<script>	/* eslint-disable */
 	import fileApi from '@/api/file'
 	import {
 		Notification
@@ -156,7 +156,7 @@
 						type: 'success',
 						duration: 3000
 					})
-					this.$store.commit('app/SET_FILELIST', res.data)
+					this.$store.commit('app/SET_FILELIST', res.data)					// 重新获取文件信息					this.uploadData.graphId = this.graphId;					let projectId = this.$route.params.id;					this.axios({						method: 'get',						url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,					}).then(res => {						this.fileTableData = Array(res.data.data.list)[0];						for (let i = 0; i < this.fileTableData.length; i++) {							let item = this.fileTableData[i];							if (item.graphid.toString() !== projectId) {								this.fileTableData.splice(i, 1);							}							let TIndex = item.buildtime.indexOf('T');							let pointIndex = item.buildtime.indexOf('.');							item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);							item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';						}					}).catch(err => {						this.$message({							message: err,							type: 'error'						});					});
 				}).catch(error => {
 					this.$message({
 						message: err,
