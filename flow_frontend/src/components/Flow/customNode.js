@@ -18,12 +18,13 @@ const customNode = {
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
              */
             draw(cfg, group) {
-                const width = 170;
+                const width = 200;
                 const height = 34;
                 const color = "#1890ff";
                 // 此处必须有偏移 不然drag-node错位
                 const offsetX = -width / 2;
                 const offsetY = -height / 2;
+                const label = cfg.label;
                 store.dispatch('app/uniqueId');
                 const mainId = 'rect' + store.state.app.max_id;
                 const shape = group.addShape("rect", {
@@ -93,23 +94,19 @@ const customNode = {
                         }
                     })
                 }
-                cfg.node_detail.forEach(detail => {
-                    if (detail.name === 'name') {
-                        store.dispatch('app/uniqueId')
-                        group.addShape('text', {
-                            attrs: {
-                                id: 'label' + store.state.app.max_id,
-                                x: offsetX + width / 2,
-                                y: offsetY + height / 2,
-                                textAlign: "center",
-                                textBaseline: "middle",
-                                text: detail.value,
-                                parent: mainId,
-                                fill: "#565758"
-                            }
-                        })
+                store.dispatch('app/uniqueId')
+                group.addShape('text', {
+                    attrs: {
+                        id: 'label' + store.state.app.max_id,
+                        x: offsetX + width / 2,
+                        y: offsetY + height / 2,
+                        textAlign: "center",
+                        textBaseline: "middle",
+                        text: label,
+                        parent: mainId,
+                        fill: "#565758"
                     }
-                })
+                });
                 if (cfg.point_detail) {
                     cfg.point_detail.forEach(point => {
                         let x, y = 0

@@ -1,68 +1,68 @@
 <template>
     <div class="my-retrieve-page">
-                <div class="container h-100">
-                    <div class="row justify-content-md-center h-100">
-                        <div class="card-wrapper">
-                            <div class="brand">
-                                <img src="@/assets/images/logo.jpg" alt="logo"/>
-                            </div>
-                            <div class="card fat">
-                                <el-form :model="formRetrievePassword">
-                                    <h2 class="card-title">Retrieve Password</h2>
-                                    <!-- username -->
-                                    <el-form-item label="用户名" prop="username">
-                                        <el-input v-model="formRetrievePassword.username"
-                                                  clearable
-                                                  prefix-icon="el-icon-user-solid"
-                                                  style="width: 80%; float: right"></el-input>
-                                    </el-form-item>
-                                    <!-- phone -->
-                                    <el-form-item label="手机号" prop="phone">
-                                        <el-input v-model="formRetrievePassword.phone"
-                                                  clearable
-                                                  prefix-icon="el-icon-user-solid"
-                                                  style="width: 80%; float: right"></el-input>
-                                    </el-form-item>
-                                    <!-- password -->
-                                    <el-form-item label="新密码" prop="password">
-                                        <el-input style="display: inline-block; width: 80%; float: right"
-                                                  v-model="formRetrievePassword.password"
-                                                  show-password
-                                                  prefix-icon="el-icon-lock"></el-input>
-                                    </el-form-item>
-                                    <!-- checkPassword -->
-                                    <el-form-item label="确认密码" prop="checkPassword">
-                                        <el-input style="display: inline-block; width: 80%; float: right"
-                                                  v-model="formRetrievePassword.checkPassword"
-                                                  show-password
-                                                  prefix-icon="el-icon-lock"></el-input>
-                                    </el-form-item>
-                                    <!-- Verification Code -->
-                                    <el-form-item label="验证码" prop="VerificationCode">
-                                        <el-input v-model="formRetrievePassword.code"
-                                                  prefix-icon="el-icon-picture-outline-round"
-                                                  style="width: 40%; float: left; margin-left: 22px"></el-input>
-                                        <img :src="base64CodeVerificationCode"
-                                             alt="VerificationCode"
-                                             @click="getCaptcha()"
-                                             style="margin-left: 20px">
-                                    </el-form-item>
-                                    <!-- 验证手机号 button -->
-                                    <el-form-item>
-                                        <el-button
-                                                style="width: 100%; font-weight: bold;"
-                                                type="primary"
-                                                :loading="loading"
-                                                @click="changePassword()">
-                                            更改密码
-                                        </el-button>
-                                    </el-form-item>
-                                </el-form>
-                            </div>
-                            <div class="footer">Copyright &copy; 2020 &mdash; NKAI</div>
-                        </div>
+        <div class="container h-100">
+            <div class="row justify-content-md-center h-100">
+                <div class="card-wrapper">
+                    <div class="brand">
+                        <img src="@/assets/images/logo.jpg" alt="logo"/>
                     </div>
+                    <div class="card fat">
+                        <el-form :model="formRetrievePassword">
+                            <h2 class="card-title">Retrieve Password</h2>
+                            <!-- username -->
+                            <el-form-item label="用户名" prop="username">
+                                <el-input v-model="formRetrievePassword.username"
+                                          clearable
+                                          prefix-icon="el-icon-user-solid"
+                                          style="width: 80%; float: right"></el-input>
+                            </el-form-item>
+                            <!-- phone -->
+                            <el-form-item label="手机号" prop="phone">
+                                <el-input v-model="formRetrievePassword.phone"
+                                          clearable
+                                          prefix-icon="el-icon-user-solid"
+                                          style="width: 80%; float: right"></el-input>
+                            </el-form-item>
+                            <!-- password -->
+                            <el-form-item label="新密码" prop="password">
+                                <el-input style="display: inline-block; width: 80%; float: right"
+                                          v-model="formRetrievePassword.password"
+                                          show-password
+                                          prefix-icon="el-icon-lock"></el-input>
+                            </el-form-item>
+                            <!-- checkPassword -->
+                            <el-form-item label="确认密码" prop="checkPassword">
+                                <el-input style="display: inline-block; width: 80%; float: right"
+                                          v-model="formRetrievePassword.checkPassword"
+                                          show-password
+                                          prefix-icon="el-icon-lock"></el-input>
+                            </el-form-item>
+                            <!-- Verification Code -->
+                            <el-form-item label="验证码" prop="VerificationCode">
+                                <el-input v-model="formRetrievePassword.code"
+                                          prefix-icon="el-icon-picture-outline-round"
+                                          style="width: 40%; float: left; margin-left: 22px"></el-input>
+                                <img :src="base64CodeVerificationCode"
+                                     alt="VerificationCode"
+                                     @click="getCaptcha()"
+                                     style="margin-left: 20px">
+                            </el-form-item>
+                            <!-- 验证手机号 button -->
+                            <el-form-item>
+                                <el-button
+                                        style="width: 100%; font-weight: bold;"
+                                        type="primary"
+                                        :loading="loading"
+                                        @click="changePassword()">
+                                    更改密码
+                                </el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="footer">Copyright &copy; 2020 &mdash; NKAI</div>
                 </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -114,13 +114,13 @@
                     if (valid) {
                         this.loading = true;
                         this.$store.dispatch("user/Register", formData).then(() => {
-                                localStorage.setItem("username", formData.username);
-                                this.loading = false;
-                                this.$router.push({path: "/"});
+                            localStorage.setItem("username", formData.username);
+                            this.loading = false;
+                            this.$router.push({path: "/"});
                             // eslint-disable-next-line no-unused-vars
-                            }).catch(e => {
-                                this.loading = false;
-                            });
+                        }).catch(e => {
+                            this.loading = false;
+                        });
                     } else {
                         this.$message.error("error submit!!");
                         return false;

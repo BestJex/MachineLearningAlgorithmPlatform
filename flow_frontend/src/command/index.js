@@ -1,6 +1,7 @@
 import { uniqueId } from '@/utils'
 import eventBus from "@/utils/eventBus"
 import store from "@/store"
+
 class command {
     editor = null;
     undoList = [];

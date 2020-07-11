@@ -6,9 +6,9 @@
 					批量删除
 				</el-button>
 				<el-button @click="toggleSelection()" size="small" type="primary">取消选择</el-button>
-				<el-table ref="multipleTable" :data="/* eslint-disable */ fileTableData.filter(data => !search || data.filename.includes(search))"
-				 tooltip-effect="dark" style="width: 100%;" :default-sort="{prop: 'buildtime', order: 'descending'}"
-				 @selection-change="handleSelectionChange" max-height="180">
+				<el-table ref="multipleTable" :data="fileTableData.filter(data => !search || data.filename.includes(search))"
+				 tooltip-effect="dark" style="width: 100%" :default-sort="{prop: 'buildtime', order: 'descending'}"
+				 @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="buildtime" label="日期" width="150" sortable></el-table-column>
 					<el-table-column prop="filename" label="文件名" width="100"></el-table-column>
@@ -25,10 +25,20 @@
 				</el-table>
 			</el-tab-pane>
 			<el-tab-pane label="上传文件">
-				<el-upload :before-remove="beforeRemove" :before-upload="beforeUpload" :data="uploadData" :file-list="fileList"
-				 :on-error="onUploadErr" :on-remove="handleRemove" :on-success="onUploadSucc" :headers="{Authorization: 'JWT ' + token}"
-				 accept=".jpg, .csv, .png" :action="base_api + 'upload_file'" class="upload-demo" :show-file-list="false" multiple
-				 drag style="display: inline-block">
+				<el-upload :before-remove="beforeRemove"
+						   :before-upload="beforeUpload"
+						   :data="uploadData"
+						   :file-list="fileList"
+						   :on-error="onUploadErr"
+						   :on-remove="handleRemove"
+						   :on-success="onUploadSucc"
+						   :headers="{Authorization: 'JWT ' + token}"
+						   accept=".jpg, .csv, .png"
+						   :action="base_api + 'upload_file'"
+						   class="upload-demo"
+						   :show-file-list="false" multiple
+						   drag
+						   style="display: inline-block">
 					<i class="el-icon-upload"></i>
 					<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em>，大小不能超过10MB。</div>
 				</el-upload>
@@ -37,7 +47,7 @@
 	</div>
 </template>
 
-<script>	/* eslint-disable */
+<script>
 	import fileApi from '@/api/file'
 	import {
 		Notification
@@ -52,11 +62,10 @@
 		data() {
 			return {
 				tabPosition: 'left',
-				// 从服务端搜索数据
 				restaurants: [],
 				state: '',
 				timeout: null,
-
+				fileList:[],
 				fileTableData: [],
 				multipleSelection: [],
 				uploadData: {
@@ -86,35 +95,38 @@
 			}
 		},
 		created() {
-			// 1.获取文件列表
-			this.uploadData.graphId = this.graphId;
-			let projectId = this.$route.params.id;
-			this.axios({
-				method: 'get',
-				url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-			}).then(res => {
-				this.fileTableData = Array(res.data.data.list)[0];
-				for (let i = 0; i < this.fileTableData.length; i++) {
-					let item = this.fileTableData[i];
-					if (item.graphid.toString() !== projectId) {
-						this.fileTableData.splice(i, 1);
-					}
-					let TIndex = item.buildtime.indexOf('T');
-					let pointIndex = item.buildtime.indexOf('.');
-					item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
-					item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
-				}
-			}).catch(err => {
-				this.$message({
-					message: err,
-					type: 'error'
-				});
-			});
+			this.getFileList();
 		},
 		mounted() {
 			this.restaurants = this.loadAll();
 		},
 		methods: {
+			getFileList() {
+				this.uploadData.graphId = this.graphId;
+				let projectId = this.$route.params.id;
+				this.axios({
+					method: 'get',
+					url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+				}).then(res => {
+					this.fileTableData = Array(res.data.data.list)[0];
+					for (let i = 0; i < this.fileTableData.length; i++) {
+						let item = this.fileTableData[i];
+						if (item.graphid.toString() !== projectId) {
+							this.fileTableData.splice(i, 1);
+						}
+						let TIndex = item.buildtime.indexOf('T');
+						let pointIndex = item.buildtime.indexOf('.');
+						item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+						item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+					}
+				}).catch(err => {
+					this.$message({
+						message: err,
+						type: 'error'
+					});
+				});
+			},
+
 			loadAll() {
 				let fileListLength = this.fileTableData.length;
 				let fileArray = Array(fileListLength);
@@ -148,7 +160,7 @@
 			},
 			handleDelete(index, row) {
 				fileApi.deleteFile({
-					id: row.id
+					filelist: [row.id]
 				}).then(res => {
 					Notification({
 						title: '成功',
@@ -156,7 +168,8 @@
 						type: 'success',
 						duration: 3000
 					})
-					this.$store.commit('app/SET_FILELIST', res.data)					// 重新获取文件信息					this.uploadData.graphId = this.graphId;					let projectId = this.$route.params.id;					this.axios({						method: 'get',						url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,					}).then(res => {						this.fileTableData = Array(res.data.data.list)[0];						for (let i = 0; i < this.fileTableData.length; i++) {							let item = this.fileTableData[i];							if (item.graphid.toString() !== projectId) {								this.fileTableData.splice(i, 1);							}							let TIndex = item.buildtime.indexOf('T');							let pointIndex = item.buildtime.indexOf('.');							item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);							item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';						}					}).catch(err => {						this.$message({							message: err,							type: 'error'						});					});
+					this.$store.commit('app/SET_FILELIST', res.data);
+					this.getFileList();
 				}).catch(error => {
 					this.$message({
 						message: err,

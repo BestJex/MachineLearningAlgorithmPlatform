@@ -29,18 +29,39 @@ export default {
             data,
         })
     },
+    changePassword(data) {
+        return request({
+            url: '/user/chapassword',
+            method: 'post',
+            data,
+        })
+    },
     information(data) {
         return request({
             url: '/user/information',
             method: 'get',
-            data,
+            params: data,
         })
     },
     changeInformation(data) {
         return request({
             url: '/user/chainformation',
-            method: 'get',
+            method: 'post',
             data,
+        })
+    },
+    file(data) {
+        return request({
+            url: '/fileinf',
+            method: 'get',
+            params: data,
+        })
+    },
+    filelist(data) {
+        return request({
+            url: '/filelistall',
+            method: 'get',
+            params: data,
         })
     },
 }

@@ -4,7 +4,7 @@
                 class="pannel"
                 id="canvas_detailpannel"
                 v-if="status==='canvas-selected'">
-            <div class="pannel-title">画布</div>
+            <div class="pannel-title">面板</div>
             <div class="block-container">
                 <el-checkbox
                         @change="changeGridState"
@@ -59,12 +59,13 @@
                             <el-select
                                     @change="changeValue"
                                     placeholder="请选择"
-                                    v-if="node.type==='selectFile'"
+                                    v-if="node.type==='file'"
                                     v-model="node.value">
                                 <el-option
-                                        :label="item.name"
+                                        :label="item.filename"
                                         :value="item.id"
-                                        v-for="item in fileList"></el-option>
+                                        v-for="item in fileTableData">
+                                </el-option>
                             </el-select>
                             <!-- 选择算法 -->
                             <el-select
@@ -94,21 +95,6 @@
                                     v-if="node.type==='visualization'"
                                     v-show="!isShowEcharts"/>
                         </el-form-item>
-<!--                        <el-form-item-->
-<!--                                :label="`输出${index}`"-->
-<!--                                v-for="(point, index) in point_detail"-->
-<!--                                v-show="point.type === 'output'">-->
-<!--                            &lt;!&ndash; 入度出度选择器 &ndash;&gt;-->
-<!--                            <el-select-->
-<!--                                    @change="changeValue"-->
-<!--                                    placeholder="请选择"-->
-<!--                                    v-model="point.func">-->
-<!--                                <el-option-->
-<!--                                        :label="item.value"-->
-<!--                                        :value="item.value"-->
-<!--                                        v-for="item in point_options"></el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-form-item>-->
                     </el-form>
                 </el-scrollbar>
             </div>
@@ -133,6 +119,7 @@
                 page: {},
                 graph: {},
                 item: {},
+                fileTableData: [],
                 node_detail: {},
                 point_detail: {},
                 point_options: [
@@ -149,7 +136,7 @@
             }
         },
         computed: {
-            ...mapGetters(['fileList', 'isShowPreview', 'isShowEcharts', 'docHeight']),
+            ...mapGetters(['isShowPreview', 'isShowEcharts', 'docHeight']),
             graphId: {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId;
@@ -161,12 +148,37 @@
             visualFile
         },
         created() {
-            this.init()
-            this.bindEvent()
+            this.init();
+            this.bindEvent();
+            this.getFileList();
         },
         methods: {
             init() {
 
+            },
+            getFileList() {
+                let projectId = this.$route.params.id;
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+                }).then(res => {
+                    this.fileTableData = Array(res.data.data.list)[0];
+                    for (let i = 0; i < this.fileTableData.length; i++) {
+                        let item = this.fileTableData[i];
+                        if (item.graphid.toString() !== projectId) {
+                            this.fileTableData.splice(i, 1);
+                        }
+                        let TIndex = item.buildtime.indexOf('T');
+                        let pointIndex = item.buildtime.indexOf('.');
+                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+                    }
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    });
+                });
             },
             bindEvent() {
                 let self = this
@@ -183,6 +195,7 @@
                             );
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
+                            // console.log(self.node_detail);
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);
@@ -194,11 +207,13 @@
                     })
                 })
             },
+
             downloadFile() {
                 location.href = `${configJS.BASE_API}download_file?graphId=${this.graphId}&nodeId=${
                     this.item.getModel().id
                 }`;
             },
+
             changeValue(e) {
                 const model = {
                     node_detail: this.node_detail

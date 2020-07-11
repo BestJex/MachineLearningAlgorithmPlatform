@@ -16,8 +16,6 @@
 </template>
 
 <script>
-    import eventBus from '@/utils/eventBus'
-    import Grid from '@antv/g6/build/grid'
     import detail from './detail'
 
     export default {

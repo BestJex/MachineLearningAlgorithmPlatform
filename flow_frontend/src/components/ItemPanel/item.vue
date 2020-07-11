@@ -257,11 +257,24 @@
             /**
              * 隐藏节点
              */
-            hideNodes() {				console.log(this.nodeList)
+            hideNodes() {
+				console.log(this.nodeList)
                 let checkArr = this.$refs.tree.getCheckedNodes()
                 let res = []
                 for (let i = 0; i < checkArr.length; i++) {
-                    res.push(checkArr[i].$treeNodeId)					if (!checkArr[i].children) {												// for (let a = 0; a < this.nodeList.length; a++) {							// console.log(checkArr[i].id)							// console.log(this.nodeList[a].id)							// if (checkArr[i].id === this.nodeList[a].id) {							// 	Object.assign(this.nodeList[a], { visible: false })							// 	console.log(this.nodeList[a])							// }						// }											}
+                    res.push(checkArr[i].$treeNodeId)
+					if (!checkArr[i].children) {
+						
+						// for (let a = 0; a < this.nodeList.length; a++) {
+							// console.log(checkArr[i].id)
+							// console.log(this.nodeList[a].id)
+							// if (checkArr[i].id === this.nodeList[a].id) {
+							// 	Object.assign(this.nodeList[a], { visible: false })
+							// 	console.log(this.nodeList[a])
+							// }
+						// }
+						
+					}
                 }
        //          for (let index = 0; index < res.length; index++) {
        //              let item = res[index]
@@ -270,7 +283,8 @@
 							// // console.log(this.nodeList[i]);
        //                      continue
        //                  }
-       //                  if (!this.nodeList[i].children) {							// console.log(this.nodeList[i])
+       //                  if (!this.nodeList[i].children) {
+							// console.log(this.nodeList[i])
        //                      for (let j = 0; j < this.nodeList[i].children.length; j++) {
        //                          if (this.nodeList[i].children[j].$treeNodeId === item) {
 							// 		console.log(this.nodeList[i]);

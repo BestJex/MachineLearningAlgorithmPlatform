@@ -7,13 +7,13 @@ import apiConfig from '@/config/api';
 import Message from "element-ui/packages/message/src/main";
 
 // 使用自定义配置新建一个 axios 实例
-const request = axios.create({
+const service = axios.create({
     baseURL: apiConfig.BaseAPI,
     withCredentials: true,
 })
 
 // request拦截器
-request.interceptors.request.use(
+service.interceptors.request.use(
     config => {
         // 验证 token 是否过期
         if (auth.getToken()) {
@@ -37,7 +37,7 @@ request.interceptors.request.use(
 )
 
 // response拦截器
-request.interceptors.response.use(
+service.interceptors.response.use(
     response => {
         if (response.status === 200 || response.status === 201 || response.status === 202) {
             return Promise.resolve(response.data);
@@ -60,4 +60,4 @@ request.interceptors.response.use(
     }
 )
 
-export default request
+export default service

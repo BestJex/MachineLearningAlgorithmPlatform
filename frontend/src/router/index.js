@@ -23,6 +23,11 @@ export default new Router({
                 }],
         },
         {
+            path: '/personal',
+            name: 'Personal',
+            component: () => import('@/components/User/Information'),
+        },
+        {
             path: '/graph/',
             component: layout,
             hidden: true,
@@ -30,16 +35,6 @@ export default new Router({
                 name: 'Graph',
                 path: ':id',
                 component: () => import('@/components/Editor/index'),
-            }]
-        },
-        {
-            path: '/personal/',
-            component: layout,
-            hidden: true,
-            children: [{
-                name: 'Personal',
-                path: ':id',
-                component: () => import('@/components/User/Information'),
             }]
         },
         {

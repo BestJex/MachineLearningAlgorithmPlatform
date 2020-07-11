@@ -129,7 +129,8 @@
     import Util from '@antv/g6/src/util'
     import { uniqueId, getBox } from '@/utils'
     import graphApi from '@/api/graph'
-    import { mapGetters } from 'vuex'	import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
@@ -501,7 +502,11 @@
                     })
             },
             addNode() {
-            },						getTerminal() {				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')			}
+            },
+			
+			getTerminal() {
+				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+			}
            
         }
     }
@@ -560,5 +565,100 @@
 		transition-delay: 0.1s;
 	}
 
-	
+	.terminal-top {
+		position: absolute;
+		top: 0;
+		padding: 5px 8px 7px 8px;
+		width: 100%;
+		background-color: rgb(246, 249, 252);
+		font-size: 12px;
+
+		.a {
+			width: 41%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.b {
+			width: 20%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+	}
+
+	.terminal-body {
+		margin-top: 27px;
+		height: 215px;
+
+		.a {
+			overflow-y: scroll;
+		}
+
+		.b {
+			overflow-y: scroll;
+		}
+
+		.c {
+			overflow: hidden;
+		}
+
+	}
+
+	.terminal-foot {
+		position: absolute;
+		bottom: 0;
+		display: flex;
+		justify-content: space-between;
+		padding: 0 15px 0 15px;
+		width: 100%;
+		background-color: rgb(232, 237, 243);
+		font-size: 12px;
+
+		.foot-left {
+			margin: auto 0;
+			color: #A655EF;
+			overflow: hidden;
+		}
+
+		.foot-right {
+			display: flex;
+			justify-content: flex-end;
+
+			.actions {
+				padding: 10px 18px;
+				cursor: pointer;
+			}
+
+			.actions:hover {
+				background-color: #BFD1E2;
+			}
+
+		}
+	}
+
+	.body-left {
+		background-color: rgb(232, 237, 243);
+		height: 35vh;
+
+		.a {
+			overflow: hidden;
+			background-color: rgb(191, 209, 226);
+			display: flex;
+			justify-content: left;
+
+			p {
+				line-height: 14px;
+				font-size: 12px;
+				padding: 0 8px 0 20px;
+			}
+
+		}
+
+	}
+
+	.body-right {
+		background-color: rgb(191, 209, 226);
+		height: 35vh
+	}
 </style>

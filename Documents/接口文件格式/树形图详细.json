@@ -1,0 +1,1768 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "文件处理",
+      "children": [
+        {
+          "id": 1,
+          "name": "选择文件",
+          "raw_script_name": "select.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "选择文件"
+            },
+            {
+              "name": "selectFile",
+              "type": "selectFile",
+              "label": "选择",
+              "value": ""
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "文件",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 1
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 2,
+      "name": "聚类算法",
+      "children": [
+        {
+          "id": 7,
+          "name": "Kmeans",
+          "raw_script_name": "KMeans.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "KMeans"
+            },
+            {
+              "name": "n_clusters",
+              "type": "inputNumber",
+              "label": "n_clusters",
+              "value": 8
+            },
+            {
+              "name": "init",
+              "type": "input",
+              "label": "init",
+              "value": "k-means++"
+            },
+            {
+              "name": "n_init",
+              "type": "inputNumber",
+              "label": "n_init",
+              "value": 10
+            },
+            {
+              "name": "max_iter",
+              "type": "inputNumber",
+              "label": "max_iter",
+              "value": 300
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.0001
+            },
+            {
+              "name": "precompute_distances",
+              "type": "input",
+              "label": "precompute_distances",
+              "value": "auto"
+            },
+            {
+              "name": "verbose",
+              "type": "inputNumber",
+              "label": "verbose",
+              "value": 0
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "copy_x",
+              "type": "checkbox",
+              "label": "copy_x",
+              "value": true
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            },
+            {
+              "name": "algorithm",
+              "type": "input",
+              "label": "algorithm",
+              "value": "auto"
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 2
+        },
+        {
+          "id": 13,
+          "name": "AgglomerativeClustering",
+          "raw_script_name": "AgglomerativeClustering.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "AgglomerativeClustering"
+            },
+            {
+              "name": "n_clusters",
+              "type": "inputNumber",
+              "label": "n_clusters",
+              "value": 2
+            },
+            {
+              "name": "affinity",
+              "type": "input",
+              "label": "affinity",
+              "value": "euclidean"
+            },
+            {
+              "name": "memory",
+              "type": "input",
+              "label": "memory",
+              "value": null
+            },
+            {
+              "name": "connectivity",
+              "type": "input",
+              "label": "connectivity",
+              "value": null
+            },
+            {
+              "name": "compute_full_tree",
+              "type": "input",
+              "label": "compute_full_tree",
+              "value": "auto"
+            },
+            {
+              "name": "linkage",
+              "type": "input",
+              "label": "linkage",
+              "value": "ward"
+            },
+            {
+              "name": "distance_threshold",
+              "type": "input",
+              "label": "distance_threshold",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 2
+        },
+        {
+          "id": 18,
+          "name": "AgglomerativeClustering",
+          "raw_script_name": "AgglomerativeClustering.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "AgglomerativeClustering"
+            },
+            {
+              "name": "n_clusters",
+              "type": "inputNumber",
+              "label": "n_clusters",
+              "value": 2
+            },
+            {
+              "name": "affinity",
+              "type": "input",
+              "label": "affinity",
+              "value": "euclidean"
+            },
+            {
+              "name": "memory",
+              "type": "input",
+              "label": "memory",
+              "value": null
+            },
+            {
+              "name": "connectivity",
+              "type": "input",
+              "label": "connectivity",
+              "value": null
+            },
+            {
+              "name": "compute_full_tree",
+              "type": "input",
+              "label": "compute_full_tree",
+              "value": "auto"
+            },
+            {
+              "name": "linkage",
+              "type": "input",
+              "label": "linkage",
+              "value": "ward"
+            },
+            {
+              "name": "distance_threshold",
+              "type": "input",
+              "label": "distance_threshold",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 2
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 3,
+      "name": "图形化",
+      "children": [
+        {
+          "id": 3,
+          "name": "可视化文件",
+          "raw_script_name": null,
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "可视化文件"
+            },
+            {
+              "name": "visualization",
+              "type": "visualization",
+              "label": "",
+              "value": ""
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "文件",
+              "type": "input",
+              "proportion": 0.5
+            }
+          ],
+          "category": 3
+        },
+        {
+          "id": 4,
+          "name": "下载文件",
+          "raw_script_name": null,
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "下载文件"
+            },
+            {
+              "name": "download",
+              "type": "download",
+              "label": "下载",
+              "value": ""
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "文件",
+              "type": "input",
+              "proportion": 0.5
+            }
+          ],
+          "category": 3
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 4,
+      "name": "数据处理",
+      "children": [
+        {
+          "id": 5,
+          "name": "特征选择",
+          "raw_script_name": "feature.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "特征选择"
+            },
+            {
+              "name": "feature_line",
+              "type": "input",
+              "label": "特征列（如1,2,3）",
+              "value": "1"
+            },
+            {
+              "name": "preview",
+              "type": "preview",
+              "label": "",
+              "value": ""
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "文件",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "选择列",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 4
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 5,
+      "name": "分类算法",
+      "children": [
+        {
+          "id": 6,
+          "name": "SVC",
+          "raw_script_name": "SVC.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "SVC"
+            },
+            {
+              "name": "C",
+              "type": "inputNumber",
+              "label": "C",
+              "value": 1
+            },
+            {
+              "name": "kernel",
+              "type": "input",
+              "label": "kernel",
+              "value": "rbf"
+            },
+            {
+              "name": "degree",
+              "type": "inputNumber",
+              "label": "degree",
+              "value": 3
+            },
+            {
+              "name": "gamma",
+              "type": "input",
+              "label": "gamma",
+              "value": "scale"
+            },
+            {
+              "name": "coef0",
+              "type": "inputNumber",
+              "label": "coef0",
+              "value": 0
+            },
+            {
+              "name": "shrinking",
+              "type": "checkbox",
+              "label": "shrinking",
+              "value": true
+            },
+            {
+              "name": "probability",
+              "type": "checkbox",
+              "label": "probability",
+              "value": false
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.001
+            },
+            {
+              "name": "cache_size",
+              "type": "inputNumber",
+              "label": "cache_size",
+              "value": 200
+            },
+            {
+              "name": "class_weight",
+              "type": "input",
+              "label": "class_weight",
+              "value": null
+            },
+            {
+              "name": "verbose",
+              "type": "checkbox",
+              "label": "verbose",
+              "value": false
+            },
+            {
+              "name": "max_iter",
+              "type": "inputNumber",
+              "label": "max_iter",
+              "value": -1
+            },
+            {
+              "name": "decision_function_shape",
+              "type": "input",
+              "label": "decision_function_shape",
+              "value": "ovr"
+            },
+            {
+              "name": "break_ties",
+              "type": "checkbox",
+              "label": "break_ties",
+              "value": false
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        },
+        {
+          "id": 8,
+          "name": "KNeighborsClassifier",
+          "raw_script_name": "KNeighborsClassifier.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "Knn"
+            },
+            {
+              "name": "n_neighbors",
+              "type": "inputNumber",
+              "label": "n_neighbors",
+              "value": 5
+            },
+            {
+              "name": "weights",
+              "type": "input",
+              "label": "weights",
+              "value": "uniform"
+            },
+            {
+              "name": "algorithm",
+              "type": "input",
+              "label": "algorithm",
+              "value": "auto"
+            },
+            {
+              "name": "leaf_size",
+              "type": "inputNumber",
+              "label": "leaf_size",
+              "value": 30
+            },
+            {
+              "name": "p",
+              "type": "inputNumber",
+              "label": "p",
+              "value": 2
+            },
+            {
+              "name": "metric",
+              "type": "input",
+              "label": "metric",
+              "value": "minkowski"
+            },
+            {
+              "name": "metric_params",
+              "type": "input",
+              "label": "metric_params",
+              "value": null
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        },
+        {
+          "id": 9,
+          "name": "RandomForestClassifier",
+          "raw_script_name": "RandomForestClassifier.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "RandomForestClassifier"
+            },
+            {
+              "name": "n_estimators",
+              "type": "inputNumber",
+              "label": "n_estimators",
+              "value": 100
+            },
+            {
+              "name": "criterion",
+              "type": "input",
+              "label": "criterion",
+              "value": "gini"
+            },
+            {
+              "name": "max_depth",
+              "type": "input",
+              "label": "max_depth",
+              "value": null
+            },
+            {
+              "name": "min_samples_split",
+              "type": "inputNumber",
+              "label": "min_samples_split",
+              "value": 2
+            },
+            {
+              "name": "min_samples_leaf",
+              "type": "inputNumber",
+              "label": "min_samples_leaf",
+              "value": 1
+            },
+            {
+              "name": "min_weight_fraction_leaf",
+              "type": "inputNumber",
+              "label": "min_weight_fraction_leaf",
+              "value": 0
+            },
+            {
+              "name": "max_features",
+              "type": "input",
+              "label": "max_features",
+              "value": "auto"
+            },
+            {
+              "name": "max_leaf_nodes",
+              "type": "input",
+              "label": "max_leaf_nodes",
+              "value": null
+            },
+            {
+              "name": "min_impurity_decrease",
+              "type": "inputNumber",
+              "label": "min_impurity_decrease",
+              "value": 0
+            },
+            {
+              "name": "min_impurity_split",
+              "type": "input",
+              "label": "min_impurity_split",
+              "value": null
+            },
+            {
+              "name": "bootstrap",
+              "type": "checkbox",
+              "label": "bootstrap",
+              "value": true
+            },
+            {
+              "name": "oob_score",
+              "type": "checkbox",
+              "label": "oob_score",
+              "value": false
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "verbose",
+              "type": "inputNumber",
+              "label": "verbose",
+              "value": 0
+            },
+            {
+              "name": "warm_start",
+              "type": "checkbox",
+              "label": "warm_start",
+              "value": false
+            },
+            {
+              "name": "class_weight",
+              "type": "input",
+              "label": "class_weight",
+              "value": null
+            },
+            {
+              "name": "ccp_alpha",
+              "type": "inputNumber",
+              "label": "ccp_alpha",
+              "value": 0
+            },
+            {
+              "name": "max_samples",
+              "type": "input",
+              "label": "max_samples",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        },
+        {
+          "id": 10,
+          "name": "GradientBoostingClassifier",
+          "raw_script_name": "GradientBoostingClassifier.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "GradientBoostingClassifier"
+            },
+            {
+              "name": "loss",
+              "type": "input",
+              "label": "loss",
+              "value": "deviance"
+            },
+            {
+              "name": "learning_rate",
+              "type": "inputNumber",
+              "label": "learning_rate",
+              "value": 0.1
+            },
+            {
+              "name": "n_estimators",
+              "type": "inputNumber",
+              "label": "n_estimators",
+              "value": 100
+            },
+            {
+              "name": "subsample",
+              "type": "inputNumber",
+              "label": "subsample",
+              "value": 1
+            },
+            {
+              "name": "criterion",
+              "type": "input",
+              "label": "criterion",
+              "value": "friedman_mse"
+            },
+            {
+              "name": "min_samples_split",
+              "type": "inputNumber",
+              "label": "min_samples_split",
+              "value": 2
+            },
+            {
+              "name": "min_samples_leaf",
+              "type": "inputNumber",
+              "label": "min_samples_leaf",
+              "value": 1
+            },
+            {
+              "name": "min_weight_fraction_leaf",
+              "type": "inputNumber",
+              "label": "min_weight_fraction_leaf",
+              "value": 0
+            },
+            {
+              "name": "max_depth",
+              "type": "inputNumber",
+              "label": "max_depth",
+              "value": 3
+            },
+            {
+              "name": "min_impurity_decrease",
+              "type": "inputNumber",
+              "label": "min_impurity_decrease",
+              "value": 0
+            },
+            {
+              "name": "min_impurity_split",
+              "type": "input",
+              "label": "min_impurity_split",
+              "value": null
+            },
+            {
+              "name": "init",
+              "type": "input",
+              "label": "init",
+              "value": null
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "max_features",
+              "type": "input",
+              "label": "max_features",
+              "value": null
+            },
+            {
+              "name": "verbose",
+              "type": "inputNumber",
+              "label": "verbose",
+              "value": 0
+            },
+            {
+              "name": "max_leaf_nodes",
+              "type": "input",
+              "label": "max_leaf_nodes",
+              "value": null
+            },
+            {
+              "name": "warm_start",
+              "type": "checkbox",
+              "label": "warm_start",
+              "value": false
+            },
+            {
+              "name": "presort",
+              "type": "input",
+              "label": "presort",
+              "value": "deprecated"
+            },
+            {
+              "name": "validation_fraction",
+              "type": "inputNumber",
+              "label": "validation_fraction",
+              "value": 0.1
+            },
+            {
+              "name": "n_iter_no_change",
+              "type": "input",
+              "label": "n_iter_no_change",
+              "value": null
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.0001
+            },
+            {
+              "name": "ccp_alpha",
+              "type": "inputNumber",
+              "label": "ccp_alpha",
+              "value": 0
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        },
+        {
+          "id": 11,
+          "name": "GaussianNB",
+          "raw_script_name": "GaussianNB.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "GaussianNB"
+            },
+            {
+              "name": "priors",
+              "type": "input",
+              "label": "priors",
+              "value": null
+            },
+            {
+              "name": "var_smoothing",
+              "type": "inputNumber",
+              "label": "var_smoothing",
+              "value": 0.000000001
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        },
+        {
+          "id": 12,
+          "name": "DecisionTreeClassifier",
+          "raw_script_name": "DecisionTreeClassifier.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "DecisionTreeClassifier"
+            },
+            {
+              "name": "criterion",
+              "type": "input",
+              "label": "criterion",
+              "value": "gini"
+            },
+            {
+              "name": "splitter",
+              "type": "input",
+              "label": "splitter",
+              "value": "best"
+            },
+            {
+              "name": "max_depth",
+              "type": "input",
+              "label": "max_depth",
+              "value": null
+            },
+            {
+              "name": "min_samples_split",
+              "type": "inputNumber",
+              "label": "min_samples_split",
+              "value": 2
+            },
+            {
+              "name": "min_samples_leaf",
+              "type": "inputNumber",
+              "label": "min_samples_leaf",
+              "value": 1
+            },
+            {
+              "name": "min_weight_fraction_leaf",
+              "type": "inputNumber",
+              "label": "min_weight_fraction_leaf",
+              "value": 0
+            },
+            {
+              "name": "max_features",
+              "type": "input",
+              "label": "max_features",
+              "value": null
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "max_leaf_nodes",
+              "type": "input",
+              "label": "max_leaf_nodes",
+              "value": null
+            },
+            {
+              "name": "min_impurity_decrease",
+              "type": "inputNumber",
+              "label": "min_impurity_decrease",
+              "value": 0
+            },
+            {
+              "name": "min_impurity_split",
+              "type": "input",
+              "label": "min_impurity_split",
+              "value": null
+            },
+            {
+              "name": "class_weight",
+              "type": "input",
+              "label": "class_weight",
+              "value": null
+            },
+            {
+              "name": "presort",
+              "type": "input",
+              "label": "presort",
+              "value": "deprecated"
+            },
+            {
+              "name": "ccp_alpha",
+              "type": "inputNumber",
+              "label": "ccp_alpha",
+              "value": 0
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 5
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 6,
+      "name": "模型结果",
+      "children": [
+        {
+          "id": 22,
+          "name": "查看结果",
+          "raw_script_name": null,
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "名称",
+              "value": "查看结果"
+            },
+            {
+              "name": "preview",
+              "type": "preview",
+              "label": "",
+              "value": ""
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "查看结果",
+              "type": "input",
+              "proportion": 0.5
+            }
+          ],
+          "category": 6
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 7,
+      "name": "回归算法",
+      "children": [
+        {
+          "id": 14,
+          "name": "SVR",
+          "raw_script_name": "SVR.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "SVR"
+            },
+            {
+              "name": "kernel",
+              "type": "input",
+              "label": "kernel",
+              "value": "rbf"
+            },
+            {
+              "name": "degree",
+              "type": "inputNumber",
+              "label": "degree",
+              "value": 3
+            },
+            {
+              "name": "gamma",
+              "type": "input",
+              "label": "gamma",
+              "value": "scale"
+            },
+            {
+              "name": "coef0",
+              "type": "inputNumber",
+              "label": "coef0",
+              "value": 0
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.001
+            },
+            {
+              "name": "C",
+              "type": "inputNumber",
+              "label": "C",
+              "value": 1
+            },
+            {
+              "name": "epsilon",
+              "type": "inputNumber",
+              "label": "epsilon",
+              "value": 0.1
+            },
+            {
+              "name": "shrinking",
+              "type": "checkbox",
+              "label": "shrinking",
+              "value": true
+            },
+            {
+              "name": "cache_size",
+              "type": "inputNumber",
+              "label": "cache_size",
+              "value": 200
+            },
+            {
+              "name": "verbose",
+              "type": "checkbox",
+              "label": "verbose",
+              "value": false
+            },
+            {
+              "name": "max_iter",
+              "type": "inputNumber",
+              "label": "max_iter",
+              "value": -1
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 7
+        },
+        {
+          "id": 15,
+          "name": "Ridge",
+          "raw_script_name": "Ridge.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "Ridge"
+            },
+            {
+              "name": "alpha",
+              "type": "inputNumber",
+              "label": "alpha",
+              "value": 1
+            },
+            {
+              "name": "fit_intercept",
+              "type": "checkbox",
+              "label": "fit_intercept",
+              "value": true
+            },
+            {
+              "name": "normalize",
+              "type": "checkbox",
+              "label": "normalize",
+              "value": false
+            },
+            {
+              "name": "copy_X",
+              "type": "checkbox",
+              "label": "copy_X",
+              "value": true
+            },
+            {
+              "name": "max_iter",
+              "type": "input",
+              "label": "max_iter",
+              "value": null
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.001
+            },
+            {
+              "name": "solver",
+              "type": "input",
+              "label": "solver",
+              "value": "auto"
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 7
+        },
+        {
+          "id": 16,
+          "name": "LinearRegression",
+          "raw_script_name": "LinearRegression.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "LinearRegression"
+            },
+            {
+              "name": "fit_intercept",
+              "type": "checkbox",
+              "label": "fit_intercept",
+              "value": true
+            },
+            {
+              "name": "normalize",
+              "type": "checkbox",
+              "label": "normalize",
+              "value": false
+            },
+            {
+              "name": "copy_X",
+              "type": "checkbox",
+              "label": "copy_X",
+              "value": true
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 7
+        },
+        {
+          "id": 17,
+          "name": "LogisticRegression",
+          "raw_script_name": "LogisticRegression.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "LogisticRegression"
+            },
+            {
+              "name": "penalty",
+              "type": "input",
+              "label": "penalty",
+              "value": "l2"
+            },
+            {
+              "name": "dual",
+              "type": "checkbox",
+              "label": "dual",
+              "value": false
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.0001
+            },
+            {
+              "name": "C",
+              "type": "inputNumber",
+              "label": "C",
+              "value": 1
+            },
+            {
+              "name": "fit_intercept",
+              "type": "checkbox",
+              "label": "fit_intercept",
+              "value": true
+            },
+            {
+              "name": "intercept_scaling",
+              "type": "inputNumber",
+              "label": "intercept_scaling",
+              "value": 1
+            },
+            {
+              "name": "class_weight",
+              "type": "input",
+              "label": "class_weight",
+              "value": null
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "solver",
+              "type": "input",
+              "label": "solver",
+              "value": "lbfgs"
+            },
+            {
+              "name": "max_iter",
+              "type": "inputNumber",
+              "label": "max_iter",
+              "value": 100
+            },
+            {
+              "name": "multi_class",
+              "type": "input",
+              "label": "multi_class",
+              "value": "auto"
+            },
+            {
+              "name": "verbose",
+              "type": "inputNumber",
+              "label": "verbose",
+              "value": 0
+            },
+            {
+              "name": "warm_start",
+              "type": "checkbox",
+              "label": "warm_start",
+              "value": false
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            },
+            {
+              "name": "l1_ratio",
+              "type": "input",
+              "label": "l1_ratio",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 7
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 8,
+      "name": "降维算法",
+      "children": [
+        {
+          "id": 19,
+          "name": "PCA",
+          "raw_script_name": "PCA.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "PCA"
+            },
+            {
+              "name": "n_components",
+              "type": "input",
+              "label": "n_components",
+              "value": null
+            },
+            {
+              "name": "copy",
+              "type": "checkbox",
+              "label": "copy",
+              "value": true
+            },
+            {
+              "name": "whiten",
+              "type": "checkbox",
+              "label": "whiten",
+              "value": false
+            },
+            {
+              "name": "svd_solver",
+              "type": "input",
+              "label": "svd_solver",
+              "value": "auto"
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0
+            },
+            {
+              "name": "iterated_power",
+              "type": "input",
+              "label": "iterated_power",
+              "value": "auto"
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 8
+        },
+        {
+          "id": 20,
+          "name": "KernelPCA",
+          "raw_script_name": "KernelPCA.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "KernelPCA"
+            },
+            {
+              "name": "n_components",
+              "type": "input",
+              "label": "n_components",
+              "value": null
+            },
+            {
+              "name": "kernel",
+              "type": "input",
+              "label": "kernel",
+              "value": "linear"
+            },
+            {
+              "name": "gamma",
+              "type": "input",
+              "label": "gamma",
+              "value": null
+            },
+            {
+              "name": "degree",
+              "type": "inputNumber",
+              "label": "degree",
+              "value": 3
+            },
+            {
+              "name": "coef0",
+              "type": "inputNumber",
+              "label": "coef0",
+              "value": 1
+            },
+            {
+              "name": "kernel_params",
+              "type": "input",
+              "label": "kernel_params",
+              "value": null
+            },
+            {
+              "name": "alpha",
+              "type": "inputNumber",
+              "label": "alpha",
+              "value": 1
+            },
+            {
+              "name": "fit_inverse_transform",
+              "type": "checkbox",
+              "label": "fit_inverse_transform",
+              "value": false
+            },
+            {
+              "name": "eigen_solver",
+              "type": "input",
+              "label": "eigen_solver",
+              "value": "auto"
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0
+            },
+            {
+              "name": "max_iter",
+              "type": "input",
+              "label": "max_iter",
+              "value": null
+            },
+            {
+              "name": "remove_zero_eig",
+              "type": "checkbox",
+              "label": "remove_zero_eig",
+              "value": false
+            },
+            {
+              "name": "random_state",
+              "type": "input",
+              "label": "random_state",
+              "value": null
+            },
+            {
+              "name": "copy_X",
+              "type": "checkbox",
+              "label": "copy_X",
+              "value": true
+            },
+            {
+              "name": "n_jobs",
+              "type": "input",
+              "label": "n_jobs",
+              "value": null
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 8
+        },
+        {
+          "id": 21,
+          "name": "FactorAnalysis",
+          "raw_script_name": "FactorAnalysis.txt",
+          "shape": "customNode",
+          "size": "170*34",
+          "color": "#1890ff",
+          "node_detail": [
+            {
+              "name": "name",
+              "type": "input",
+              "label": "label",
+              "value": "FactorAnalysis"
+            },
+            {
+              "name": "n_components",
+              "type": "input",
+              "label": "n_components",
+              "value": null
+            },
+            {
+              "name": "tol",
+              "type": "inputNumber",
+              "label": "tol",
+              "value": 0.01
+            },
+            {
+              "name": "copy",
+              "type": "checkbox",
+              "label": "copy",
+              "value": true
+            },
+            {
+              "name": "max_iter",
+              "type": "inputNumber",
+              "label": "max_iter",
+              "value": 1000
+            },
+            {
+              "name": "noise_variance_init",
+              "type": "input",
+              "label": "noise_variance_init",
+              "value": null
+            },
+            {
+              "name": "svd_method",
+              "type": "input",
+              "label": "svd_method",
+              "value": "randomized"
+            },
+            {
+              "name": "iterated_power",
+              "type": "inputNumber",
+              "label": "iterated_power",
+              "value": 3
+            },
+            {
+              "name": "random_state",
+              "type": "inputNumber",
+              "label": "random_state",
+              "value": 0
+            }
+          ],
+          "point_detail": [
+            {
+              "func": "",
+              "name": "训练数据",
+              "type": "input",
+              "proportion": 0.5
+            },
+            {
+              "func": "",
+              "name": "结果",
+              "type": "output",
+              "proportion": 0.5
+            }
+          ],
+          "category": 8
+        }
+      ],
+      "is_menu": true
+    },
+    {
+      "id": 9,
+      "name": "自定义算法",
+      "children": [
+      ],
+      "is_menu": true
+    }
+  ]
+}
