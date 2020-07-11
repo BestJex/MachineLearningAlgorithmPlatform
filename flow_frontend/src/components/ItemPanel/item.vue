@@ -12,7 +12,13 @@
                 type="success"
                 icon="el-icon-circle-plus-outline"
                 circle
-                @click="addNodes()"></el-button>
+                @click="isShowTreeNodeAppand = true"></el-button>
+        <el-button
+                v-show="operation"
+                type="warning"
+                icon="el-icon-refresh-left"
+                circle
+                @click="recoveryNodes()"></el-button>
         <!--        <el-button-->
         <!--                v-show="operation"-->
         <!--                type="info"-->
@@ -61,7 +67,7 @@
         </el-tree>
         <el-dialog
                 :append-to-body="true"
-                :visible.sync="isShowTreeNodeManage"
+                :visible.sync="isShowTreeNodeRecovery"
                 custom-class="preview-dialog"
                 title="恢复结点">
             <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
@@ -71,6 +77,19 @@
             </el-checkbox-group>
             <el-button
                     @click="recoveryTreeNode()"
+                    size="small"
+                    style="margin-top: 20px; margin-left: 450px;"
+                    type="success">确认
+            </el-button>
+        </el-dialog>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowTreeNodeAppand"
+                custom-class="preview-dialog"
+                title="添加结点">
+            <div style="margin: 15px 0;"></div>
+            <el-button
+                    @click="appendNodes()"
                     size="small"
                     style="margin-top: 20px; margin-left: 450px;"
                     type="success">确认
@@ -92,7 +111,8 @@
                 cities: [],
                 isIndeterminate: true,
 
-                isShowTreeNodeManage: false,
+                isShowTreeNodeRecovery: false,
+                isShowTreeNodeAppand: false,
                 treeNode: {
                     nodeId: 0,
                     categoryName: "",
@@ -201,15 +221,29 @@
             },
 
             /**
-             * 新增节点
+             * 添加节点：根据json文件添加新的节点
              */
-            addNodes() {
-                this.isShowTreeNodeManage = true;
+            appendNodes() {
+                this.isShowTreeNodeAppand = false;
+            },
+
+            /**
+             * 恢复节点：恢复标砖模板中已经被删除的节点
+             */
+            recoveryNodes() {
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/searchdeletenode?graphid=${this.$route.params.id}&username=${localStorage.getItem('username')}`,
                 }).then(res => {
                     this.cities = res.data.data.list;
+                    if (this.cities.length === 0) {
+                        this.$message({
+                            message: "没有已删除的节点",
+                            type: 'warning',
+                        });
+                    } else {
+                        this.isShowTreeNodeRecovery = true;
+                    }
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -238,7 +272,7 @@
                 }).then(res => {
                     console.log(res);
                     this.getTree();
-                    this.isShowTreeNodeManage = false;
+                    this.isShowTreeNodeRecovery = false;
                 }).catch(err => {
                     this.$message({
                         message: err,
