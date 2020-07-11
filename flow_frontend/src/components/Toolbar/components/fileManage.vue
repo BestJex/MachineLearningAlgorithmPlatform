@@ -25,10 +25,20 @@
 				</el-table>
 			</el-tab-pane>
 			<el-tab-pane label="上传文件">
-				<el-upload :before-remove="beforeRemove" :before-upload="beforeUpload" :data="uploadData" :file-list="fileList"
-				 :on-error="onUploadErr" :on-remove="handleRemove" :on-success="onUploadSucc" :headers="{Authorization: 'JWT ' + token}"
-				 accept=".jpg, .csv, .png" :action="base_api + 'upload_file'" class="upload-demo" :show-file-list="false" multiple
-				 drag style="display: inline-block">
+				<el-upload :before-remove="beforeRemove"
+						   :before-upload="beforeUpload"
+						   :data="uploadData"
+						   :file-list="fileList"
+						   :on-error="onUploadErr"
+						   :on-remove="handleRemove"
+						   :on-success="onUploadSucc"
+						   :headers="{Authorization: 'JWT ' + token}"
+						   accept=".jpg, .csv, .png"
+						   :action="base_api + 'upload_file'"
+						   class="upload-demo"
+						   :show-file-list="false" multiple
+						   drag
+						   style="display: inline-block">
 					<i class="el-icon-upload"></i>
 					<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em>，大小不能超过10MB。</div>
 				</el-upload>

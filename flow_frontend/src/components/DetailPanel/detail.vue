@@ -62,9 +62,10 @@
                                     v-if="node.type==='file'"
                                     v-model="node.value">
                                 <el-option
-                                        :label="item.name"
+                                        :label="item.filename"
                                         :value="item.id"
-                                        v-for="item in fileList"></el-option>
+                                        v-for="item in fileTableData">
+                                </el-option>
                             </el-select>
                             <!-- 选择算法 -->
                             <el-select
@@ -118,6 +119,7 @@
                 page: {},
                 graph: {},
                 item: {},
+                fileTableData: [],
                 node_detail: {},
                 point_detail: {},
                 point_options: [
@@ -134,7 +136,7 @@
             }
         },
         computed: {
-            ...mapGetters(['fileList', 'isShowPreview', 'isShowEcharts', 'docHeight']),
+            ...mapGetters(['isShowPreview', 'isShowEcharts', 'docHeight']),
             graphId: {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId;
@@ -146,12 +148,37 @@
             visualFile
         },
         created() {
-            this.init()
-            this.bindEvent()
+            this.init();
+            this.bindEvent();
+            this.getFileList();
         },
         methods: {
             init() {
 
+            },
+            getFileList() {
+                let projectId = this.$route.params.id;
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+                }).then(res => {
+                    this.fileTableData = Array(res.data.data.list)[0];
+                    for (let i = 0; i < this.fileTableData.length; i++) {
+                        let item = this.fileTableData[i];
+                        if (item.graphid.toString() !== projectId) {
+                            this.fileTableData.splice(i, 1);
+                        }
+                        let TIndex = item.buildtime.indexOf('T');
+                        let pointIndex = item.buildtime.indexOf('.');
+                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
+                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
+                    }
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    });
+                });
             },
             bindEvent() {
                 let self = this
