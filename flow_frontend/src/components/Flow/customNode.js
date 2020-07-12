@@ -68,7 +68,7 @@ const customNode = {
                             width: 16,
                             height: 16,
                             parent: mainId,
-                            img: cfg.status === 'complete' ? okSvg : cfg.status === 'loading' ? loadingSvg : ''
+                            img: cfg.statuspoint_detail === 'complete' ? okSvg : cfg.status === 'loading' ? loadingSvg : ''
                         },
                     })
                 }
@@ -129,6 +129,20 @@ const customNode = {
                                     func: point.func,
                                     fill: '#1890ff',
                                     opacity: 0
+                                }
+                            })
+                            group.addShape('text', {
+                                attrs: {
+                                    size: 12,
+                                    parent: id,
+                                    x: x + offsetX,
+                                    y: y + offsetY - 15,
+                                    isOutPointText: true,
+                                    textAlign: 'center',
+                                    textBaseline: 'top',
+                                    text: point.name,
+                                    fill: '#1890ff',
+                                    opacity: 0,
                                 }
                             })
                             group.addShape("circle", {

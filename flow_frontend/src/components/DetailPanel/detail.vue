@@ -34,15 +34,14 @@
                                     @change="changeValue"
                                     v-if="node.type === 'int' || node.name === 'name' || node.type === 'RandomState'"
                                     type="number"
-                                    v-model="node.value"
-                                    :placeholder="node.default"></el-input-number>
+                                    v-model="node.value"></el-input-number>
                             <!-- float类型输入框 -->
                             <el-input-number
                                     @change="changeValue"
                                     v-if="node.type==='float'"
                                     type="number"
                                     v-model="node.value"
-                                    :placeholder="node.default"></el-input-number>
+                                    step="0.1"></el-input-number>
                             <!-- 滑动器 -->
                             <el-slider
                                     @change="changeValue"
@@ -150,7 +149,6 @@
         created() {
             this.init();
             this.bindEvent();
-            this.getFileList();
         },
         methods: {
             init() {
@@ -195,7 +193,7 @@
                             );
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
-                            // console.log(self.node_detail);
+                            this.getFileList();
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);

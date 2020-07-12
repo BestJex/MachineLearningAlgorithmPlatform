@@ -134,6 +134,7 @@
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
+	import configJS from "@/statics/config";
 
     export default {
         data() {
@@ -269,7 +270,9 @@
                     }
                 }
             },
-
+			downloadFile() {
+				location.href = `${configJS.BASE_API}download_file?graphId=${this.graphId}`;
+			},
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)

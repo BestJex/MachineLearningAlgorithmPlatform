@@ -1,95 +1,98 @@
 <template>
-	<div>
-		<hr>
-		<el-button
-			:type="operation ? 'primary' : ''"
-			icon="el-icon-edit"
-			circle
-			style="margin-left: 5px;"
-			@click="handleOperation()"
-			:title="operation ? '取消编辑' : '编辑'"
-		></el-button>
-		<el-button
-			v-show="operation"
-			type="success"
-			icon="el-icon-circle-plus-outline"
-			circle
-			@click="addNodes()"
-			title="恢复节点"
-		></el-button>
-		<el-button
-			v-show="operation"
-			type="info"
-			icon="el-icon-view"
-			circle
-			@click="hideNodes()"
-			title="隐藏节点"
-		></el-button>
-		<el-button
-			v-show="operation"
-			type="danger"
-			icon="el-icon-delete"
-			circle
-			@click="deleteNodes()"
-			title="删除"
-		></el-button>
-		<el-input
-			v-show="!operation"
-			placeholder="输入关键字进行过滤"
-			v-model="filterText"
-			style="display: inline-block; width: 80%">
-		</el-input>
-		<hr>
-		<el-tree
-			ref="tree"
-			class="filter-tree"
-			default-expand-all
-			:data="nodeList"
-			:draggable="true"
-			:props="defaultProps"
-			:allow-drop="allowDrop"
-			:allow-drag="allowDrag"
-			:highlight-current="true"
-			:show-checkbox="operation"
-			:filter-node-method="filterNode"
-			:expand-on-click-node="!operation"
-			@node-drop="handleDrop"
-			@node-drag-over="handleDragOver"
-			@node-drag-end="handleElDragEnd"
-			@check-change="handleCheckChange"
-			@node-drag-enter="handleDragEnter"
-			@node-drag-leave="handleDragLeave"
-			@node-drag-start="handleElDragStart">
+    <div>
+        <hr>
+        <el-button
+                :type="operation ? 'primary' : ''"
+                icon="el-icon-edit"
+                circle
+                style="margin-left: 5px;"
+                @click="handleOperation()"
+                :title="operation ? '取消编辑' : '编辑'"
+        ></el-button>
+        <el-button
+                v-show="operation"
+                type="success"
+                icon="el-icon-circle-plus-outline"
+                circle
+                @click="addNodes()"
+                title="恢复节点"
+        ></el-button>
+        <el-button
+                v-show="operation"
+                type="info"
+                icon="el-icon-view"
+                circle
+                @click="hideNodes()"
+                title="隐藏节点"
+        ></el-button>
+        <el-button
+                v-show="operation"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="deleteNodes()"
+                title="删除"
+        ></el-button>
+        <el-input
+                v-show="!operation"
+                placeholder="输入关键字进行过滤"
+                v-model="filterText"
+                style="display: inline-block; width: 80%">
+        </el-input>
+        <hr>
+        <el-tree
+                ref="tree"
+                class="filter-tree"
+                default-expand-all
+                :data="nodeList"
+                :draggable="true"
+                :props="defaultProps"
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
+                :highlight-current="true"
+                :show-checkbox="operation"
+                :filter-node-method="filterNode"
+                :expand-on-click-node="!operation"
+                @node-drop="handleDrop"
+                @node-drag-over="handleDragOver"
+                @node-drag-end="handleElDragEnd"
+                @check-change="handleCheckChange"
+                @node-drag-enter="handleDragEnter"
+                @node-drag-leave="handleDragLeave"
+                @node-drag-start="handleElDragStart">
                   <span
-					  class="custom-tree-node"
-					  slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                          class="custom-tree-node"
+                          slot-scope="{ node, data }">
+                        <span v-show="!operation">{{ node.label }}</span>
+                        <label>
+                            <input type="text" v-model="data.name" v-show="operation">
+                        </label>
                   </span>
-		</el-tree>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowTreeNodeManage"
-			custom-class="preview-dialog"
-			title="恢复结点">
-			<!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-			<div style="margin: 15px 0;"></div>
-			<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-				<el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
-			</el-checkbox-group>
-			<el-button
-				@click="recoveryTreeNode()"
-				size="small"
-				style="margin-top: 20px; margin-left: 450px;"
-				type="success">确认
-			</el-button>
-		</el-dialog>
-	</div>
+        </el-tree>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowTreeNodeManage"
+                custom-class="preview-dialog"
+                title="恢复结点">
+            <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
+            <div style="margin: 15px 0;"></div>
+            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                <el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
+            </el-checkbox-group>
+            <el-button
+                    @click="recoveryTreeNode()"
+                    size="small"
+                    style="margin-top: 20px; margin-left: 450px;"
+                    type="success">确认
+            </el-button>
+        </el-dialog>
+    </div>
 </template>
 
 
 <script>
     import eventBus from '@/utils/eventBus'
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -174,9 +177,11 @@
              */
             handleOperation() {
                 this.operation = !this.operation
-                let itempannel = document.getElementById('itempannel')
+                let itempannel = document.getElementById('itempannel');
+                let itemResizer = document.getElementById('item-resizer');
                 if (this.operation) {
-                    itempannel.style.width = 250 + 'px'
+                    itempannel.style.width = 270 + 'px';
+                    itemResizer.style.left = 270 + 'px';
                 } else {
                     itempannel.style.width = 240 + 'px'
                     // 保存修改的树形图
@@ -193,7 +198,7 @@
                     }).catch(err => {
                         this.$message({
                             message: err,
-                            type: 'error'
+                            type: 'error',
                         })
                     })
                 }
@@ -258,41 +263,41 @@
              * 隐藏节点
              */
             hideNodes() {
-				console.log(this.nodeList)
+                console.log(this.nodeList)
                 let checkArr = this.$refs.tree.getCheckedNodes()
                 let res = []
                 for (let i = 0; i < checkArr.length; i++) {
                     res.push(checkArr[i].$treeNodeId)
-					if (!checkArr[i].children) {
-						
-						// for (let a = 0; a < this.nodeList.length; a++) {
-							// console.log(checkArr[i].id)
-							// console.log(this.nodeList[a].id)
-							// if (checkArr[i].id === this.nodeList[a].id) {
-							// 	Object.assign(this.nodeList[a], { visible: false })
-							// 	console.log(this.nodeList[a])
-							// }
-						// }
-						
-					}
+                    if (!checkArr[i].children) {
+
+                        // for (let a = 0; a < this.nodeList.length; a++) {
+                        // console.log(checkArr[i].id)
+                        // console.log(this.nodeList[a].id)
+                        // if (checkArr[i].id === this.nodeList[a].id) {
+                        // 	Object.assign(this.nodeList[a], { visible: false })
+                        // 	console.log(this.nodeList[a])
+                        // }
+                        // }
+
+                    }
                 }
-       //          for (let index = 0; index < res.length; index++) {
-       //              let item = res[index]
-       //              for (let i = 0; i < this.nodeList.length; i++) {
-       //                  if (this.nodeList[i].$treeNodeId === item) {
-							// // console.log(this.nodeList[i]);
-       //                      continue
-       //                  }
-       //                  if (!this.nodeList[i].children) {
-							// console.log(this.nodeList[i])
-       //                      for (let j = 0; j < this.nodeList[i].children.length; j++) {
-       //                          if (this.nodeList[i].children[j].$treeNodeId === item) {
-							// 		console.log(this.nodeList[i]);
-       //                          }
-       //                      }
-       //                  }
-       //              }
-       //          }
+                //          for (let index = 0; index < res.length; index++) {
+                //              let item = res[index]
+                //              for (let i = 0; i < this.nodeList.length; i++) {
+                //                  if (this.nodeList[i].$treeNodeId === item) {
+                // // console.log(this.nodeList[i]);
+                //                      continue
+                //                  }
+                //                  if (!this.nodeList[i].children) {
+                // console.log(this.nodeList[i])
+                //                      for (let j = 0; j < this.nodeList[i].children.length; j++) {
+                //                          if (this.nodeList[i].children[j].$treeNodeId === item) {
+                // 		console.log(this.nodeList[i]);
+                //                          }
+                //                      }
+                //                  }
+                //              }
+                //          }
             },
 
             /**
@@ -356,6 +361,7 @@
                         data.status = 'init'
                         // 加载输入节点
                         for (const [key, value] of Object.entries(node.data.information.inputattibute)) {
+                            value.disable = "Yes";
                             data.point_detail.push(value)
                         }
                         // 加载参数列表
@@ -366,8 +372,8 @@
                         for (const [key, value] of Object.entries(node.data.information.outputattibute)) {
                             data.point_detail.push(value)
                         }
-                        data.shape = 'customNode'
-                        data.type = 'node'
+                        data.shape = 'customNode';
+                        data.type = 'node';
                         this.command.executeCommand('add', [data])
                     }
                     this.$store.commit('app/SET_ALLOWDROP', false)
@@ -422,82 +428,82 @@
 </script>
 
 <style lang="scss">
-	.itempannel {
-		.el-tree {
-			background: #f6f9fc;
+    .itempannel {
+        .el-tree {
+            background: #f6f9fc;
 
-			.el-tree-node__content {
-				background: #f6f9fc;
+            .el-tree-node__content {
+                background: #f6f9fc;
 
-				&:hover {
-					background: rgba(0, 0, 0, 0.05);
-					color: rgb(51, 51, 51);
-				}
-			}
+                &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    color: rgb(51, 51, 51);
+                }
+            }
 
-			.el-tree-node {
-				&:focus {
-					background: rgba(0, 0, 0, 0.05);
-				}
+            .el-tree-node {
+                &:focus {
+                    background: rgba(0, 0, 0, 0.05);
+                }
 
-				&:focus > .el-tree-node__content {
-					background: rgba(0, 0, 0, 0.05);
-				}
-			}
-		}
-	}
+                &:focus > .el-tree-node__content {
+                    background: rgba(0, 0, 0, 0.05);
+                }
+            }
+        }
+    }
 </style>
 
 <style scoped>
-	.itempannel ul {
-		padding: 0 0 0 16px;
-	}
+    .itempannel ul {
+        padding: 0 0 0 16px;
+    }
 
-	.itempannel li {
-		color: rgba(0, 0, 0, 0.65);
-		border-radius: 4px;
-		width: 160px;
-		height: 28px;
-		line-height: 26px;
-		padding-left: 8px;
-		border: 1px solid rgba(0, 0, 0, 0);
-		list-style-type: none;
-	}
+    .itempannel li {
+        color: rgba(0, 0, 0, 0.65);
+        border-radius: 4px;
+        width: 160px;
+        height: 28px;
+        line-height: 26px;
+        padding-left: 8px;
+        border: 1px solid rgba(0, 0, 0, 0);
+        list-style-type: none;
+    }
 
-	.itempannel li:hover {
-		background: white;
-		border: 1px solid #ced4d9;
-		cursor: move;
-	}
+    .itempannel li:hover {
+        background: white;
+        border: 1px solid #ced4d9;
+        cursor: move;
+    }
 
-	.grabbable {
-		cursor: move;
-	}
+    .grabbable {
+        cursor: move;
+    }
 
-	.grabbable:active {
-		cursor: grabbing;
-	}
+    .grabbable:active {
+        cursor: grabbing;
+    }
 
-	.itempannel .pannel-type-icon {
-		width: 16px;
-		height: 16px;
-		display: inline-block;
-		vertical-align: middle;
-		margin-right: 8px;
-	}
+    .itempannel .pannel-type-icon {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 8px;
+    }
 
-	.tree {
-		position: relative;
-		cursor: default;
-		color: #606266;
-	}
+    .tree {
+        position: relative;
+        cursor: default;
+        color: #606266;
+    }
 
-	.custom-tree-node {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		font-size: 14px;
-		padding-right: 8px;
-	}
+    .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+    }
 </style>
