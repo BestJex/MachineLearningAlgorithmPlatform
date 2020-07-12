@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-                :style="`left: ${itemWidth}px; height: 500px; margin-top: 100px;`"
+                :style="`left: ${itemWidth}px; height: 500px; margin-top: 100px;display: ${$store.state.app.operation ? 'block' : 'none'}`"
                 @mousedown="onResizeMouseDown"
                 class="resizer"
                 id="item-resizer"></div>
@@ -29,7 +29,7 @@
                 DEFAULT_ITEM_WIDTH: 200,
                 DEFAULT_RESIZER_LEFT: 190,
                 MAX_ITEM_WIDTH: 400,
-                MIN_ITEM_WIDTH: 180
+                MIN_ITEM_WIDTH: 200
             }
         },
         computed: {
@@ -52,6 +52,7 @@
                 })
             },
             onResizeMouseDown(e) {
+
                 this.isActive = true
                 this.startX = e.clientX
 
@@ -59,8 +60,18 @@
                 let resizer = document.getElementById('item-resizer')
 
                 const preItemWidth = this.itemWidth;
+                // 拦截器
                 document.onmousemove = e => {
                     this.onResizeMouseMove(e, preItemWidth, itempannel, resizer)
+					// 增加用户体验，实时修改相应组件尺寸
+					const nowItempannelWidth = parseInt(
+                        itempannel.style.width.replace('px', '')
+                    );
+                    if (nowItempannelWidth !== this.itemWidth) {
+                        this.itemWidth = nowItempannelWidth
+                    }
+                    // 拦截器，不允许宽度过小
+
                 }
 
                 document.onmouseup = e => {

@@ -70,6 +70,13 @@
                 const preDetailWidth = this.detailWidth;
                 document.onmousemove = e => {
                     this.onResizeMouseMove(e, preDetailWidth, detailpannel, resizer);
+                    // 实时修改尺寸
+                    const nowDetailpannelWidth = parseInt(
+                        detailpannel.style.width.replace('px', '')
+                    );
+                    if (nowDetailpannelWidth !== this.detailWidth) {
+                        this.detailWidth = nowDetailpannelWidth;
+                    }
                 }
 
                 document.onmouseup = e => {

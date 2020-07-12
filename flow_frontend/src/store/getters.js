@@ -14,7 +14,9 @@ const getters = {
   isShowPreview: state => state.app.is_show_preview,
   isShowVisual: state => state.app.is_show_visual,
   isShowEcharts: state => state.app.is_show_echarts,
-  graphId: state => state.app.graph_id,  terminalDisplay: state => state.app.terminal_display,
+  graphId: state => state.app.graph_id,
+  terminalDisplay: state => state.app.terminal_display,
+  operation: state => state.app.operation,
   token: state => state.user.token,
   username: state => state.user.username
 }
