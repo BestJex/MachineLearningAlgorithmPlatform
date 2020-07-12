@@ -24,7 +24,6 @@
                                 v-for="node in node_detail">
                             <!-- 输入框 -->
                             <el-input
-                                    :label="node.label"
                                     type="text"
                                     @change="changeValue"
                                     v-if="node.type==='object' || node.type==='str'"
@@ -32,7 +31,16 @@
                             <!-- int类型输入框 -->
                             <el-input-number
                                     @change="changeValue"
-                                    v-if="node.type === 'int' || node.name === 'name' || node.type === 'RandomState'"
+                                    @input="checkIntInput(node.name + node.number, node.label, node.value)"
+                                    v-if="node.type === 'int'"
+                                    type="number"
+                                    :id="node.name + node.number"
+                                    v-model="node.value"></el-input-number>
+                            <!-- 随机数类型输入框 -->
+                            <el-input-number
+                                    @change="changeValue"
+                                    @input="checkIntInput(node.label, node.value)"
+                                    v-if="node.type === 'RandomState'"
                                     type="number"
                                     v-model="node.value"></el-input-number>
                             <!-- float类型输入框 -->
@@ -40,8 +48,7 @@
                                     @change="changeValue"
                                     v-if="node.type==='float'"
                                     type="number"
-                                    v-model="node.value"
-                                    step="0.1"></el-input-number>
+                                    v-model="node.value"></el-input-number>
                             <!-- 滑动器 -->
                             <el-slider
                                     @change="changeValue"
@@ -109,6 +116,7 @@
     import graphApi from '@/api/graph'
     import {mapGetters} from 'vuex'
     import configJS from '@/statics/config'
+    import {Notification} from "element-ui";
 
     export default {
         data() {
@@ -194,6 +202,7 @@
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
                             this.getFileList();
+                            console.log(self.node_detail);
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);
@@ -217,6 +226,17 @@
                     node_detail: this.node_detail
                 }
                 this.graph.update(this.item, model);
+            },
+
+            checkIntInput(id, label, value) {
+                if (!(parseInt(value, 10) === value)) {
+                    Notification({
+                        title: '错误',
+                        message: `${label}必须为整数！`,
+                        type: 'error',
+                        duration: 1000,
+                    });
+                }
             },
 
             /**
