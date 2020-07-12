@@ -2,16 +2,16 @@
     <div id="mountNode">
         <div class="editor">
             <context-menu/>
-            <!--toolbar-->
+				<!-- 上面的菜单栏 -->
             <toolbar/>
             <div class="bottom-container">
-                <!--itempannel-->
+                <!-- 左侧工具栏 -->
                 <item-panel/>
-                <!--detailpannel-->
+                <!-- 右侧参数栏 -->
                 <detail-panel/>
-                <!--miniMap-->
+                <!--缩略图-->
                 <minimap/>
-                <!--page-->
+                <!-- G6图 -->
                 <page/>
             </div>
         </div>

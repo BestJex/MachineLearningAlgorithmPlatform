@@ -2,15 +2,15 @@
     <div>
         <hr>
         <el-button
-                :type="operation ? 'primary' : ''"
+                :type="$store.state.app.operation ? 'primary' : ''"
                 icon="el-icon-edit"
                 circle
                 style="margin-left: 5px;"
                 @click="handleOperation()"
-                :title="operation ? '取消编辑' : '编辑'"
+                :title="$store.state.app.operation ? '取消编辑' : '编辑'"
         ></el-button>
         <el-button
-                v-show="operation"
+                v-show="$store.state.app.operation"
                 type="success"
                 icon="el-icon-circle-plus-outline"
                 circle
@@ -18,7 +18,7 @@
                 title="恢复节点"
         ></el-button>
         <el-button
-                v-show="operation"
+                v-show="$store.state.app.operation"
                 type="info"
                 icon="el-icon-view"
                 circle
@@ -26,7 +26,7 @@
                 title="隐藏节点"
         ></el-button>
         <el-button
-                v-show="operation"
+                v-show="this.$store.state.app.operation"
                 type="danger"
                 icon="el-icon-delete"
                 circle
@@ -34,7 +34,7 @@
                 title="删除"
         ></el-button>
         <el-input
-                v-show="!operation"
+                v-show="!$store.state.app.operation"
                 placeholder="输入关键字进行过滤"
                 v-model="filterText"
                 style="display: inline-block; width: 80%">
@@ -50,9 +50,9 @@
                 :allow-drop="allowDrop"
                 :allow-drag="allowDrag"
                 :highlight-current="true"
-                :show-checkbox="operation"
+                :show-checkbox="$store.state.app.operation"
                 :filter-node-method="filterNode"
-                :expand-on-click-node="!operation"
+                :expand-on-click-node="!$store.state.app.operation"
                 @node-drop="handleDrop"
                 @node-drag-over="handleDragOver"
                 @node-drag-end="handleElDragEnd"
@@ -63,9 +63,9 @@
                   <span
                           class="custom-tree-node"
                           slot-scope="{ node, data }">
-                        <span v-show="!operation">{{ node.label }}</span>
+                        <span v-show="!$store.state.app.operation">{{ node.label }}</span>
                         <label>
-                            <input type="text" v-model="data.name" v-show="operation">
+                            <input type="text" v-model="data.name" v-show="$store.state.app.operation">
                         </label>
                   </span>
         </el-tree>
@@ -127,7 +127,7 @@
             }
         },
         computed: {
-            ...mapGetters(['isAllowDrop']),
+            ...mapGetters(['isAllowDrop', 'operation']),
         },
         created() {
             this.bindEvent()
@@ -176,10 +176,12 @@
              * 操作节点
              */
             handleOperation() {
+                // 全局
+				this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
                 this.operation = !this.operation
                 let itempannel = document.getElementById('itempannel');
                 let itemResizer = document.getElementById('item-resizer');
-                if (this.operation) {
+                if (this.$store.state.app.operation) {
                     itempannel.style.width = 270 + 'px';
                     itemResizer.style.left = 270 + 'px';
                 } else {
@@ -390,7 +392,7 @@
             },
 
             allowDrop(node, _node, type) {
-                return this.operation
+                return this.$store.state.app.operation
             },
 
             handleDragStart(node, ev) {
