@@ -683,13 +683,11 @@
 	}
 
 	.acc_index_t .acc_t {
-		font-family: PingFangSC-Semibold;
 		font-size: 20px;
 		color: #3d3d3d;
 	}
 
 	.acc_index_t .acc_t {
-		font-family: PingFangSC-Semibold;
 		font-size: 20px;
 		color: #3d3d3d;
 	}

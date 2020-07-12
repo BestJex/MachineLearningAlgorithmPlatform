@@ -84,10 +84,22 @@
 
 				<el-dropdown style="float: right; margin-right: 10px;">
 					<el-button type="primary">
-						生成代码<i class="el-icon-arrow-down el-icon--right"></i>
+						文件
+						<i class="el-icon-arrow-down el-icon--right"></i>
 					</el-button>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>导出.py文件</el-dropdown-item>
+<!--						<el-dropdown-item>-->
+<!--							<span @click="importPythonFile()">导入.py文件</span>-->
+<!--						</el-dropdown-item>-->
+						<el-dropdown-item>
+							<span @click="isShowImportManage = true">导入.json文件</span>
+						</el-dropdown-item>
+						<el-dropdown-item>
+							<span @click="exportPythonFile()">导出.py文件</span>
+						</el-dropdown-item>
+						<el-dropdown-item>
+							<span @click="exportJsonFile()">导出.json文件</span>
+						</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
@@ -115,6 +127,13 @@
 		</el-dialog>
 		<el-dialog
 			:append-to-body="true"
+			:visible.sync="isShowImportManage"
+			custom-class="preview-dialog"
+			title="导入文件">
+			<import-manage :graph="graph"></import-manage>
+		</el-dialog>
+		<el-dialog
+			:append-to-body="true"
 			:visible.sync="isShowNodeManage"
 			custom-class="preview-dialog"
 			title="新增结点">
@@ -133,6 +152,7 @@
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
+	import importManage from "@/components/Toolbar/components/importManage";
 
     export default {
         data() {
@@ -149,12 +169,11 @@
                 selectedItem: [],
                 multiSelect: false,
                 addGroup: false,
+                isShowImportManage: false,
                 isShowFileManagement: false,
                 max_id: 0,
-
                 drawer: false,
                 direction: 'btt',
-
 				testRunning: false // 测试运行，不是真正的运行，到时候要删掉
             }
         },
@@ -184,7 +203,8 @@
         },
         components: {
             fileManage,
-            nodeManage
+            nodeManage,
+			importManage
         },
         created() {
             this.init()
@@ -270,7 +290,6 @@
                     }
                 }
             },
-
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -286,7 +305,6 @@
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
                     }
-                    console.log(data)
                     graphApi.sendGraph(data).then(res => {
                         Notification({
                             title: '成功',
@@ -457,7 +475,6 @@
                 this.selectedItem = nodes
                 this.graph.paint()
             },
-
             consoleData() {
                 const data = this.graph.save()
                 Object.assign(data, { id: 1 })
@@ -488,7 +505,6 @@
 			stopRuning() {
                 this.testRunning = false
 			},
-
             runNode() {
                 let graph = this.graph.save()
                 Object.assign(graph, { id: this.graphId })
@@ -509,12 +525,41 @@
                     })
             },
             addNode() {
+
             },
-			
 			getTerminal() {
 				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
-			}
-           
+			},
+			importPythonFile() {
+
+			},
+			importJsonFile() {
+				this.isShowImportManage = true;
+			},
+			exportPythonFile() {
+            	this.axios({
+					method: 'get',
+					url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
+				}).then(response => {
+					console.log(response);
+					if (response.data.data.error) {
+						this.$message({
+							message: response.data.data.error,
+							type: 'error'
+						});
+					} else {
+						window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
+					}
+				}).catch(error => {
+					this.$message({
+						message: error,
+						type: 'error'
+					});
+				});
+			},
+			exportJsonFile() {
+				window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`);
+			},
         }
     }
 </script>
