@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-                :style="`right:${detailWidth}px;`"
+                :style="`right:${detailWidth}px; display: none;`"
                 @mousedown="onResizeMouseDown"
                 class="resizer"
                 id="detail-resizer"></div>

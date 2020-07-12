@@ -45,7 +45,7 @@
         line-height: 1.5;
         font-size: 15px;
         height: 100%;
-        width: 100%;
+		overflow: hidden;
         margin: 0;
         /* margin-top: 60px; */
     }

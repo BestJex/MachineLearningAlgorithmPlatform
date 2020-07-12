@@ -123,7 +123,7 @@
                 clientX: 0,
                 offsetY: 0,
                 clientY: 0,
-                operation: false,
+                // operation: false,
             }
         },
         computed: {
@@ -181,11 +181,8 @@
                 this.operation = !this.operation
                 let itempannel = document.getElementById('itempannel');
                 let itemResizer = document.getElementById('item-resizer');
-                if (this.$store.state.app.operation) {
-                    itempannel.style.width = 270 + 'px';
-                    itemResizer.style.left = 270 + 'px';
-                } else {
-                    itempannel.style.width = 240 + 'px'
+                if (!this.$store.state.app.operation) {
+
                     // 保存修改的树形图
                     let data = {
                         graph_id: this.$route.params.id,
