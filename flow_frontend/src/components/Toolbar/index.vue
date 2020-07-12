@@ -1,7 +1,8 @@
 <template>
 	<div class="toolbar">
 		<transition name="el-zoom-in-center">
-			<div :class="{'delay-5': !isRunning}" v-show="!isRunning">
+<!--		这里记得正式修改的时候改回来！两处！	-->
+			<div :class="{'delay-5': !testRunning}" v-show="!testRunning">
 				<link
 					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
 					rel="stylesheet"
@@ -78,7 +79,7 @@
 				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
 				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
 				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-				<el-button @click="runProject" type="success">运行项目</el-button>
+				<el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">{{testRunning ? "停止运行" : "运行项目"}}</el-button>
 				<el-button @click="getTerminal" type="success">运行信息</el-button>
 
 				<el-dropdown style="float: right; margin-right: 10px;">
@@ -89,22 +90,20 @@
 						<el-dropdown-item>导出.py文件</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
-			<!-- 	<el-drawer
-					:visible.sync="drawer"
-					:direction="direction"
-					:with-header="false">
-
-					
-				</el-drawer> -->
-
 			</div>
 		</transition>
 		<transition name="el-zoom-in-center">
+<!--		这里也有修改，记得改回来	-->
 			<div
-				:class="{'delay-4': isRunning, 'delay-0': !isRunning}"
+				:class="{'delay-4': testRunning, 'delay-0': !testRunning}"
 				style="text-align: center;"
-				v-show="isRunning">
-				<span>正在运行</span>
+				v-show="testRunning">
+				<link
+					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+					rel="stylesheet"
+					type="text/css"/>
+				<el-button @click="runProject" type="success">重启项目</el-button>
+				<el-button @click="stopRuning" type="danger">停止运行</el-button>
 			</div>
 		</transition>
 		<el-dialog
@@ -134,7 +133,6 @@
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
-	import configJS from "@/statics/config";
 
     export default {
         data() {
@@ -156,6 +154,8 @@
 
                 drawer: false,
                 direction: 'btt',
+
+				testRunning: false // 测试运行，不是真正的运行，到时候要删掉
             }
         },
         computed: {
@@ -270,9 +270,7 @@
                     }
                 }
             },
-			downloadFile() {
-				location.href = `${configJS.BASE_API}download_file?graphId=${this.graphId}`;
-			},
+
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -467,24 +465,30 @@
                 // })
             },
             runProject() {
-                let graph = this.graph.save()
-                Object.assign(graph, { id: this.graphId })
-                graphApi
-                    .runProject({ graph: JSON.stringify(graph) })
-                    .then(res => {
-                        console.log('正在运行')
-                        this.isRunning = true
-                    })
-                    .catch(err => {
-                        Notification({
-                            title: '错误',
-                            message: err.data,
-                            type: 'error',
-                            duration: 3000
-                        })
-                        this.isRunning = false
-                    })
+                this.testRunning = true
+				/* 这部分在测试项目运行可以之后再使用 */
+                // let graph = this.graph.save()
+                // Object.assign(graph, { id: this.graphId })
+                // graphApi
+                //     .runProject({ graph: JSON.stringify(graph) })
+                //     .then(res => {
+                //         console.log('正在运行')
+                //         this.isRunning = true
+                //     })
+                //     .catch(err => {
+                //         Notification({
+                //             title: '错误',
+                //             message: err.data,
+                //             type: 'error',
+                //             duration: 3000
+                //         })
+                //         this.isRunning = false
+                //     })
             },
+			stopRuning() {
+                this.testRunning = false
+			},
+
             runNode() {
                 let graph = this.graph.save()
                 Object.assign(graph, { id: this.graphId })
@@ -568,100 +572,5 @@
 		transition-delay: 0.1s;
 	}
 
-	.terminal-top {
-		position: absolute;
-		top: 0;
-		padding: 5px 8px 7px 8px;
-		width: 100%;
-		background-color: rgb(246, 249, 252);
-		font-size: 12px;
-
-		.a {
-			width: 41%;
-			display: flex;
-			justify-content: space-between;
-		}
-
-		.b {
-			width: 20%;
-			display: flex;
-			justify-content: space-between;
-		}
-
-	}
-
-	.terminal-body {
-		margin-top: 27px;
-		height: 215px;
-
-		.a {
-			overflow-y: scroll;
-		}
-
-		.b {
-			overflow-y: scroll;
-		}
-
-		.c {
-			overflow: hidden;
-		}
-
-	}
-
-	.terminal-foot {
-		position: absolute;
-		bottom: 0;
-		display: flex;
-		justify-content: space-between;
-		padding: 0 15px 0 15px;
-		width: 100%;
-		background-color: rgb(232, 237, 243);
-		font-size: 12px;
-
-		.foot-left {
-			margin: auto 0;
-			color: #A655EF;
-			overflow: hidden;
-		}
-
-		.foot-right {
-			display: flex;
-			justify-content: flex-end;
-
-			.actions {
-				padding: 10px 18px;
-				cursor: pointer;
-			}
-
-			.actions:hover {
-				background-color: #BFD1E2;
-			}
-
-		}
-	}
-
-	.body-left {
-		background-color: rgb(232, 237, 243);
-		height: 35vh;
-
-		.a {
-			overflow: hidden;
-			background-color: rgb(191, 209, 226);
-			display: flex;
-			justify-content: left;
-
-			p {
-				line-height: 14px;
-				font-size: 12px;
-				padding: 0 8px 0 20px;
-			}
-
-		}
-
-	}
-
-	.body-right {
-		background-color: rgb(191, 209, 226);
-		height: 35vh
-	}
+	
 </style>
