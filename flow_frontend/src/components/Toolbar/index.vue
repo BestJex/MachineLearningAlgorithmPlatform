@@ -79,8 +79,8 @@
                 <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
                 <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
                 <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-                <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">{{testRunning ? "停止运行" :
-                    "运行项目"}}
+                <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
+                    {{testRunning ? "停止运行" : "运行项目"}}
                 </el-button>
                 <el-button @click="getTerminal" type="success">运行信息</el-button>
 
@@ -312,7 +312,7 @@
                             title: '成功',
                             message: '保存成功',
                             type: 'success',
-                            duration: 3000
+                            duration: 1000
                         })
                     }).then(() => {
                         return graphApi.getGraphById({graphid: this.graphId})
@@ -477,11 +477,36 @@
                 this.selectedItem = nodes
                 this.graph.paint()
             },
-            consoleData() {
-                const data = this.graph.save()
-                Object.assign(data, {id: 1})
-                // graphApi.uploadJson(data).then(res => {
-                // })
+            checkGraph() {
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
+                }).then(response => {
+                    if (response.data.data.error) {
+                        this.$message({
+                            message: response.data.data.error,
+                            type: 'error'
+                        });
+                        let groupId = 'group' + (new Date()).valueOf();
+                        this.graph.addItem('group', {
+                            groupId: groupId,
+                            nodes: response.data.data.node,
+                            type: 'rect',
+                            title: '',
+                        });
+                        let self = this;
+                        setTimeout(function () {
+                            self.graph.removeItem(groupId);
+                        }, 2000);
+                    } else {
+                        return true;
+                    }
+                }).catch(error => {
+                    this.$message({
+                        message: error,
+                        type: 'error'
+                    });
+                });
             },
             runProject() {
                 this.testRunning = true;
@@ -529,32 +554,10 @@
             getTerminal() {
                 this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
             },
-            importPythonFile() {
-
-            },
-            importJsonFile() {
-                this.isShowImportManage = true;
-            },
             exportPythonFile() {
-                this.axios({
-                    method: 'get',
-                    url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
-                }).then(response => {
-                    console.log(response);
-                    if (response.data.data.error) {
-                        this.$message({
-                            message: response.data.data.error,
-                            type: 'error'
-                        });
-                    } else {
-                        window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
-                    }
-                }).catch(error => {
-                    this.$message({
-                        message: error,
-                        type: 'error'
-                    });
-                });
+                if (this.checkGraph()) {
+                    window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
+                }
             },
             exportJsonFile() {
                 window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`);

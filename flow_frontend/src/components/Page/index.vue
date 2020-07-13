@@ -178,7 +178,7 @@
                         duration: 3000,
                     });
                     this.$router.push('/');
-                })
+                });
             },
 
             // 递归读取元素信息
@@ -214,7 +214,9 @@
                             }
                         ],
                         addEdge: ['add-edge'],
-                    }
+                    },
+					groupType: 'rect',		// 指定分组的类型
+					animate: true,			// 切换布局时是否使用动画过度，默认为 false
                 });
                 const { editor, command } = this.$parent;
                 editor.emit('afterAddPage', { graph: this.graph, command });

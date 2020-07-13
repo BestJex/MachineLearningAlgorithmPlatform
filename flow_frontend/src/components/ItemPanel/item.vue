@@ -1,44 +1,51 @@
 <template>
     <div>
         <hr>
-        <el-button
-                :type="$store.state.app.operation ? 'primary' : ''"
-                icon="el-icon-edit"
-                circle
-                style="margin-left: 5px;"
-                @click="handleOperation()"
-                :title="$store.state.app.operation ? '取消编辑' : '编辑'"
-        ></el-button>
-        <el-button
-                v-show="$store.state.app.operation"
-                type="success"
-                icon="el-icon-circle-plus-outline"
-                circle
-                @click="addNodes()"
-                title="恢复节点"
-        ></el-button>
-        <el-button
-                v-show="$store.state.app.operation"
-                type="info"
-                icon="el-icon-view"
-                circle
-                @click="hideNodes()"
-                title="隐藏节点"
-        ></el-button>
-        <el-button
-                v-show="this.$store.state.app.operation"
-                type="danger"
-                icon="el-icon-delete"
-                circle
-                @click="deleteNodes()"
-                title="删除"
-        ></el-button>
+        <el-tooltip placement="top">
+            <div slot="content">{{ $store.state.app.operation ? '取消编辑' : '编辑' }}</div>
+            <el-button
+                    :type="$store.state.app.operation ? 'primary' : ''"
+                    icon="el-icon-edit"
+                    circle
+                    style="margin-left: 5px;"
+                    @click="handleOperation()"
+                    :title="$store.state.app.operation ? '取消编辑' : '编辑'"></el-button>
+        </el-tooltip>
+        <el-tooltip placement="top">
+            <div slot="content">恢复节点</div>
+            <el-button
+                    v-show="$store.state.app.operation"
+                    type="warning"
+                    icon="el-icon-refresh-left"
+                    circle
+                    @click="recoveryNode()"
+                    title="恢复节点"></el-button>
+        </el-tooltip>
+        <el-tooltip placement="top">
+            <div slot="content">隐藏节点</div>
+            <el-button
+                    v-show="$store.state.app.operation"
+                    type="info"
+                    icon="el-icon-view"
+                    circle
+                    @click="hideNodes()"
+                    title="隐藏节点"></el-button>
+        </el-tooltip>
+        <el-tooltip placement="top">
+            <div slot="content">删除节点</div>
+            <el-button
+                    v-show="this.$store.state.app.operation"
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    @click="deleteNodes()"
+                    title="删除"></el-button>
+        </el-tooltip>
         <el-input
                 v-show="!$store.state.app.operation"
                 placeholder="输入关键字进行过滤"
                 v-model="filterText"
-                style="display: inline-block; width: 80%">
-        </el-input>
+                style="display: inline-block; width: 80%"></el-input>
         <hr>
         <el-tree
                 ref="tree"
@@ -177,7 +184,7 @@
              */
             handleOperation() {
                 // 全局
-				this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
+                this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
                 this.operation = !this.operation
                 let itempannel = document.getElementById('itempannel');
                 let itemResizer = document.getElementById('item-resizer');
@@ -214,7 +221,7 @@
             /**
              * 新增节点
              */
-            addNodes() {
+            recoveryNode() {
                 this.isShowTreeNodeManage = true
                 this.axios({
                     method: 'get',

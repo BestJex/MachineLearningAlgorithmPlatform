@@ -123,30 +123,6 @@
                     type: 'success',
                     duration: 3000
                 });
-                this.$store.commit('app/SET_FILELIST', res.data);
-                this.uploadData.graphid = this.graphId;
-                let projectId = this.$route.params.id;
-                this.axios({
-                    method: 'get',
-                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-                }).then(res => {
-                    this.fileTableData = Array(res.data.data.list)[0];
-                    for (let i = 0; i < this.fileTableData.length; i++) {
-                        let item = this.fileTableData[i];
-                        if (item.graphid.toString() !== projectId) {
-                            this.fileTableData.splice(i, 1);
-                        }
-                        let TIndex = item.buildtime.indexOf('T');
-                        let pointIndex = item.buildtime.indexOf('.');
-                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
-                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
-                    }
-                }).catch(err => {
-                    this.$message({
-                        message: err,
-                        type: 'error'
-                    });
-                });
             },
             onUploadErr(res, file, fileList) {
                 console.log(res);
