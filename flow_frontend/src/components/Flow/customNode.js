@@ -18,7 +18,7 @@ const customNode = {
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
              */
             draw(cfg, group) {
-                const width = 200;
+                const width = 200; // 节点宽高
                 const height = 34;
                 const color = "#1890ff";
                 // 此处必须有偏移 不然drag-node错位
@@ -140,7 +140,7 @@ const customNode = {
                                     isOutPointText: true,
                                     textAlign: 'center',
                                     textBaseline: 'top',
-                                    text: point.name,
+                                    text: point.name, // 节点名字
                                     fill: '#1890ff',
                                     opacity: 0,
                                 }
@@ -178,7 +178,7 @@ const customNode = {
                                     isOutPointOut: true,
                                     func: point.func,
                                     fill: "#1890ff",
-                                    opacity: 0//默認0 需要時改成0.3
+                                    opacity: 0 //默認0 需要時改成0.3
                                 }
                             })
                             group.addShape('text', {
