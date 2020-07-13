@@ -39,7 +39,7 @@
                                                   v-model="formLogin.code"
                                                   prefix-icon="el-icon-picture-outline-round"
                                                   style="width: 40%; float: left; margin-left: 22px"></el-input>
-                                        <img :src="base64CodeVerificationCode" alt="" @click="changeVerificationCode()">
+                                        <img :src="base64CodeVerificationCode" alt="" @click="getCaptcha()">
                                     </el-form-item>
 
                                     <!-- login button -->
