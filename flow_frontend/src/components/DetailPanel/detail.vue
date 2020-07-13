@@ -202,7 +202,7 @@
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
                             this.getFileList();
-                            console.log(self.node_detail);
+                            console.log(self);
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);

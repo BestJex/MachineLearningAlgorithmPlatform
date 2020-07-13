@@ -17,8 +17,9 @@
 		<el-dialog
 			title="修改节点名"
 			:visible.sync="dialogVisible"
-			width="30%"
-			:before-close="handleClose">
+			width="400px"
+			>
+<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
 
 			<el-input v-model="input" placeholder="请输入内容"></el-input>
 
@@ -116,7 +117,6 @@
         methods: {
             onContextmenu(event) {
                 let e = event || window.event
-                console.log(this.terminalHei)
                 if (this.$store.state.app.terminal_display === 'block') {
                     if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.terminalHei) {
                         this.getContextMenu()
@@ -151,7 +151,7 @@
                             label: '修改节点名',
                             onClick: () => {
 								this.dialogVisible = true
-
+								///////////////
                             },
                             disabled: false,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',

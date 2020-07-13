@@ -110,6 +110,7 @@
 			:append-to-body="true"
 			:visible.sync="isShowFileManagement"
 			custom-class="preview-dialog"
+			style="min-width: 1500px"
 			title="文件管理">
 			<file-manage :graph="graph"></file-manage>
 		</el-dialog>
