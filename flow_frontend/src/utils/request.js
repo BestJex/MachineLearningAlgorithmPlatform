@@ -20,20 +20,20 @@ service.interceptors.request.use(
             const payload = jwt.payload_decode(auth.getToken());
             const now = Date.parse(new Date());
             if (now / 1000 > payload.exp) {
-                store.dispatch('user/Logout')
-                router.push('/login')
+                store.dispatch('user/Logout');
+                router.push('/login');
                 return Promise.reject({
                     response: {data: "signature expire"}
-                })
+                });
             }
-            config.headers['Authorization'] = 'JWT ' + auth.getToken()
+            config.headers['Authorization'] = 'JWT ' + auth.getToken();
         }
-        return config
+        return config;
     },
     error => {
         // do something with request error
-        console.log(error) // for debug
-        return Promise.reject(error)
+        console.log(error); // for debug
+        return Promise.reject(error);
     }
 )
 
@@ -45,23 +45,23 @@ service.interceptors.response.use(
          */
         if (res.status === 202 || res.status === 201 || res.status === 200) {
             // Promise.resolve(res.data)
-            return Promise.resolve(res.data)
+            return Promise.resolve(res.data);
         } else {
             Message({
                 message: res.data,
                 type: 'error',
-                duration: 3 * 1000
-            })
-            return Promise.reject(res.data)
+                duration: 3000,
+            });
+            return Promise.reject(res.data);
         }
     },
     error => {
-        // Message({
-        //   message: error,
-        //   type: 'error',
-        //   duration: 5 * 1000
-        // });
-        return Promise.reject(error.response.data)
+        Message({
+          message: error,
+          type: 'error',
+          duration: 5000,
+        });
+        return Promise.reject(error.response.data);
     }
 )
 

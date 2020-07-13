@@ -1,158 +1,160 @@
 <template>
-	<div class="toolbar">
-		<transition name="el-zoom-in-center">
-<!--		这里记得正式修改的时候改回来！两处！	-->
-			<div :class="{'delay-5': !testRunning}" v-show="!testRunning">
-				<link
-					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
-					rel="stylesheet"
-					type="text/css"/>
-				<i
-					:class="undoList.length>0?'':'disable'"
-					@click="handleUndo"
-					class="command iconfont icon-undo"
-					title="撤销"></i>
-				<i
-					:class="redoList.length>0?'':'disable'"
-					@click="handleRedo"
-					class="command iconfont icon-redo"
-					title="重做"></i>
-				<span class="separator"></span>
-				<!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
-				<i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleDelete"
-					class="command iconfont icon-delete-o"
-					data-command="delete"
-					title="删除"></i>
-				<span class="separator"></span>
-				<i
-					@click="handleZoomIn"
-					class="command iconfont icon-zoom-in-o"
-					data-command="zoomIn"
-					title="放大"></i>
-				<i
-					@click="handleZoomOut"
-					class="command iconfont icon-zoom-out-o"
-					data-command="zoomOut"
-					title="缩小"></i>
-				<i
-					@click="handleAutoZoom"
-					class="command iconfont icon-fit"
-					data-command="autoZoom"
-					title="适应画布"></i>
-				<i
-					@click="handleResetZoom"
-					class="command iconfont icon-actual-size-o"
-					data-command="resetZoom"
-					title="实际尺寸"></i>
-				<span class="separator"></span>
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleToBack"
-					class="command iconfont icon-to-back"
-					data-command="toBack"
-					title="层级后置"></i>
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleToFront"
-					class="command iconfont icon-to-front"
-					data-command="toFront"
-					title="层级前置"></i>
-				<span class="separator"></span>
-				<span class="separator"></span>
-				<i
-					:class="multiSelect?'disable':''"
-					@click="handleMuiltSelect"
-					class="command iconfont icon-select"
-					data-command="multiSelect"
-					title="多选"></i>
-				<!-- <i
-				  :class="addGroup?'':'disable'"
-				  @click="handleAddGroup"
-				  class="command iconfont icon-group"
-				  data-command="addGroup"
-				  title="成组"
-				></i>
-				<i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
-				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
-				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-				<el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">{{testRunning ? "停止运行" : "运行项目"}}</el-button>
-				<el-button @click="getTerminal" type="success">运行信息</el-button>
+    <div class="toolbar">
+        <transition name="el-zoom-in-center">
+            <!--		这里记得正式修改的时候改回来！两处！	-->
+            <div :class="{'delay-5': !testRunning}" v-show="!testRunning">
+                <link
+                        href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+                        rel="stylesheet"
+                        type="text/css"/>
+                <i
+                        :class="undoList.length>0?'':'disable'"
+                        @click="handleUndo"
+                        class="command iconfont icon-undo"
+                        title="撤销"></i>
+                <i
+                        :class="redoList.length>0?'':'disable'"
+                        @click="handleRedo"
+                        class="command iconfont icon-redo"
+                        title="重做"></i>
+                <span class="separator"></span>
+                <!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
+                <i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleDelete"
+                        class="command iconfont icon-delete-o"
+                        data-command="delete"
+                        title="删除"></i>
+                <span class="separator"></span>
+                <i
+                        @click="handleZoomIn"
+                        class="command iconfont icon-zoom-in-o"
+                        data-command="zoomIn"
+                        title="放大"></i>
+                <i
+                        @click="handleZoomOut"
+                        class="command iconfont icon-zoom-out-o"
+                        data-command="zoomOut"
+                        title="缩小"></i>
+                <i
+                        @click="handleAutoZoom"
+                        class="command iconfont icon-fit"
+                        data-command="autoZoom"
+                        title="适应画布"></i>
+                <i
+                        @click="handleResetZoom"
+                        class="command iconfont icon-actual-size-o"
+                        data-command="resetZoom"
+                        title="实际尺寸"></i>
+                <span class="separator"></span>
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleToBack"
+                        class="command iconfont icon-to-back"
+                        data-command="toBack"
+                        title="层级后置"></i>
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleToFront"
+                        class="command iconfont icon-to-front"
+                        data-command="toFront"
+                        title="层级前置"></i>
+                <span class="separator"></span>
+                <span class="separator"></span>
+                <i
+                        :class="multiSelect?'disable':''"
+                        @click="handleMuiltSelect"
+                        class="command iconfont icon-select"
+                        data-command="multiSelect"
+                        title="多选"></i>
+                <!-- <i
+                  :class="addGroup?'':'disable'"
+                  @click="handleAddGroup"
+                  class="command iconfont icon-group"
+                  data-command="addGroup"
+                  title="成组"
+                ></i>
+                <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
+                <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
+                <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
+                <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
+                <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">{{testRunning ? "停止运行" :
+                    "运行项目"}}
+                </el-button>
+                <el-button @click="getTerminal" type="success">运行信息</el-button>
 
-				<el-dropdown style="float: right; margin-right: 10px;">
-					<el-button type="primary">
-						文件
-						<i class="el-icon-arrow-down el-icon--right"></i>
-					</el-button>
-					<el-dropdown-menu slot="dropdown">
-<!--						<el-dropdown-item>-->
-<!--							<span @click="importPythonFile()">导入.py文件</span>-->
-<!--						</el-dropdown-item>-->
-						<el-dropdown-item>
-							<span @click="isShowImportManage = true">导入.json文件</span>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<span @click="exportPythonFile()">导出.py文件</span>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<span @click="exportJsonFile()">导出.json文件</span>
-						</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</div>
-		</transition>
-		<transition name="el-zoom-in-center">
-<!--		这里也有修改，记得改回来	-->
-			<div
-				:class="{'delay-4': testRunning, 'delay-0': !testRunning}"
-				style="text-align: center;"
-				v-show="testRunning">
-				<link
-					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
-					rel="stylesheet"
-					type="text/css"/>
-				<el-button @click="runProject" type="success">重启项目</el-button>
-				<el-button @click="stopRuning" type="danger">停止运行</el-button>
-			</div>
-		</transition>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowFileManagement"
-			custom-class="preview-dialog"
-			title="文件管理">
-			<file-manage :graph="graph"></file-manage>
-		</el-dialog>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowImportManage"
-			custom-class="preview-dialog"
-			title="导入文件">
-			<import-manage :graph="graph"></import-manage>
-		</el-dialog>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowNodeManage"
-			custom-class="preview-dialog"
-			title="新增结点">
-			<node-manage/>
-		</el-dialog>
-	</div>
+                <el-dropdown style="float: right; margin-right: 10px;">
+                    <el-button type="primary">
+                        文件
+                        <i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <!--						<el-dropdown-item>-->
+                        <!--							<span @click="importPythonFile()">导入.py文件</span>-->
+                        <!--						</el-dropdown-item>-->
+                        <el-dropdown-item>
+                            <span @click="isShowImportManage = true">导入.json文件</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <span @click="exportPythonFile()">导出.py文件</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <span @click="exportJsonFile()">导出.json文件</span>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+        </transition>
+        <transition name="el-zoom-in-center">
+            <!--		这里也有修改，记得改回来	-->
+            <div
+                    :class="{'delay-4': testRunning, 'delay-0': !testRunning}"
+                    style="text-align: center;"
+                    v-show="testRunning">
+                <link
+                        href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+                        rel="stylesheet"
+                        type="text/css"/>
+                <el-button @click="runProject" type="success">重启项目</el-button>
+                <el-button @click="stopRuning" type="danger">停止运行</el-button>
+            </div>
+        </transition>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowFileManagement"
+                custom-class="preview-dialog"
+                title="文件管理">
+            <file-manage :graph="graph"></file-manage>
+        </el-dialog>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowImportManage"
+                custom-class="preview-dialog"
+                title="导入文件">
+            <import-manage :graph="graph"></import-manage>
+        </el-dialog>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowNodeManage"
+                custom-class="preview-dialog"
+                title="新增结点">
+            <node-manage/>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
     import eventBus from '@/utils/eventBus'
     import Util from '@antv/g6/src/util'
-    import { uniqueId, getBox } from '@/utils'
+    import {uniqueId, getBox} from '@/utils'
     import graphApi from '@/api/graph'
-    import { mapGetters } from 'vuex'
-	import { mapState } from 'vuex'
-    import { Notification } from 'element-ui'
+    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
+    import {Notification} from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
-	import importManage from "@/components/Toolbar/components/importManage";
+    import importManage from "@/components/Toolbar/components/importManage";
 
     export default {
         data() {
@@ -174,7 +176,7 @@
                 max_id: 0,
                 drawer: false,
                 direction: 'btt',
-				testRunning: false // 测试运行，不是真正的运行，到时候要删掉
+                testRunning: false // 测试运行，不是真正的运行，到时候要删掉
             }
         },
         computed: {
@@ -204,7 +206,7 @@
         components: {
             fileManage,
             nodeManage,
-			importManage
+            importManage
         },
         created() {
             this.init()
@@ -217,7 +219,7 @@
         },
         methods: {
             init() {
-                const { editor, command } = this.$parent
+                const {editor, command} = this.$parent
                 this.editor = editor
                 this.command = command
             },
@@ -300,7 +302,7 @@
                         background: 'rgba(0, 0, 0, 0.8)'
                     })
                     let graph = this.graph.save()
-                    Object.assign(graph, { id: this.graphId })
+                    Object.assign(graph, {id: this.graphId})
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
@@ -313,7 +315,7 @@
                             duration: 3000
                         })
                     }).then(() => {
-                        return graphApi.getGraphById({ graphid: this.graphId })
+                        return graphApi.getGraphById({graphid: this.graphId})
                     }).then(res => {
                         const data = res.data.data
                         this.forEach(data)
@@ -477,39 +479,36 @@
             },
             consoleData() {
                 const data = this.graph.save()
-                Object.assign(data, { id: 1 })
+                Object.assign(data, {id: 1})
                 // graphApi.uploadJson(data).then(res => {
                 // })
             },
             runProject() {
-                this.testRunning = true
-				/* 这部分在测试项目运行可以之后再使用 */
-                // let graph = this.graph.save()
-                // Object.assign(graph, { id: this.graphId })
-                // graphApi
-                //     .runProject({ graph: JSON.stringify(graph) })
-                //     .then(res => {
-                //         console.log('正在运行')
-                //         this.isRunning = true
-                //     })
-                //     .catch(err => {
-                //         Notification({
-                //             title: '错误',
-                //             message: err.data,
-                //             type: 'error',
-                //             duration: 3000
-                //         })
-                //         this.isRunning = false
-                //     })
+                this.testRunning = true;
+                /* 这部分在测试项目运行可以之后再使用 */
+                let graph = this.graph.save();
+                Object.assign(graph, {id: this.graphId});
+                graphApi.runProject({graph: JSON.stringify(graph)}).then(res => {
+                    console.log('正在运行');
+                    this.isRunning = true;
+                }).catch(error => {
+                    Notification({
+                        title: '错误',
+                        message: error.data,
+                        type: 'error',
+                        duration: 3000,
+                    });
+                    this.isRunning = false;
+                });
             },
-			stopRuning() {
+            stopRuning() {
                 this.testRunning = false
-			},
+            },
             runNode() {
                 let graph = this.graph.save()
-                Object.assign(graph, { id: this.graphId })
+                Object.assign(graph, {id: this.graphId})
                 graphApi
-                    .runNode({ graph: JSON.stringify(graph), nodeId: this.selectedNodeId })
+                    .runNode({graph: JSON.stringify(graph), nodeId: this.selectedNodeId})
                     .then(res => {
                         console.log('正在运行')
                         this.isRunning = true
@@ -527,95 +526,95 @@
             addNode() {
 
             },
-			getTerminal() {
-				this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
-			},
-			importPythonFile() {
+            getTerminal() {
+                this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+            },
+            importPythonFile() {
 
-			},
-			importJsonFile() {
-				this.isShowImportManage = true;
-			},
-			exportPythonFile() {
-            	this.axios({
-					method: 'get',
-					url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
-				}).then(response => {
-					console.log(response);
-					if (response.data.data.error) {
-						this.$message({
-							message: response.data.data.error,
-							type: 'error'
-						});
-					} else {
-						window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
-					}
-				}).catch(error => {
-					this.$message({
-						message: error,
-						type: 'error'
-					});
-				});
-			},
-			exportJsonFile() {
-				window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`);
-			},
+            },
+            importJsonFile() {
+                this.isShowImportManage = true;
+            },
+            exportPythonFile() {
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
+                }).then(response => {
+                    console.log(response);
+                    if (response.data.data.error) {
+                        this.$message({
+                            message: response.data.data.error,
+                            type: 'error'
+                        });
+                    } else {
+                        window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
+                    }
+                }).catch(error => {
+                    this.$message({
+                        message: error,
+                        type: 'error'
+                    });
+                });
+            },
+            exportJsonFile() {
+                window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`);
+            },
         }
     }
 </script>
 
 
 <style lang="scss" scoped>
-	.toolbar {
-		box-sizing: border-box;
-		padding: 8px 0;
-		width: 100%;
-		border: 1px solid #e9e9e9;
-		height: 42px;
-		z-index: 3;
-		box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
-	}
+    .toolbar {
+        box-sizing: border-box;
+        padding: 8px 0;
+        width: 100%;
+        border: 1px solid #e9e9e9;
+        height: 42px;
+        z-index: 3;
+        box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
+    }
 
-	.toolbar .command:nth-of-type(1) {
-		margin-left: 24px;
-	}
+    .toolbar .command:nth-of-type(1) {
+        margin-left: 24px;
+    }
 
-	.toolbar .command {
-		box-sizing: border-box;
-		width: 27px;
-		height: 27px;
-		margin: 0 6px;
-		border-radius: 2px;
-		padding-left: 4px;
-		display: inline-block;
-		border: 1px solid rgba(2, 2, 2, 0);
-	}
+    .toolbar .command {
+        box-sizing: border-box;
+        width: 27px;
+        height: 27px;
+        margin: 0 6px;
+        border-radius: 2px;
+        padding-left: 4px;
+        display: inline-block;
+        border: 1px solid rgba(2, 2, 2, 0);
+    }
 
-	.toolbar .command:hover {
-		cursor: pointer;
-		border: 1px solid #e9e9e9;
-	}
+    .toolbar .command:hover {
+        cursor: pointer;
+        border: 1px solid #e9e9e9;
+    }
 
-	.toolbar .disable {
-		color: rgba(0, 0, 0, 0.25);
-	}
+    .toolbar .disable {
+        color: rgba(0, 0, 0, 0.25);
+    }
 
-	.toolbar .separator {
-		margin: 4px;
-		border-left: 1px solid #e9e9e9;
-	}
+    .toolbar .separator {
+        margin: 4px;
+        border-left: 1px solid #e9e9e9;
+    }
 
-	.delay-0 {
-		transition: none;
-	}
+    .delay-0 {
+        transition: none;
+    }
 
-	.delay-4 {
-		transition-delay: 0.4s;
-	}
+    .delay-4 {
+        transition-delay: 0.4s;
+    }
 
-	.delay-5 {
-		transition-delay: 0.1s;
-	}
+    .delay-5 {
+        transition-delay: 0.1s;
+    }
 
-	
+
 </style>
