@@ -178,7 +178,6 @@
                         type: 'error',
                         duration: 3000,
                     })
-                    this.$router.push('/')
                 })
             },
 
@@ -221,6 +220,7 @@
                         default: {
                             fill: '#ff0000',
                             radius: 10,
+							minDis: 10,
                         },
                     },
                     animate: true,			// 切换布局时是否使用动画过度，默认为 false

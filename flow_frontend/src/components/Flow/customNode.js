@@ -68,7 +68,7 @@ const customNode = {
                             width: 16,
                             height: 16,
                             parent: mainId,
-                            img: cfg.statuspoint_detail === 'complete' ? okSvg : cfg.status === 'loading' ? loadingSvg : ''
+                            img: cfg.status === 'complete' ? okSvg : cfg.status === 'loading' ? loadingSvg : ''
                         },
                     })
                 }

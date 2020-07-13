@@ -22,9 +22,10 @@
 
 <script>
     import fileApi from "@/api/file";
-    import {Notification} from "element-ui";
+    import {Message, Notification} from "element-ui";
     import configJS from "@/statics/config";
     import {mapGetters} from "vuex";
+    import graphApi from "@/api/graph";
 
     export default {
         name: "importManage",
@@ -122,8 +123,25 @@
                     title: '成功',
                     message: '文件上传成功',
                     type: 'success',
-                    duration: 3000
+                    duration: 1000,
                 });
+
+                graphApi.getGraphById({graphid: this.$route.params.id}).then(res => {
+                    this.data = res.data.data;
+                    this.forEach(this.data);
+                    this.$store.commit('app/SET_MAXID', this.max_id);
+                    this.graph.read(this.data);
+                    if (this.data.nodes.length) {
+                        this.graph.fitView(100)
+                    }
+                }).catch(err => {
+                    Message({
+                        message: err.data,
+                        type: 'error',
+                        duration: 3000,
+                    })
+                })
+                this.$emit('success', false)
             },
             onUploadErr(res, file, fileList) {
                 console.log(res);
@@ -131,6 +149,19 @@
                     message: res,
                     type: 'error',
                 });
+            },
+            forEach(json) {
+                for (const val in json) {
+                    if (val === 'id' && typeof json[val] === 'string') {
+                        this.max_id = Math.max(
+                            this.max_id,
+                            parseInt(json[val].replace(/[^0-9]/gi, ''))
+                        )
+                    }
+                    if (typeof json[val] == 'object' && json[val] !== null) {
+                        this.forEach(json[val])
+                    }
+                }
             },
         }
     }

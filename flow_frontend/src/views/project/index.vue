@@ -171,7 +171,7 @@
                                     title: '成功',
                                     message: '创建项目成功',
                                     type: 'success',
-                                    duration: 3000
+                                    duration: 500
                                 })
                                 this.getGraphs()
                                 this.isShowDialog = false
@@ -183,7 +183,7 @@
                                     title: '错误',
                                     message: err.data,
                                     type: 'error',
-                                    duration: 3000
+                                    duration: 500
                                 })
                             })
                     }
@@ -212,7 +212,7 @@
                             title: '成功',
                             message: '文件移除成功',
                             type: 'success',
-                            duration: 3000
+                            duration: 500
                         })
                         this.getGraphs()
                     })
@@ -234,7 +234,7 @@
                         title: '成功',
                         message: '文件复制成功',
                         type: 'success',
-                        duration: 3000
+                        duration: 500
                     })
                     this.getGraphs()
                 }).catch(err => {

@@ -124,7 +124,7 @@
                 :visible.sync="isShowFileManagement"
                 custom-class="preview-dialog"
                 title="文件管理">
-            <file-manage :graph="graph"></file-manage>
+            <file-manage :graph="graph" v-on:success="success(res)"></file-manage>
         </el-dialog>
         <el-dialog
                 :append-to-body="true"
@@ -149,7 +149,7 @@
     import {uniqueId, getBox} from '@/utils'
     import graphApi from '@/api/graph'
     import {mapGetters} from 'vuex'
-    import {mapState} from 'vuex'
+    import api from "@/statics/config";
     import {Notification} from 'element-ui'
     import fileManage from './components/fileManage'
     import nodeManage from './components/nodeManage'
@@ -223,7 +223,7 @@
                 this.command = command
             },
             bindEvent() {
-                let self = this
+                let self = this;
                 eventBus.$on('afterAddPage', page => {
                     self.page = page
                     self.graph = self.page.graph
@@ -311,7 +311,7 @@
                             title: '成功',
                             message: '保存成功',
                             type: 'success',
-                            duration: 1000
+                            duration: 500
                         })
                     }).then(() => {
                         return graphApi.getGraphById({graphid: this.graphId})
@@ -509,23 +509,49 @@
                     });
                 });
             },
+            success() {
+                this.isShowImportManage = false;
+            },
+            changeGraph(nodeID, model) {
+                let item = this.graph.findById(nodeID);
+                this.graph.update(item, model);
+            },
+            buildWebSocket(data) {
+                if (window.s) {
+                    window.s.close()
+                }
+                let self = this;
+                const socket = new WebSocket(api.WS_API + "runproject");
+                socket.onopen = function () {
+                    console.log('WebSocket open');      //成功连接上Websocket
+                    window.s.send(data);
+                };
+                socket.onmessage = function (e) {
+                    window.s.send("success");
+                    let data = JSON.parse(e.data)
+                    if (data.type === 1) {
+                        if (data.status === "begin") {
+                            self.changeGraph(data.name, {status: 'loading'});
+                        } else if (data.status === "finished") {
+                            self.changeGraph(data.name, {status: 'complete'});
+                        }
+                    }
+                    if (data.type === 2) {
+                        this.stopRuning();
+                    }
+                    console.log(data);
+                };
+                window.s = socket;
+            },
+            closeWebSocket() {
+                if (window.s) {
+                    window.s.close();//关闭websocket
+                    console.log('websocket已关闭');
+                }
+            },
             runProject() {
                 this.testRunning = true;
-                /* 这部分在测试项目运行可以之后再使用 */
-                let graph = this.graph.save();
-                Object.assign(graph, {id: this.graphId});
-                graphApi.runProject({graph: JSON.stringify(graph)}).then(res => {
-                    console.log('正在运行');
-                    this.isRunning = true;
-                }).catch(error => {
-                    Notification({
-                        title: '错误',
-                        message: error.data,
-                        type: 'error',
-                        duration: 3000,
-                    });
-                    this.isRunning = false;
-                });
+                this.buildWebSocket(this.graphId);
             },
             stopRuning() {
                 this.testRunning = false
