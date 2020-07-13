@@ -1,27 +1,28 @@
 <template>
-    <div
-            :style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;`"
-            @click="clickCanvas"
-            @dragover.prevent
-            @drop="handleDrop">
-        <div
-                :id="pageId"
-                class="graph-container"
-                style="position: relative; height: 100%;"
-                @contextmenu.prevent="onContextmenu">
-            <div :style="{display: this.$store.state.app.terminal_display}" ref="terminal">
-                <Terminal/>
-            </div>
-        </div>
+	<div
+		:style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;`"
+		@click="clickCanvas"
+		@dragover.prevent
+		@drop="handleDrop">
+		<div
+			:id="pageId"
+			class="graph-container"
+			style="position: relative; height: 100%;"
+			@contextmenu.prevent="onContextmenu">
+			<div :style="{display: this.$store.state.app.terminal_display}" ref="terminal">
+				<Terminal/>
+			</div>
+		</div>
 
-        <el-dialog
-                title="修改节点名"
-                :visible.sync="dialogVisible"
-                width="400px"
-        >
-            <!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
-            <el-input v-model="input" placeholder="请输入内容"></el-input>
-            <span slot="footer" class="dialog-footer">
+		<el-dialog
+			title="修改节点名"
+			:visible.sync="dialogVisible"
+			width="400px"
+		>
+			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
+			<el-input v-model="input" placeholder="请输入内容"></el-input>
+			<span slot="footer" class="dialog-footer">
+
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
   			</span>
@@ -64,7 +65,6 @@
                     'keyboard',
                     'add-menu',
                 ],
-
             }
         },
 
@@ -117,15 +117,15 @@
                 let e = event || window.event
                 if (this.$store.state.app.terminal_display === 'block') {
                     if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.terminalHei) {
-                        this.getContextMenu()
+                        this.getContextMenu(event)
                     }
                 } else {
-                    this.getContextMenu()
+                    this.getContextMenu(event)
                 }
                 return false
             },
 
-            getContextMenu() {
+            getContextMenu(event) {
                 this.$contextmenu({
                     items: [
                         {
@@ -154,6 +154,7 @@
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
                         },
                     ],
+                    event,
                     customClass: 'class-a',
                     zIndex: 3,
                     minWidth: 230
@@ -169,16 +170,16 @@
                     this.$store.commit('app/SET_MAXID', this.max_id);
                     this.graph.read(this.data);
                     if (this.data.nodes.length) {
-                        this.graph.fitView(100);
+                        this.graph.fitView(100)
                     }
                 }).catch(err => {
                     Message({
                         message: err.data,
                         type: 'error',
                         duration: 3000,
-                    });
-                    this.$router.push('/');
-                });
+                    })
+                    this.$router.push('/')
+                })
             },
 
             // 递归读取元素信息
@@ -197,8 +198,8 @@
             },
 
             init() {
-                const height = this.canvasHeight;
-                const width = this.canvasWidth;
+                const height = this.canvasHeight
+                const width = this.canvasWidth
 
                 this.graph = new G6.Graph({
                     container: 'graph-container',
