@@ -18,6 +18,7 @@ export default {
         };
     },
     onClick(e) {
+        console.log('ok');
         const self = this;
         const item = e.item;
         const graph = self.graph;

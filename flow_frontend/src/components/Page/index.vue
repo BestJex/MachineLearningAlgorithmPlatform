@@ -17,7 +17,9 @@
 		<el-dialog
 			title="修改节点名"
 			:visible.sync="dialogVisible"
-			width="30%">
+			width="400px"
+			>
+<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
 			<el-input v-model="input" placeholder="请输入内容"></el-input>
 			<span slot="footer" class="dialog-footer">
    				<el-button @click="dialogVisible = false">取 消</el-button>
@@ -47,7 +49,7 @@
 				input: '',
                 terminalHei: 270, // 获取控制台高度
                 graph: null,
-                data: null,
+                data: null, // 图里元素信息
                 max_id: 0,
                 isLockCanvas: false,
                 supportBehavior: [
@@ -113,7 +115,6 @@
         methods: {
             onContextmenu(event) {
                 let e = event || window.event
-                console.log(this.terminalHei)
                 if (this.$store.state.app.terminal_display === 'block') {
                     if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.terminalHei) {
                         this.getContextMenu()
@@ -139,7 +140,6 @@
                             label: this.isLockCanvas ? '解除锁定' : '锁定画布',
                             onClick: () => {
                                 this.isLockCanvas = !this.isLockCanvas
-
                             },
                             disabled: false,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
@@ -148,7 +148,7 @@
                             label: '修改节点名',
                             onClick: () => {
 								this.dialogVisible = true
-
+								///////////////
                             },
                             disabled: false,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
@@ -160,6 +160,7 @@
                 })
             },
 
+			// 获取节点
             getGraph() {
                 graphApi.getGraphById({ graphid: this.id }).then(res => {
                     this.data = res.data.data;

@@ -35,7 +35,7 @@ const customNode = {
                         width: width,
                         height: height,
                         stroke: "#ced4d9",
-                        fill: '#fff',//此处必须有fill 不然不能触发事件
+                        fill: '#fff', //此处必须有fill 不然不能触发事件
                         radius: 4,
                     },
                 });
@@ -108,6 +108,7 @@ const customNode = {
                     }
                 });
                 if (cfg.point_detail) {
+                    // console.log(cfg);
                     cfg.point_detail.forEach(point => {
                         let x, y = 0
                         if (point.type === 'input') {

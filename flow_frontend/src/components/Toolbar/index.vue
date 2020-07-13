@@ -83,7 +83,6 @@
                     {{testRunning ? "停止运行" : "运行项目"}}
                 </el-button>
                 <el-button @click="getTerminal" type="success">运行信息</el-button>
-
                 <el-dropdown style="float: right; margin-right: 10px;">
                     <el-button type="primary">
                         文件
