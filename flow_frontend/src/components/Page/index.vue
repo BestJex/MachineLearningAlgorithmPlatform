@@ -22,20 +22,21 @@
 			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
 			<el-input v-model="input" placeholder="请输入内容"></el-input>
 			<span slot="footer" class="dialog-footer">
+
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
   			</span>
-		</el-dialog>
+        </el-dialog>
 
-	</div>
+    </div>
 </template>
 
 <script>
     import G6 from '@antv/g6/build/g6'
-    import { initBehavors } from '@/behavior'
-    import { mapGetters } from 'vuex'
+    import {initBehavors} from '@/behavior'
+    import {mapGetters} from 'vuex'
     import graphApi from '@/api/graph'
-    import { Message } from 'element-ui'
+    import {Message} from 'element-ui'
     import Terminal from '../Terminal'
 
     export default {
@@ -162,12 +163,12 @@
 
             // 获取节点
             getGraph() {
-                graphApi.getGraphById({ graphid: this.id }).then(res => {
-                    this.data = res.data.data
-                    this.isRunning = this.data.status === 'loading'
-                    this.forEach(this.data)
-                    this.$store.commit('app/SET_MAXID', this.max_id)
-                    this.graph.read(this.data)
+                graphApi.getGraphById({graphid: this.id}).then(res => {
+                    this.data = res.data.data;
+                    this.isRunning = this.data.status === 'loading';
+                    this.forEach(this.data);
+                    this.$store.commit('app/SET_MAXID', this.max_id);
+                    this.graph.read(this.data);
                     if (this.data.nodes.length) {
                         this.graph.fitView(100)
                     }
@@ -216,11 +217,17 @@
                         addEdge: ['add-edge'],
                     },
                     groupType: 'rect',		// 指定分组的类型
+                    groupStyle: {
+                        default: {
+                            fill: '#ff0000',
+                            radius: 10,
+                        },
+                    },
                     animate: true,			// 切换布局时是否使用动画过度，默认为 false
-                })
-                const { editor, command } = this.$parent
-                editor.emit('afterAddPage', { graph: this.graph, command })
-                this.readData()
+                });
+                const {editor, command} = this.$parent;
+                editor.emit('afterAddPage', {graph: this.graph, command});
+                this.readData();
             },
 
             readData() {

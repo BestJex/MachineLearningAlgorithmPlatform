@@ -1,13 +1,12 @@
 import auth from '@/utils/auth'
 import userApi from '@/api/user.js'
-import WebSocket from '@/mixin/socket'
 import { Message } from 'element-ui'
 import jwt from '@/utils/jwt'
 
 const state = {
   token: auth.getToken(),
   userId: auth.getToken() ? jwt.payload_decode(auth.getToken()).userId : 0,
-  username: auth.getToken() ? jwt.payload_decode(auth.getToken()).username : ''
+  username: auth.getToken() ? jwt.payload_decode(auth.getToken()).username : '',
 }
 
 const mutations = {
@@ -31,7 +30,6 @@ const actions = {
         commit('SET_TOKEN', res.token)
         commit('SET_USERNAME', res.username)
         commit('SET_USERID', res.userId)
-        WebSocket.initWebSocket()
         resolve()
       }).catch(err => {
         Message({
@@ -51,7 +49,6 @@ const actions = {
         commit('SET_TOKEN', res.token)
         commit('SET_USERNAME', res.username)
         commit('SET_USERID', res.userId)
-        WebSocket.initWebSocket()
         resolve()
       }).catch(err => {
         Message({

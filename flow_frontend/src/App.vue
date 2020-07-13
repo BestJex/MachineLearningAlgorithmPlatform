@@ -7,7 +7,6 @@
 
 <script>
     import ResizeMixin from './mixin/ResizeHandler'
-    import WebSocket from './mixin/socket'
     import {mapGetters} from 'vuex';
     import Header from "@/components/Common/Header";
 
@@ -16,15 +15,10 @@
         components: {
             Header,
         },
-        mixins: [ResizeMixin, WebSocket],
+        mixins: [ResizeMixin],
         computed: {
             ...mapGetters(['token'])
         },
-        created() {
-            if (this.token) {
-                WebSocket.initWebSocket();
-            }
-        }
     }
 </script>
 
