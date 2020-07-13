@@ -51,7 +51,7 @@
 				input: '',
                 terminalHei: 270, // 获取控制台高度
                 graph: null,
-                data: null,
+                data: null, // 图里元素信息
                 max_id: 0,
                 isLockCanvas: false,
                 supportBehavior: [
@@ -142,7 +142,6 @@
                             label: this.isLockCanvas ? '解除锁定' : '锁定画布',
                             onClick: () => {
                                 this.isLockCanvas = !this.isLockCanvas
-
                             },
                             disabled: false,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
@@ -164,6 +163,7 @@
                 })
             },
 
+			// 获取节点
             getGraph() {
                 graphApi.getGraphById({ graphid: this.id }).then(res => {
                     this.data = res.data.data

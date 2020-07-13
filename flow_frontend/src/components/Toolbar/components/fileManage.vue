@@ -126,6 +126,7 @@
             this.restaurants = this.loadAll()
         },
         methods: {
+            // 获取所有的文件的信息
             getFileList() {
                 this.uploadData.graphId = this.graphId
                 let projectId = this.$route.params.id
@@ -133,7 +134,10 @@
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
                 }).then(res => {
-                    this.fileTableData = this.fileTableDataNotSort = Array(res.data.data.list)[0]
+                    this.fileTableData = Array(res.data.data.list)[0]
+
+                    console.log(this.fileTableData);
+					this.fileTableDataNotSort = this.fileTableData.concat()
                     for (let i = 0; i < this.fileTableData.length; i++) {
                         let item = this.fileTableData[i]
                         if (item.graphid.toString() !== projectId) {
@@ -144,7 +148,6 @@
                         item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)
                         item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB'
                     }
-                    this.getCurrentPage()
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -333,21 +336,6 @@
 
             pageCurrentChange(val) {
                 this.listQuery.page = val
-                this.getCurrentPage()
-            },
-
-            // 获取当前页面信息
-            getCurrentPage() {
-                // 获取目前页面所有信息
-                // let file = this.fileTableData.filter(data => !this.search || data.filename.includes(this.search))
-                // let fileTableData_page = []
-                // let pageStart = (this.listQuery.page - 1) * (this.listQuery.page_size)
-                // for (let i = pageStart; i < pageStart + this.listQuery.page_size; i++) {
-                //     if (file[i]) {
-                //         fileTableData_page.push(file[i])
-                //     }
-                // }
-                // this.DoneFileTableData = fileTableData_page
             },
 
             getSortRes(res) {
@@ -368,14 +356,23 @@
 							return size2 - size1
                         })
                     } else if (res.order === null) {
-                        this.fileTableData = this.fileTableDataNotSort
-						console.log(this.fileTableData);
+                        // 去他妈的深拷贝
+                        this.fileTableData = this.fileTableDataNotSort.concat()
                     }
-
-                }
-
+                } else if (res.prop === 'buildtime') {
+                    if (res.order === 'descending') {
+						this.fileTableData.sort((a, b) => {
+						    return a.buildtime < b.buildtime ? 1 : -1
+						})
+					} else if (res.order === 'descending') {
+						this.fileTableData.sort((a, b) => {
+						    return a.buildtime > b.buildtime ? 1 : -1
+						})
+					} else if (res.order === null) {
+                        this.fileTableData = this.fileTableDataNotSort.concat()
+					}
+				}
             },
-
         }
     }
 </script>
