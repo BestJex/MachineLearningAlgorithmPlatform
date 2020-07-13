@@ -18,20 +18,21 @@ export default {
         this.websock.onclose = this.websocketClose;
     },
     websocketOnOpen() {
-
+        console.log("WebSocket连接成功！");
     },
     websocketOnError() {
-
+        console.log("WebSocket出现错误！");
     },
     websocketOnMessage(res) {
+        console.log("WebSocket接收message：", res);
         const msg = JSON.parse(res.data).msg;
         if (msg === 'complete') {
-            store.commit('app/SET_ISRUNNING', false)
+            store.commit('app/SET_ISRUNNING', false);
             Notification({
                 title: '成功',
                 message: '项目运行成功',
                 type: 'success',
-                duration: 3000
+                duration: 3000,
             })
         } else {
             const nodeId = msg.nodeId;
@@ -39,17 +40,19 @@ export default {
             const item = graph.findById(nodeId);
             const model = {
                 status: status
-            }
-            graph.update(item, model)
+            };
+            graph.update(item, model);
         }
     },
     websocketClose(val) {
+        console.log("WebSocket关闭！");
         if (this.websock) {
-            this.websock.send(JSON.stringify({msg: 'close'}))
-            this.websock = null
+            this.websock.send(JSON.stringify({msg: 'close'}));
+            this.websock = null;
         }
     },
     websocketSend(data) {
-        this.websock.send(JSON.stringify({data}))
-    }
+        console.log("WebSocket发送message：", data);
+        this.websock.send(JSON.stringify({data}));
+    },
 }

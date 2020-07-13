@@ -40,7 +40,7 @@
             Minimap,
             Page,
             ContextMenu,
-            Flow
+            Flow,
         },
         computed: {
             ...mapGetters(['docHeight', 'tbHeight']),

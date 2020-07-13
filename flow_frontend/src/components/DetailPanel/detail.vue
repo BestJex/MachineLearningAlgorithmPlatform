@@ -28,19 +28,10 @@
                                     @change="changeValue"
                                     v-if="node.type==='object' || node.type==='str'"
                                     v-model="node.value"></el-input>
-                            <!-- int类型输入框 -->
+                            <!-- int/随机数类型输入框 -->
                             <el-input-number
-                                    @change="changeValue"
-                                    @input="checkIntInput(node.name + node.number, node.label, node.value)"
-                                    v-if="node.type === 'int'"
-                                    type="number"
-                                    :id="node.name + node.number"
-                                    v-model="node.value"></el-input-number>
-                            <!-- 随机数类型输入框 -->
-                            <el-input-number
-                                    @change="changeValue"
-                                    @input="checkIntInput(node.label, node.value)"
-                                    v-if="node.type === 'RandomState'"
+                                    @change="changeValue(node)"
+                                    v-if="node.type === 'int' || node.type === 'RandomState'"
                                     type="number"
                                     v-model="node.value"></el-input-number>
                             <!-- float类型输入框 -->
@@ -90,7 +81,8 @@
                                 <el-button
                                         @click="downloadFile"
                                         plain
-                                        type="info">{{ node.name }}</el-button>
+                                        type="info">{{ node.name }}
+                                </el-button>
                             </div>
                             <!-- 预览文件 -->
                             <detail-preview
@@ -126,6 +118,7 @@
                 page: {},
                 graph: {},
                 item: {},
+                visible: false,
                 fileTableData: [],
                 node_detail: {},
                 point_detail: {},
@@ -152,7 +145,7 @@
         },
         components: {
             detailPreview,
-            visualFile
+            visualFile,
         },
         created() {
             this.init();
@@ -197,12 +190,11 @@
                             self.item = item.target;
                             this.$store.commit(
                                 'app/SET_SETSELECTEDNODEID',
-                                item.target.getModel().id
+                                item.target.getModel().id,
                             );
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
                             this.getFileList();
-                            console.log(self);
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);
@@ -221,20 +213,24 @@
                 }`;
             },
 
-            changeValue(e) {
+            changeValue(node) {
+                if (node.type === 'int' || node.type === 'RandomState') {
+                    this.checkIntInput(node);
+                }
                 const model = {
                     node_detail: this.node_detail
                 }
                 this.graph.update(this.item, model);
             },
 
-            checkIntInput(id, label, value) {
-                if (!(parseInt(value, 10) === value)) {
+            checkIntInput(node) {
+                if (!(parseInt(node.value, 10) === node.value)) {
+                    node.value = Math.floor(node.value);
                     Notification({
                         title: '错误',
-                        message: `${label}必须为整数！`,
+                        message: `${node.label}必须为整数！`,
                         type: 'error',
-                        duration: 1000,
+                        duration: 3000,
                     });
                 }
             },

@@ -29,7 +29,7 @@ const state = {
     graph_id: 0,
 
     terminal_display: 'none',
-    operation: false
+    operation: false,
 }
 
 const mutations = {

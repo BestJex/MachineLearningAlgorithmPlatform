@@ -11,7 +11,6 @@
                             <div class="card fat">
                                 <el-form :model="formLogin" :rules="rules" ref="formLogin" v-if="!isRetrievePassword">
                                     <h2 class="card-title">Login</h2>
-
                                     <!-- username -->
                                     <el-form-item label="用户名" prop="username">
                                         <el-input @keyup.native.enter="login"
