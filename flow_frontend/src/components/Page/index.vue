@@ -154,7 +154,6 @@
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
                         },
                     ],
-                    event,
                     customClass: 'class-a',
                     zIndex: 3,
                     minWidth: 230

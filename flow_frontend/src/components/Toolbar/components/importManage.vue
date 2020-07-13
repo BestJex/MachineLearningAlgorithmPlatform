@@ -59,7 +59,7 @@
                         title: '成功',
                         message: '文件移除成功',
                         type: 'success',
-                        duration: 3000
+                        duration: 3000,
                     });
                 })
             },
@@ -72,18 +72,18 @@
                         });
                     }).then(res => {
                         if (res.data) {
-                            resolve()
+                            resolve();
                         } else {
                             Notification({
                                 title: '错误',
                                 message: '文件不存在或文件路径不正确',
                                 type: 'error',
-                                duration: 3000
+                                duration: 3000,
                             })
-                            reject()
+                            reject();
                         }
                     }).catch(err => {
-                        return reject()
+                        return reject();
                     })
                 })
             },
@@ -117,6 +117,7 @@
                 })
             },
             onUploadSucc(res, file, fileList) {
+                console.log(res);
                 Notification({
                     title: '成功',
                     message: '文件上传成功',

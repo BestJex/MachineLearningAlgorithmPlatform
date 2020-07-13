@@ -487,17 +487,19 @@
                             message: response.data.data.error,
                             type: 'error'
                         });
-                        let groupId = 'group' + (new Date()).valueOf();
-                        this.graph.addItem('group', {
-                            groupId: groupId,
-                            nodes: response.data.data.node,
-                            type: 'rect',
-                            title: '',
-                        });
-                        let self = this;
-                        setTimeout(function () {
-                            self.graph.removeItem(groupId);
-                        }, 2000);
+                        for (let i = 0; i < response.data.data.node.length; i++) {
+                            let groupId = 'group' + (new Date()).valueOf();
+                            this.graph.addItem('group', {
+                                groupId: groupId,
+                                nodes: [response.data.data.node[i]],
+                                type: 'rect',
+                                title: '',
+                            });
+                            let self = this;
+                            setTimeout(function () {
+                                self.graph.removeItem(groupId);
+                            }, 2000);
+                        }
                     } else {
                         return true;
                     }
