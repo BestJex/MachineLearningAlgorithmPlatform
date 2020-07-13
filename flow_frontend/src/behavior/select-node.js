@@ -1,88 +1,93 @@
-
 import Util from '@antv/g6/src/util'
-import eventBus from "@/utils/eventBus";
+import eventBus from '@/utils/eventBus'
+
 export default {
     getDefaultCfg() {
         return {
             multiple: true,
             keyCode: 17
-        };
+        }
     },
     getEvents() {
         return {
+            'node:contextmenu': 'onRightClick', // 鼠标右键
             'node:click': 'onClick',
             'canvas:click': 'onCanvasClick',
             'canvas:mouseover': 'onCanvasMouseover',
             keyup: 'onKeyUp',
             keydown: 'onKeyDown'
-        };
+        }
+    },
+    onRightClick(e) {
+        // const self = this;
+        eventBus.$emit('getName', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
+
     },
     onClick(e) {
-        console.log('ok');
-        const self = this;
-        const item = e.item;
-        const graph = self.graph;
-        const autoPaint = graph.get('autoPaint');
-        graph.setAutoPaint(false);
-        const selectedEdges = graph.findAllByState('edge', 'selected');
+        const self = this
+        const item = e.item
+        const graph = self.graph
+        const autoPaint = graph.get('autoPaint')
+        graph.setAutoPaint(false)
+        const selectedEdges = graph.findAllByState('edge', 'selected')
         Util.each(selectedEdges, edge => {
-            graph.setItemState(edge, 'selected', false);
-        });
+            graph.setItemState(edge, 'selected', false)
+        })
         if (!self.keydown || !self.multiple) {
-            const selected = graph.findAllByState('node', 'selected');
+            const selected = graph.findAllByState('node', 'selected')
             Util.each(selected, node => {
                 if (node !== item) {
-                    graph.setItemState(node, 'selected', false);
+                    graph.setItemState(node, 'selected', false)
                 }
-            });
+            })
         }
         if (item.hasState('selected')) {
             if (self.shouldUpdate.call(self, e)) {
-                graph.setItemState(item, 'selected', false);
+                graph.setItemState(item, 'selected', false)
             }
-          
-            eventBus.$emit('nodeselectchange', { target: item, select: false });
+
+            eventBus.$emit('nodeselectchange', { target: item, select: false })
         } else {
             if (self.shouldUpdate.call(self, e)) {
-                graph.setItemState(item, 'selected', true);
+                graph.setItemState(item, 'selected', true)
             }
-            eventBus.$emit('nodeselectchange', { target: item, select: true });
+            eventBus.$emit('nodeselectchange', { target: item, select: true })
         }
-        graph.setAutoPaint(autoPaint);
-        graph.paint();
+        graph.setAutoPaint(autoPaint)
+        graph.paint()
     },
     onCanvasClick() {
-        const graph = this.graph;
-        const autoPaint = graph.get('autoPaint');
-        graph.setAutoPaint(false);
-        const selected = graph.findAllByState('node', 'selected');
+        const graph = this.graph
+        const autoPaint = graph.get('autoPaint')
+        graph.setAutoPaint(false)
+        const selected = graph.findAllByState('node', 'selected')
         Util.each(selected, node => {
-            graph.setItemState(node, 'selected', false);
-            eventBus.$emit('nodeselectchange', { target: node, select: false });
-        });
-
-        const selectedEdges = graph.findAllByState('edge', 'selected');
-        Util.each(selectedEdges, edge => {
-            graph.setItemState(edge, 'selected', false);
-            eventBus.$emit('nodeselectchange', { target: edge, select: false });
+            graph.setItemState(node, 'selected', false)
+            eventBus.$emit('nodeselectchange', { target: node, select: false })
         })
 
-        graph.paint();
-        graph.setAutoPaint(autoPaint);
+        const selectedEdges = graph.findAllByState('edge', 'selected')
+        Util.each(selectedEdges, edge => {
+            graph.setItemState(edge, 'selected', false)
+            eventBus.$emit('nodeselectchange', { target: edge, select: false })
+        })
+
+        graph.paint()
+        graph.setAutoPaint(autoPaint)
     },
     onCanvasMouseover() {
-        const graph = this.graph;
-        graph.paint();
+        const graph = this.graph
+        graph.paint()
     },
     onKeyDown(e) {
-        const code = e.keyCode || e.which;
+        const code = e.keyCode || e.which
         if (code === this.keyCode) {
-            this.keydown = true;
+            this.keydown = true
         } else {
-            this.keydown = false;
+            this.keydown = false
         }
     },
     onKeyUp() {
-        this.keydown = false;
+        this.keydown = false
     }
-};
+}
