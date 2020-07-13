@@ -1,41 +1,41 @@
 <template>
-	<div
-		:style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;`"
-		@click="clickCanvas"
-		@dragover.prevent
-		@drop="handleDrop">
-		<div
-			:id="pageId"
-			class="graph-container"
-			style="position: relative; height: 100%;"
-			@contextmenu.prevent="onContextmenu">
-			<div :style="{display: this.$store.state.app.terminal_display}" ref="terminal">
-				<Terminal/>
-			</div>
-		</div>
+    <div
+            :style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;`"
+            @click="clickCanvas"
+            @dragover.prevent
+            @drop="handleDrop">
+        <div
+                :id="pageId"
+                class="graph-container"
+                style="position: relative; height: 100%;"
+                @contextmenu.prevent="onContextmenu">
+            <div :style="{display: this.$store.state.app.terminal_display}" ref="terminal">
+                <Terminal/>
+            </div>
+        </div>
 
-		<el-dialog
-			title="修改节点名"
-			:visible.sync="dialogVisible"
-			width="400px"
-			>
-<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
-			<el-input v-model="input" placeholder="请输入内容"></el-input>
-			<span slot="footer" class="dialog-footer">
+        <el-dialog
+                title="修改节点名"
+                :visible.sync="dialogVisible"
+                width="400px"
+        >
+            <!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
+            <el-input v-model="input" placeholder="请输入内容"></el-input>
+            <span slot="footer" class="dialog-footer">
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
   			</span>
-		</el-dialog>
+        </el-dialog>
 
-	</div>
+    </div>
 </template>
 
 <script>
     import G6 from '@antv/g6/build/g6'
-    import { initBehavors } from '@/behavior'
-    import { mapGetters } from 'vuex'
+    import {initBehavors} from '@/behavior'
+    import {mapGetters} from 'vuex'
     import graphApi from '@/api/graph'
-    import { Message } from 'element-ui'
+    import {Message} from 'element-ui'
     import Terminal from '../Terminal'
 
     export default {
@@ -45,8 +45,8 @@
         data() {
             return {
                 pageId: 'graph-container',
-				dialogVisible: false,
-				input: '',
+                dialogVisible: false,
+                input: '',
                 terminalHei: 270, // 获取控制台高度
                 graph: null,
                 data: null, // 图里元素信息
@@ -147,8 +147,8 @@
                         {
                             label: '修改节点名',
                             onClick: () => {
-								this.dialogVisible = true
-								///////////////
+                                this.dialogVisible = true
+                                ///////////////
                             },
                             disabled: false,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
@@ -160,9 +160,9 @@
                 })
             },
 
-			// 获取节点
+            // 获取节点
             getGraph() {
-                graphApi.getGraphById({ graphid: this.id }).then(res => {
+                graphApi.getGraphById({graphid: this.id}).then(res => {
                     this.data = res.data.data;
                     this.isRunning = this.data.status === 'loading';
                     this.forEach(this.data);
@@ -215,11 +215,17 @@
                         ],
                         addEdge: ['add-edge'],
                     },
-					groupType: 'rect',		// 指定分组的类型
-					animate: true,			// 切换布局时是否使用动画过度，默认为 false
+                    groupType: 'rect',		// 指定分组的类型
+                    groupStyle: {
+                        default: {
+                            fill: '#ff0000',
+                            radius: 10,
+                        },
+                    },
+                    animate: true,			// 切换布局时是否使用动画过度，默认为 false
                 });
-                const { editor, command } = this.$parent;
-                editor.emit('afterAddPage', { graph: this.graph, command });
+                const {editor, command} = this.$parent;
+                editor.emit('afterAddPage', {graph: this.graph, command});
                 this.readData();
             },
 
@@ -238,9 +244,9 @@
                 this.$store.commit('app/SET_ALLOWDROP', true)
             },
 
-			submitName() {
+            submitName() {
 
-			}
+            }
         }
     }
 </script>
