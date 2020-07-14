@@ -15,7 +15,9 @@ const state = {
     allow_drop: false,
     allow_save: true,
     selected_node_id: null,
-    is_running: false,
+    is_running: false,  // 是否在跑算法
+    running_complete: false, // 算法是否跑完了
+    is_show_node_manage: false,
 
     file_list: [],
     node_list: [],
@@ -106,6 +108,9 @@ const mutations = {
     },
     SET_TERMINALHEIGHT: (state, terminal_height) => {
         state.terminal_height = terminal_height
+    },
+    SET_RUNNINGCOMPLETE: (state, running_complete) => {
+        state.running_complete = running_complete
     }
 }
 

@@ -139,11 +139,11 @@
 <script>
     import eventBus from '@/utils/eventBus'
     import Util from '@antv/g6/src/util'
-    import {uniqueId, getBox} from '@/utils'
+    import { uniqueId, getBox } from '@/utils'
     import graphApi from '@/api/graph'
-    import {mapGetters} from 'vuex'
-    import api from "@/statics/config";
-    import {Notification} from 'element-ui'
+    import { mapGetters } from 'vuex'
+    import api from '@/statics/config'
+    import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
     import importManage from "@/components/Toolbar/components/importManage";
 
@@ -209,12 +209,12 @@
         },
         methods: {
             init() {
-                const {editor, command} = this.$parent
+                const { editor, command } = this.$parent
                 this.editor = editor
                 this.command = command
             },
             bindEvent() {
-                let self = this;
+                let self = this
                 eventBus.$on('afterAddPage', page => {
                     self.page = page
                     self.graph = self.page.graph
@@ -286,7 +286,7 @@
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
                     let graph = this.graph.save()
-                    Object.assign(graph, {id: this.graphId})
+                    Object.assign(graph, { id: this.graphId })
                     let data = {
                         graphid: this.graphId,
                         graph: JSON.stringify(graph),
@@ -299,7 +299,7 @@
                             duration: 500
                         })
                     }).then(() => {
-                        return graphApi.getGraphById({graphid: this.graphId})
+                        return graphApi.getGraphById({ graphid: this.graphId })
                     }).then(res => {
                         const data = res.data.data
                         this.forEach(data)
@@ -461,17 +461,17 @@
             },
             addErrorFrame(nodes) {
                 for (let i = 0; i < nodes.length; i++) {
-                    let groupId = 'group' + (new Date()).valueOf();
+                    let groupId = 'group' + (new Date()).valueOf()
                     this.graph.addItem('group', {
                         groupId: groupId,
                         nodes: [nodes[i]],
                         type: 'rect',
                         title: '',
-                    });
-                    let self = this;
+                    })
+                    let self = this
                     setTimeout(function () {
-                        self.graph.removeItem(groupId);
-                    }, 3000);
+                        self.graph.removeItem(groupId)
+                    }, 3000)
                 }
             },
             checkGraph() {
@@ -483,53 +483,53 @@
                         this.$message({
                             message: response.data.data.error,
                             type: 'error'
-                        });
+                        })
                         this.addErrorFrame(response.data.data.node)
                     } else {
                         this.$message({
-                            message: "Successful",
+                            message: 'Successful',
                             type: 'success'
-                        });
-                        return true;
+                        })
+                        return true
                     }
                 }).catch(error => {
                     this.$message({
                         message: error,
                         type: 'error'
-                    });
-                });
+                    })
+                })
             },
             success() {
-                this.isShowImportManage = false;
+                this.isShowImportManage = false
             },
             buildWebSocket(data) {
                 if (window.s) {
                     window.s.close()
                 }
-                let self = this;
-                const socket = new WebSocket(api.WS_API + "runproject");
+                let self = this
+                const socket = new WebSocket(api.WS_API + 'runproject')
                 socket.onopen = function () {
-                    console.log('WebSocket open');      //成功连接上Websocket
-                    window.s.send(data);
-                };
+                    console.log('WebSocket open')      //成功连接上Websocket
+                    window.s.send(data)
+                }
                 socket.onmessage = function (e) {
-                    window.s.send("success")
+                    window.s.send('success')
                     let data = JSON.parse(e.data)
                     console.log(data);
                     if (data.type === 1) {
-                        if (data.status === "begin") {
-                            let item = self.graph.findById(data.name);
-                            self.graph.update(item, {status: 'loading'});
-                            self.terminalContent = data.name + "开始运行" + "<br>"
-                        } else if (data.status === "finished") {
-                            let item = self.graph.findById(data.name);
-                            self.graph.update(item, {status: 'complete'});
-                            self.terminalContent = data.name + "运行完毕" + "<br>"
+                        if (data.status === 'begin') {
+                            let item = self.graph.findById(data.name)
+                            self.graph.update(item, { status: 'loading' })
+                            self.terminalContent = data.name + '开始运行' + '<br>'
+                        } else if (data.status === 'finished') {
+                            let item = self.graph.findById(data.name)
+                            self.graph.update(item, { status: 'complete' })
+                            self.terminalContent = data.name + '运行完毕' + '<br>'
                         }
                     }
                     if (data.type === 3) {
                         self.addErrorFrame([data.name])
-                        self.terminalContent = data.name + "运行出错" + "<br>"
+                        self.terminalContent = data.name + '<p style=\'color: #dd6161\'>运行出错</p><br>'
                     }
                     if (data.type === 4) {
                         Notification({
@@ -537,26 +537,28 @@
                             message: data.value,
                             type: 'error',
                         })
-                        self.terminalContent = data.value + "<br>"
+                        self.terminalContent = data.value + '<br>'
                         self.stopRuning()
                     }
                     if (data.type === 5) {
-                        self.terminalContent = "项目运行完毕<br>"
+                        self.terminalContent = '<p style=\'color: #13ce66\'>项目运行完毕</p><br>'
                         self.graph.save()
                         self.stopRuning()
+                        self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                     }
-                };
+                }
                 window.s = socket
             },
             closeWebSocket() {
                 if (window.s) {
-                    window.s.close();//关闭websocket
-                    console.log('websocket已关闭');
+                    window.s.close()//关闭websocket
+                    console.log('websocket已关闭')
                 }
             },
             runProject() {
                 this.testRunning = true
                 this.buildWebSocket(this.graphId)
+                this.$store.state.app.terminal_display = 'block'
             },
             stopRuning() {
                 this.testRunning = false
@@ -597,56 +599,56 @@
 
 
 <style lang="scss" scoped>
-    .toolbar {
-        box-sizing: border-box;
-        padding: 8px 0;
-        width: 100%;
-        border: 1px solid #e9e9e9;
-        height: 42px;
-        z-index: 3;
-        box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
-    }
+	.toolbar {
+		box-sizing: border-box;
+		padding: 8px 0;
+		width: 100%;
+		border: 1px solid #e9e9e9;
+		height: 42px;
+		z-index: 3;
+		box-shadow: 0 8px 12px 0 rgba(0, 52, 107, 0.04);
+	}
 
-    .toolbar .command:nth-of-type(1) {
-        margin-left: 24px;
-    }
+	.toolbar .command:nth-of-type(1) {
+		margin-left: 24px;
+	}
 
-    .toolbar .command {
-        box-sizing: border-box;
-        width: 27px;
-        height: 27px;
-        margin: 0 6px;
-        border-radius: 2px;
-        padding-left: 4px;
-        display: inline-block;
-        border: 1px solid rgba(2, 2, 2, 0);
-    }
+	.toolbar .command {
+		box-sizing: border-box;
+		width: 27px;
+		height: 27px;
+		margin: 0 6px;
+		border-radius: 2px;
+		padding-left: 4px;
+		display: inline-block;
+		border: 1px solid rgba(2, 2, 2, 0);
+	}
 
-    .toolbar .command:hover {
-        cursor: pointer;
-        border: 1px solid #e9e9e9;
-    }
+	.toolbar .command:hover {
+		cursor: pointer;
+		border: 1px solid #e9e9e9;
+	}
 
-    .toolbar .disable {
-        color: rgba(0, 0, 0, 0.25);
-    }
+	.toolbar .disable {
+		color: rgba(0, 0, 0, 0.25);
+	}
 
-    .toolbar .separator {
-        margin: 4px;
-        border-left: 1px solid #e9e9e9;
-    }
+	.toolbar .separator {
+		margin: 4px;
+		border-left: 1px solid #e9e9e9;
+	}
 
-    .delay-0 {
-        transition: none;
-    }
+	.delay-0 {
+		transition: none;
+	}
 
-    .delay-4 {
-        transition-delay: 0.4s;
-    }
+	.delay-4 {
+		transition-delay: 0.4s;
+	}
 
-    .delay-5 {
-        transition-delay: 0.1s;
-    }
+	.delay-5 {
+		transition-delay: 0.1s;
+	}
 
 
 </style>
