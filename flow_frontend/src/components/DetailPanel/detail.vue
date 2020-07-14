@@ -26,7 +26,7 @@
                             <el-input
                                     type="text"
                                     @change="changeValue(node)"
-                                    v-if="node.type==='object' || node.type==='str'"
+                                    v-if="node.type==='object' || node.type==='str' || node.type==='model'"
                                     v-model="node.value"></el-input>
                             <!-- int/随机数类型输入框 -->
                             <el-input-number
