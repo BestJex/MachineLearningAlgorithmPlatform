@@ -15,16 +15,31 @@
 		</div>
 
 		<el-dialog
+			v-if="params === 0"
 			title="修改节点名"
 			:visible.sync="dialogVisible"
 			width="400px"
 		>
 			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
+
 			<el-input v-model="input.name" placeholder="请输入内容"></el-input>
 			<span slot="footer" class="dialog-footer">
 
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
+  			</span>
+		</el-dialog>
+
+		<el-dialog
+			v-else
+			title="修改节点名"
+			:visible.sync="dialogVisible"
+			width="400px"
+		>
+			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
+			内容
+			<span slot="footer" class="dialog-footer">
+    			<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   			</span>
 		</el-dialog>
 
@@ -54,6 +69,7 @@
                 isRightClickNode: false, // 判断右击是否点了节点
                 graph: null,
                 data: null, // 图里元素信息
+				params: null,
                 max_id: 0,
                 isLockCanvas: false,
                 supportBehavior: [
@@ -186,9 +202,19 @@
                         {
                             label: '修改节点名',
                             onClick: () => {
+                                this.params = 0
                                 this.dialogVisible = true
                             },
                             disabled: !this.isRightClickNode,
+                            icon: 'el-icon-edit',
+                        },
+						{
+                            label: '查看输出结果',
+                            onClick: () => {
+                                this.params = 1
+                                this.dialogVisible = true
+                            },
+                            disabled: !this.$store.state.app.running_complete,
                             icon: 'el-icon-edit',
                         },
                     ],
