@@ -93,13 +93,13 @@
                         <!--							<span @click="importPythonFile()">导入.py文件</span>-->
                         <!--						</el-dropdown-item>-->
                         <el-dropdown-item>
-                            <span @click="isShowImportManage = true">导入.json文件</span>
+                            <span @click="isShowImportManage = true">导入.gph文件</span>
                         </el-dropdown-item>
                         <el-dropdown-item>
                             <span @click="exportPythonFile()">导出.py文件</span>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <span @click="exportJsonFile()">导出.json文件</span>
+                            <span @click="exportJsonFile()">导出.gph文件</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -509,13 +509,12 @@
                 let self = this;
                 const socket = new WebSocket(api.WS_API + "runproject");
                 socket.onopen = function () {
-                    console.log('WebSocket open');      //成功连接上Websocket
+                    // console.log('WebSocket open');      //成功连接上Websocket
                     window.s.send(data);
                 };
                 socket.onmessage = function (e) {
                     window.s.send("success")
                     let data = JSON.parse(e.data)
-                    console.log(data);
                     if (data.type === 1) {
                         if (data.status === "begin") {
                             let item = self.graph.findById(data.name);
@@ -551,7 +550,7 @@
             closeWebSocket() {
                 if (window.s) {
                     window.s.close();//关闭websocket
-                    console.log('websocket已关闭');
+                    // console.log('websocket已关闭');
                 }
             },
             runProject() {
