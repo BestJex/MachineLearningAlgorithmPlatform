@@ -69,7 +69,6 @@
                     'keyboard',
                     'add-menu',
                 ],
-
             }
         },
 
@@ -200,7 +199,7 @@
                                 this.dialogVisible = true
                             },
                             disabled: !this.isRightClickNode,
-                            icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
+                            icon: 'el-icon-edit',
                         },
                     ],
                     event,
