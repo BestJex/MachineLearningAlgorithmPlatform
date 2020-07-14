@@ -16,6 +16,7 @@ const getters = {
     isShowEcharts: state => state.app.is_show_echarts,
     graphId: state => state.app.graph_id,
     terminalDisplay: state => state.app.terminal_display,
+    terminalContent: state => state.app.terminalContent,
     operation: state => state.app.operation,
     clickNode: state => state.app.click_node,
     terminalHeight: state => state.app.terminal_height,

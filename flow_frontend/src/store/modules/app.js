@@ -30,6 +30,7 @@ const state = {
     graph_id: 0,
 
     terminal_display: 'none',
+    terminalContent: '',
     operation: false,
     clickNode: null
 }
@@ -97,6 +98,9 @@ const mutations = {
     },
     SET_TERMINALDISPLAY: (state, terminal_display) => {
         state.terminal_display = terminal_display
+    },
+    SET_TERMINALCONTENT: (state, terminalContent) => {
+        state.terminalContent += terminalContent
     },
     SET_OPERATION: (state, operation) => {
         state.operation = operation
