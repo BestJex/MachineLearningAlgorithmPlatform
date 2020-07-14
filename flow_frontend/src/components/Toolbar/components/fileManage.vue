@@ -155,19 +155,14 @@
             // 获取所有的文件的信息
             getFileList() {
                 this.uploadData.graphId = this.graphId
-                let projectId = this.$route.params.id
                 this.axios({
                     method: 'get',
-                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
+					url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
                 }).then(res => {
-                    this.fileTableData = Array(res.data.data.list)[0]
-                    // console.log(this.fileTableData);
+					this.fileTableData = Array(res.data.data.list)[0]
 					this.fileTableDataNotSort = this.fileTableData.concat()
                     for (let i = 0; i < this.fileTableData.length; i++) {
                         let item = this.fileTableData[i]
-                        if (item.graphid.toString() !== projectId) {
-                            this.fileTableData.splice(i, 1)
-                        }
                         let TIndex = item.buildtime.indexOf('T')
                         let pointIndex = item.buildtime.indexOf('.')
                         item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)

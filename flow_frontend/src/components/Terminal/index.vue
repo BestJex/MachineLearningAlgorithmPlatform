@@ -111,7 +111,7 @@
 
 	.main {
 		z-index: 1;
-		/*width: 100%;*/
+		width: 100%;
 		height: $hei;
 		position: absolute;
 		bottom: 8px;

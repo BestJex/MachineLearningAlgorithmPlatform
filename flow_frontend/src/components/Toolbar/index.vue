@@ -541,6 +541,7 @@
                 socket.onmessage = function (e) {
                     window.s.send("success")
                     let data = JSON.parse(e.data)
+                    console.log(data);
                     if (data.type === 1) {
                         if (data.status === "begin") {
                             let item = self.graph.findById(data.name);
