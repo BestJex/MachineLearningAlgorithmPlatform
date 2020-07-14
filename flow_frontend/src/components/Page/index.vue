@@ -51,7 +51,6 @@
                 input: {},
                 status: true,
                 interceptor: null, // 拦截器，防止用户的憨憨行为
-                terminalHei: 270, // 获取控制台高度,以后有需求就改成动态的
                 isRightClickNode: false, // 判断右击是否点了节点
                 graph: null,
                 data: null, // 图里元素信息
@@ -153,7 +152,7 @@
 
             isClickNode() {
                 // 使用全局不使用$on触发，防止出现注册先后的问题，草
-                if (this.$store.state.app.click_node !== null) {
+                if (this.$store.state.app.click_node) {
                     this.input = this.$store.state.app.click_node
                     this.isRightClickNode = true
                 } else {
@@ -164,7 +163,7 @@
             onContextmenu(event) {
                 let e = event || window.event
                 if (this.$store.state.app.terminal_display === 'block') {
-                    if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.terminalHei) {
+                    if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.$store.state.app.terminal_height) {
                         this.getContextMenu(event)
                     }
                 } else {

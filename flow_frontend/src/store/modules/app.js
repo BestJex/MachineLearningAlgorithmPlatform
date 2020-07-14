@@ -10,6 +10,7 @@ const state = {
     canvas_height: document.documentElement.clientHeight - 42,
     detailpannel_width: 200,
     itempannel_width: 240,
+    terminal_height: 270,
 
     allow_drop: false,
     allow_save: true,
@@ -102,6 +103,9 @@ const mutations = {
     },
     SET_CLICKNODE: (state, click_node) => {
         state.click_node = click_node
+    },
+    SET_TERMINALHEIGHT: (state, terminal_height) => {
+        state.terminal_height = terminal_height
     }
 }
 

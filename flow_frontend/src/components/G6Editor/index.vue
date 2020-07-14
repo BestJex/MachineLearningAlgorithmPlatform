@@ -84,7 +84,7 @@
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
-		min-width: 1150px;
+		min-width: 1165px;
     }
 
     .bottom-container {
