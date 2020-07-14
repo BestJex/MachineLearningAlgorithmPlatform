@@ -134,7 +134,7 @@
             }
         },
         computed: {
-            ...mapGetters(['isAllowDrop', 'operation']),
+            ...mapGetters(['isAllowDrop']),
         },
         created() {
             this.bindEvent()

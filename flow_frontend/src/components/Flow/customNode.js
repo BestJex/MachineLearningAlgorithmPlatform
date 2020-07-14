@@ -226,7 +226,6 @@ const customNode = {
              */
             setState(name, value, node) {
                 const group = node.getContainer();
-                console.log(group);
                 // 避免控制台报错
                 if (!group.get("children")) {
                     return

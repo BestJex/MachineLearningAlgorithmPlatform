@@ -19,6 +19,7 @@ const getters = {
     terminalContent: state => state.app.terminalContent,
     operation: state => state.app.operation,
     clickNode: state => state.app.click_node,
+    terminalHeight: state => state.app.terminal_height,
     token: state => state.user.token,
     username: state => state.user.username
 }
