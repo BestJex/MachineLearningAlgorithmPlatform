@@ -51,9 +51,8 @@
                 input: {},
                 status: true,
                 interceptor: null, // 拦截器，防止用户的憨憨行为
-                terminalHei: 270, // 获取控制台高度
+                terminalHei: 270, // 获取控制台高度,以后有需求就改成动态的
                 isRightClickNode: false, // 判断右击是否点了节点
-                isFirstBind: false,
                 graph: null,
                 data: null, // 图里元素信息
                 max_id: 0,
@@ -154,21 +153,13 @@
             },
 
             isClickNode() {
-                // if (this.isFirstBind) {
-                //     this.isFirstBind = true
-                //     eventBus.$off('getName')  // 先解绑，再绑定，防止出现重复发送从而影响性能
-                // }
-                eventBus.$off('getName')
-                eventBus.$on('getName', page => {
-                    console.log('page')
-                    if (page.name) {
-                        this.input = page
-                        this.isRightClickNode = true
-                    } else {
-                        this.isRightClickNode = false
-                    }
-                })
-                // console.log(this.isRightClickNode);
+                // 使用全局不使用$on触发，防止出现注册先后的问题，草
+                if (this.$store.state.app.click_node !== null) {
+                    this.input = this.$store.state.app.click_node
+                    this.isRightClickNode = true
+                } else {
+                    this.isRightClickNode = false
+                }
             },
 
             onContextmenu(event) {
@@ -218,6 +209,7 @@
                     minWidth: 230
                 })
                 this.isRightClickNode = false
+				this.$store.commit('app/SET_CLICKNODE', null)
             },
 
             // 获取节点
@@ -279,7 +271,7 @@
                         default: {
                             fill: '#ff0000',
                             radius: 10,
-							minDis: 10,
+                            minDis: 10,
                         },
                     },
                     animate: true,			// 切换布局时是否使用动画过度，默认为 false

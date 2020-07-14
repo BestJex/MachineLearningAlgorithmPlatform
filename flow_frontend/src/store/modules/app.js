@@ -30,6 +30,7 @@ const state = {
 
     terminal_display: 'none',
     operation: false,
+    clickNode: null
 }
 
 const mutations = {
@@ -98,6 +99,9 @@ const mutations = {
     },
     SET_OPERATION: (state, operation) => {
         state.operation = operation
+    },
+    SET_CLICKNODE: (state, click_node) => {
+        state.click_node = click_node
     }
 }
 

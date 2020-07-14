@@ -1,5 +1,6 @@
 import Util from '@antv/g6/src/util'
 import eventBus from '@/utils/eventBus'
+import store from '@/store/index.js'
 
 export default {
     getDefaultCfg() {
@@ -19,9 +20,8 @@ export default {
         }
     },
     onRightClick(e) {
-        // const self = this;
-        eventBus.$emit('getName', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
-
+        store.commit('app/SET_CLICKNODE', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
+        // eventBus.$emit('getname', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
     },
     onClick(e) {
         const self = this

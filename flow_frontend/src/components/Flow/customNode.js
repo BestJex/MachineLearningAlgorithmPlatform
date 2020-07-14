@@ -18,7 +18,7 @@ const customNode = {
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
              */
             draw(cfg, group) {
-                console.log(cfg);
+                // console.log(cfg);
                 const width = 200; // 节点宽高
                 const height = 34;
                 const color = "#1890ff";
@@ -226,6 +226,11 @@ const customNode = {
              */
             setState(name, value, node) {
                 const group = node.getContainer();
+                console.log(group);
+                // 避免控制台报错
+                if (!group.get("children")) {
+                    return
+                }
                 const shape = group.get("children")[0]; // 顺序根据 draw 时确定
 
                 const children = group.findAll(g => {
