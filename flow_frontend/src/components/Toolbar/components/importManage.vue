@@ -38,6 +38,12 @@
                 },
             }
         },
+        props: {
+            graph: {
+                type: Object,
+                required: true
+            }
+        },
         computed: {
             ...mapGetters(['token']),
             graphId: {
@@ -134,9 +140,9 @@
                     if (this.data.nodes.length) {
                         this.graph.fitView(100)
                     }
-                }).catch(err => {
+                }).catch(error => {
                     Message({
-                        message: err.data,
+                        message: error,
                         type: 'error',
                         duration: 3000,
                     })

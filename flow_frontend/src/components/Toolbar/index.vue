@@ -82,6 +82,7 @@
                 <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
                     {{testRunning ? "停止运行" : "运行项目"}}
                 </el-button>
+                <el-button @click="checkGraph" type="success">检查图</el-button>
                 <el-button @click="getTerminal" type="success">运行信息</el-button>
                 <el-dropdown style="float: right; margin-right: 10px;">
                     <el-button type="primary">
@@ -476,6 +477,21 @@
                 this.selectedItem = nodes
                 this.graph.paint()
             },
+            addErrorFrame(nodes) {
+                for (let i = 0; i < nodes.length; i++) {
+                    let groupId = 'group' + (new Date()).valueOf();
+                    this.graph.addItem('group', {
+                        groupId: groupId,
+                        nodes: [nodes[i]],
+                        type: 'rect',
+                        title: '',
+                    });
+                    let self = this;
+                    setTimeout(function () {
+                        self.graph.removeItem(groupId);
+                    }, 3000);
+                }
+            },
             checkGraph() {
                 this.axios({
                     method: 'get',
@@ -486,20 +502,12 @@
                             message: response.data.data.error,
                             type: 'error'
                         });
-                        for (let i = 0; i < response.data.data.node.length; i++) {
-                            let groupId = 'group' + (new Date()).valueOf();
-                            this.graph.addItem('group', {
-                                groupId: groupId,
-                                nodes: [response.data.data.node[i]],
-                                type: 'rect',
-                                title: '',
-                            });
-                            let self = this;
-                            setTimeout(function () {
-                                self.graph.removeItem(groupId);
-                            }, 2000);
-                        }
+                        this.addErrorFrame(response.data.data.node)
                     } else {
+                        this.$message({
+                            message: "Successful",
+                            type: 'success'
+                        });
                         return true;
                     }
                 }).catch(error => {
@@ -512,10 +520,6 @@
             success() {
                 this.isShowImportManage = false;
             },
-            changeGraph(nodeID, model) {
-                let item = this.graph.findById(nodeID);
-                this.graph.update(item, model);
-            },
             buildWebSocket(data) {
                 if (window.s) {
                     window.s.close()
@@ -527,21 +531,35 @@
                     window.s.send(data);
                 };
                 socket.onmessage = function (e) {
-                    window.s.send("success");
+                    window.s.send("success")
                     let data = JSON.parse(e.data)
+                    console.log(data);
                     if (data.type === 1) {
                         if (data.status === "begin") {
-                            self.changeGraph(data.name, {status: 'loading'});
+                            let item = self.graph.findById(data.name);
+                            self.graph.update(item, {status: 'loading'});
                         } else if (data.status === "finished") {
-                            self.changeGraph(data.name, {status: 'complete'});
+                            let item = self.graph.findById(data.name);
+                            self.graph.update(item, {status: 'complete'});
                         }
                     }
-                    if (data.type === 2) {
-                        this.stopRuning();
+                    if (data.type === 3) {
+                        self.addErrorFrame([data.name])
                     }
-                    console.log(data);
+                    if (data.type === 4) {
+                        Notification({
+                            title: '错误',
+                            message: data.value,
+                            type: 'error',
+                        })
+                        self.stopRuning()
+                    }
+                    if (data.type === 5) {
+                        self.graph.save()
+                        self.stopRuning()
+                    }
                 };
-                window.s = socket;
+                window.s = socket
             },
             closeWebSocket() {
                 if (window.s) {
@@ -550,11 +568,12 @@
                 }
             },
             runProject() {
-                this.testRunning = true;
-                this.buildWebSocket(this.graphId);
+                this.testRunning = true
+                this.buildWebSocket(this.graphId)
             },
             stopRuning() {
                 this.testRunning = false
+                this.closeWebSocket()
             },
             runNode() {
                 let graph = this.graph.save()

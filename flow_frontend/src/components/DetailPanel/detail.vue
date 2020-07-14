@@ -25,7 +25,7 @@
                             <!-- 输入框 -->
                             <el-input
                                     type="text"
-                                    @change="changeValue"
+                                    @change="changeValue(node)"
                                     v-if="node.type==='object' || node.type==='str'"
                                     v-model="node.value"></el-input>
                             <!-- int/随机数类型输入框 -->
@@ -81,7 +81,8 @@
                                 <el-button
                                         @click="downloadFile"
                                         plain
-                                        type="info">{{ node.name }}
+                                        type="info">
+                                    {{ node.name }}
                                 </el-button>
                             </div>
                             <!-- 预览文件 -->
@@ -217,10 +218,54 @@
                 if (node.type === 'int' || node.type === 'RandomState') {
                     this.checkIntInput(node);
                 }
+                if (node.type === 'object' || node.type === 'str') {
+                    if (!this.checkBraces(node.value)) {
+                        node.value = ""
+                        Notification({
+                            title: '错误',
+                            message: `${node.label}括号必须匹配！`,
+                            type: 'error',
+                            duration: 3000,
+                        });
+                    }
+                }
                 const model = {
                     node_detail: this.node_detail
                 }
                 this.graph.update(this.item, model);
+            },
+
+            checkBraces(braces) {
+                let leftBraReg = /[\(\{\[]/, stack = [], bracket, rightBracket
+                braces = braces.split('')
+                for(bracket of braces) {
+                    if(leftBraReg.test(bracket)) {
+                        stack.push(bracket)
+                    }
+                    else {
+                        switch (bracket) {
+                            case ')':
+                                rightBracket = stack.pop()
+                                if(rightBracket !=='(') {
+                                    return false
+                                }
+                                break
+                            case ']':
+                                rightBracket = stack.pop()
+                                if(rightBracket !=='[') {
+                                    return false
+                                }
+                                break
+                            case '}':
+                                rightBracket = stack.pop()
+                                if(rightBracket !=='{') {
+                                    return false
+                                }
+                                break
+                        }
+                    }
+                }
+                return stack.length === 0
             },
 
             checkIntInput(node) {
@@ -261,7 +306,7 @@
                     graphid: this.graphId,
                     graph: JSON.stringify(graph),
                 };
-                graphApi.sendGraph(data).then(res => {
+                graphApi.sendGraph(data).then(() => {
                     loading.close()
                 }).catch(err => {
                     console.error(err);
@@ -309,8 +354,8 @@
         cursor: col-resize;
         position: absolute;
         width: 10px;
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 0;
         z-index: 99;
 
         &:hover {
@@ -321,7 +366,7 @@
                             transparent 100%
             );
             background-size: 50px 100%;
-            background-position: 0px 50%;
+            background-position: 0 50%;
         }
     }
 </style>
