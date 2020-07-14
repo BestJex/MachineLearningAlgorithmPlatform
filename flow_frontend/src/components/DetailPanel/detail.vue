@@ -52,16 +52,28 @@
                                     @change="changeValue"
                                     v-if="node.type==='checkbox'"
                                     v-model="node.value"></el-checkbox>
-                            <!-- 选择文件 -->
+                            <!-- 选择CSV文件 -->
                             <el-select
                                     @change="changeValue"
                                     placeholder="请选择"
-                                    v-if="node.type==='file'"
+                                    v-if="node.type==='file' && node.label==='文件'"
                                     v-model="node.value">
                                 <el-option
                                         :label="item.filename"
                                         :value="item.id"
-                                        v-for="item in fileTableData">
+                                        v-for="item in csvFileTableData">
+                                </el-option>
+                            </el-select>
+                            <!-- 选择MModel文件 -->
+                            <el-select
+                                    @change="changeValue"
+                                    placeholder="请选择"
+                                    v-if="node.type==='file' && node.label==='模型'"
+                                    v-model="node.value">
+                                <el-option
+                                        :label="item.filename"
+                                        :value="item.id"
+                                        v-for="item in modelFileTableData">
                                 </el-option>
                             </el-select>
                             <!-- 选择算法 -->
@@ -120,7 +132,8 @@
                 graph: {},
                 item: {},
                 visible: false,
-                fileTableData: [],
+                csvFileTableData: [],
+                modelFileTableData: [],
                 node_detail: {},
                 point_detail: {},
                 point_options: [
@@ -154,31 +167,35 @@
         },
         methods: {
             init() {
-
+                this.getFileList();
             },
             getFileList() {
-                let projectId = this.$route.params.id;
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
                 }).then(res => {
-                    this.fileTableData = Array(res.data.data.list)[0];
+                    this.fileTableData = Array(res.data.data.list)[0]
+                    this.fileTableDataNotSort = this.fileTableData.concat()
+                    this.csvFileTableData = []
+                    this.modelFileTableData = []
                     for (let i = 0; i < this.fileTableData.length; i++) {
-                        let item = this.fileTableData[i];
-                        if (item.graphid.toString() !== projectId) {
-                            this.fileTableData.splice(i, 1);
+                        let item = this.fileTableData[i]
+                        let TIndex = item.buildtime.indexOf('T')
+                        let pointIndex = item.buildtime.indexOf('.')
+                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)
+                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB'
+                        if (this.fileTableData[i].filename.endsWith("csv")) {
+                            this.csvFileTableData.push(this.fileTableData[i])
+                        } else {
+                            this.modelFileTableData.push(this.fileTableData[i])
                         }
-                        let TIndex = item.buildtime.indexOf('T');
-                        let pointIndex = item.buildtime.indexOf('.');
-                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
-                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
                     }
                 }).catch(err => {
                     this.$message({
                         message: err,
                         type: 'error'
-                    });
-                });
+                    })
+                })
             },
             bindEvent() {
                 let self = this
@@ -294,12 +311,6 @@
             },
 
             saveDetail() {
-                const loading = this.$loading({
-                    lock: true,
-                    text: '保存中',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.8)'
-                });
                 let graph = this.graph.save();
                 Object.assign(graph, {id: this.graphId});
                 let data = {
@@ -307,10 +318,8 @@
                     graph: JSON.stringify(graph),
                 };
                 graphApi.sendGraph(data).then(() => {
-                    loading.close()
                 }).catch(err => {
                     console.error(err);
-                    loading.close();
                 })
             }
         }

@@ -133,21 +133,13 @@
 
         methods: {
             saveDetail() {
-                const loading = this.$loading({
-                    lock: true,
-                    text: '保存中',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.8)'
-                })
                 let graph = this.graph.save()
                 Object.assign(graph, { id: this.id })
                 let data = {
                     graphid: this.id,
                     graph: JSON.stringify(graph),
                 }
-
                 graphApi.sendGraph(data).then(res => {
-                    loading.close()
                     graphApi.getGraphById({ graphid: this.id }).then(res => {
                         this.data = res.data.data
                         this.isRunning = this.data.status === 'loading'
@@ -162,7 +154,6 @@
                     })
                 }).catch(err => {
                     console.error(err)
-                    loading.close()
                 })
             },
 

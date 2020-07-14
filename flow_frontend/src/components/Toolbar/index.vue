@@ -1,147 +1,139 @@
 <template>
-	<div class="toolbar">
-		<transition name="el-zoom-in-center">
-			<!--		这里记得正式修改的时候改回来！两处！	-->
-			<div :class="{'delay-5': !testRunning}" v-show="!testRunning">
-				<link
-					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
-					rel="stylesheet"
-					type="text/css"/>
-				<i
-					:class="undoList.length>0?'':'disable'"
-					@click="handleUndo"
-					class="command iconfont icon-undo"
-					title="撤销"></i>
-				<i
-					:class="redoList.length>0?'':'disable'"
-					@click="handleRedo"
-					class="command iconfont icon-redo"
-					title="重做"></i>
-				<span class="separator"></span>
-				<!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
-				<i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleDelete"
-					class="command iconfont icon-delete-o"
-					data-command="delete"
-					title="删除"></i>
-				<span class="separator"></span>
-				<i
-					@click="handleZoomIn"
-					class="command iconfont icon-zoom-in-o"
-					data-command="zoomIn"
-					title="放大"></i>
-				<i
-					@click="handleZoomOut"
-					class="command iconfont icon-zoom-out-o"
-					data-command="zoomOut"
-					title="缩小"></i>
-				<i
-					@click="handleAutoZoom"
-					class="command iconfont icon-fit"
-					data-command="autoZoom"
-					title="适应画布"></i>
-				<i
-					@click="handleResetZoom"
-					class="command iconfont icon-actual-size-o"
-					data-command="resetZoom"
-					title="实际尺寸"></i>
-				<span class="separator"></span>
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleToBack"
-					class="command iconfont icon-to-back"
-					data-command="toBack"
-					title="层级后置"></i>
-				<i
-					:class="selectedItem.length?'':'disable'"
-					@click="handleToFront"
-					class="command iconfont icon-to-front"
-					data-command="toFront"
-					title="层级前置"></i>
-				<span class="separator"></span>
-				<span class="separator"></span>
-				<i
-					:class="multiSelect?'disable':''"
-					@click="handleMuiltSelect"
-					class="command iconfont icon-select"
-					data-command="multiSelect"
-					title="多选"></i>
-				<!-- <i
-				  :class="addGroup?'':'disable'"
-				  @click="handleAddGroup"
-				  class="command iconfont icon-group"
-				  data-command="addGroup"
-				  title="成组"
-				></i>
-				<i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-				<el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
-				<el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
-				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
-				<el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
-					{{testRunning ? '停止运行' : '运行项目'}}
-				</el-button>
-				<el-button @click="checkGraph" type="success">检查图</el-button>
-				<el-button @click="getTerminal" type="success">运行信息</el-button>
-				<el-dropdown style="float: right; margin-right: 10px;">
-					<el-button type="primary">
-						文件
-						<i class="el-icon-arrow-down el-icon--right"></i>
-					</el-button>
-					<el-dropdown-menu slot="dropdown">
-						<!--						<el-dropdown-item>-->
-						<!--							<span @click="importPythonFile()">导入.py文件</span>-->
-						<!--						</el-dropdown-item>-->
-						<el-dropdown-item>
-							<span @click="isShowImportManage = true">导入.json文件</span>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<span @click="exportPythonFile()">导出.py文件</span>
-						</el-dropdown-item>
-						<el-dropdown-item>
-							<span @click="exportJsonFile()">导出.json文件</span>
-						</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</div>
-		</transition>
-		<transition name="el-zoom-in-center">
-			<!--		这里也有修改，记得改回来	-->
-			<div
-				:class="{'delay-4': testRunning, 'delay-0': !testRunning}"
-				style="text-align: center;"
-				v-show="testRunning">
-				<link
-					href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
-					rel="stylesheet"
-					type="text/css"/>
-				<el-button @click="runProject" type="success">重启项目</el-button>
-				<el-button @click="stopRuning" type="danger">停止运行</el-button>
-			</div>
-		</transition>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowFileManagement"
-			custom-class="preview-dialog"
-			title="文件管理">
-			<file-manage :graph="graph" v-on:success="success(res)"></file-manage>
-		</el-dialog>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowImportManage"
-			custom-class="preview-dialog"
-			title="导入文件">
-			<import-manage :graph="graph"></import-manage>
-		</el-dialog>
-		<el-dialog
-			:append-to-body="true"
-			:visible.sync="isShowNodeManage"
-			custom-class="preview-dialog"
-			title="新增结点">
-			<node-manage/>
-		</el-dialog>
-	</div>
+    <div class="toolbar">
+        <transition name="el-zoom-in-center">
+            <!--		这里记得正式修改的时候改回来！两处！	-->
+            <div :class="{'delay-5': !testRunning}" v-show="!testRunning">
+                <link
+                        href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+                        rel="stylesheet"
+                        type="text/css"/>
+                <i
+                        :class="undoList.length>0?'':'disable'"
+                        @click="handleUndo"
+                        class="command iconfont icon-undo"
+                        title="撤销"></i>
+                <i
+                        :class="redoList.length>0?'':'disable'"
+                        @click="handleRedo"
+                        class="command iconfont icon-redo"
+                        title="重做"></i>
+                <span class="separator"></span>
+                <!-- <i data-command="copy" class="command iconfont icon-copy-o disable" title="复制"></i>
+                <i data-command="paste" class="command iconfont icon-paster-o disable" title="粘贴"></i>-->
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleDelete"
+                        class="command iconfont icon-delete-o"
+                        data-command="delete"
+                        title="删除"></i>
+                <span class="separator"></span>
+                <i
+                        @click="handleZoomIn"
+                        class="command iconfont icon-zoom-in-o"
+                        data-command="zoomIn"
+                        title="放大"></i>
+                <i
+                        @click="handleZoomOut"
+                        class="command iconfont icon-zoom-out-o"
+                        data-command="zoomOut"
+                        title="缩小"></i>
+                <i
+                        @click="handleAutoZoom"
+                        class="command iconfont icon-fit"
+                        data-command="autoZoom"
+                        title="适应画布"></i>
+                <i
+                        @click="handleResetZoom"
+                        class="command iconfont icon-actual-size-o"
+                        data-command="resetZoom"
+                        title="实际尺寸"></i>
+                <span class="separator"></span>
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleToBack"
+                        class="command iconfont icon-to-back"
+                        data-command="toBack"
+                        title="层级后置"></i>
+                <i
+                        :class="selectedItem.length?'':'disable'"
+                        @click="handleToFront"
+                        class="command iconfont icon-to-front"
+                        data-command="toFront"
+                        title="层级前置"></i>
+                <span class="separator"></span>
+                <span class="separator"></span>
+                <i
+                        :class="multiSelect?'disable':''"
+                        @click="handleMuiltSelect"
+                        class="command iconfont icon-select"
+                        data-command="multiSelect"
+                        title="多选"></i>
+                <!-- <i
+                  :class="addGroup?'':'disable'"
+                  @click="handleAddGroup"
+                  class="command iconfont icon-group"
+                  data-command="addGroup"
+                  title="成组"
+                ></i>
+                <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
+                <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
+                <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
+                <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
+                    {{testRunning ? "停止运行" : "运行项目"}}
+                </el-button>
+                <el-button @click="checkGraph" type="success">检查图</el-button>
+                <el-button @click="getTerminal" type="success">运行信息</el-button>
+                <el-dropdown style="float: right; margin-right: 10px;">
+                    <el-button type="primary">
+                        文件
+                        <i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <!--						<el-dropdown-item>-->
+                        <!--							<span @click="importPythonFile()">导入.py文件</span>-->
+                        <!--						</el-dropdown-item>-->
+                        <el-dropdown-item>
+                            <span @click="isShowImportManage = true">导入.json文件</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <span @click="exportPythonFile()">导出.py文件</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <span @click="exportJsonFile()">导出.json文件</span>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+        </transition>
+        <transition name="el-zoom-in-center">
+            <!--		这里也有修改，记得改回来	-->
+            <div
+                    :class="{'delay-4': testRunning, 'delay-0': !testRunning}"
+                    style="text-align: center;"
+                    v-show="testRunning">
+                <link
+                        href="//at.alicdn.com/t/font_598462_3xve1872wizzolxr.css"
+                        rel="stylesheet"
+                        type="text/css"/>
+                <el-button @click="runProject" type="success">重启项目</el-button>
+                <el-button @click="stopRuning" type="danger">停止运行</el-button>
+            </div>
+        </transition>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowFileManagement"
+                custom-class="preview-dialog"
+                title="文件管理">
+            <file-manage :graph="graph" v-on:success="success(res)"></file-manage>
+        </el-dialog>
+        <el-dialog
+                :append-to-body="true"
+                :visible.sync="isShowImportManage"
+                custom-class="preview-dialog"
+                title="导入文件">
+            <import-manage :graph="graph"></import-manage>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -153,8 +145,7 @@
     import api from '@/statics/config'
     import { Notification } from 'element-ui'
     import fileManage from './components/fileManage'
-    import nodeManage from './components/nodeManage'
-    import importManage from '@/components/Toolbar/components/importManage'
+    import importManage from "@/components/Toolbar/components/importManage";
 
     export default {
         data() {
@@ -197,14 +188,6 @@
                     this.$store.commit('app/SET_TERMINALCONTENT', val)
                 }
             },
-            isShowNodeManage: {
-                get() {
-                    return this.$store.state.app.is_show_node_manage
-                },
-                set(val) {
-                    this.$store.commit('app/SET_ISSHOWNODEMANAGE', val)
-                }
-            },
             graphId: {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId
@@ -213,7 +196,6 @@
         },
         components: {
             fileManage,
-            nodeManage,
             importManage
         },
         created() {
@@ -238,47 +220,47 @@
                     self.graph = self.page.graph
                 })
                 eventBus.$on('add', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('update', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('delete', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('updateItem', item => {
-                    this.command.executeCommand('update', [item])
+                    self.command.executeCommand('update', [item])
                 })
                 eventBus.$on('addItem', item => {
-                    this.command.executeCommand('add', [item])
+                    self.command.executeCommand('add', [item])
                 })
                 eventBus.$on('nodeselectchange', () => {
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
-                    this.selectedItem = this.selectedItem.concat(
-                        ...this.graph.findAllByState('edge', 'selected')
+                    self.selectedItem = self.graph.findAllByState('node', 'selected')
+                    self.selectedItem = self.selectedItem.concat(
+                        ...self.graph.findAllByState('edge', 'selected')
                     )
                 })
                 eventBus.$on('deleteItem', () => {
-                    this.handleDelete()
+                    self.handleDelete()
                 })
                 eventBus.$on('muliteSelectEnd', () => {
-                    this.multiSelect = false
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
+                    self.multiSelect = false
+                    self.selectedItem = self.graph.findAllByState('node', 'selected')
                 })
                 eventBus.$on('undo', () => {
-                    this.handleUndo()
+                    self.handleUndo()
                 })
                 eventBus.$on('redo', () => {
-                    this.handleRedo()
+                    self.handleRedo()
                 })
                 eventBus.$on('save', () => {
-                    this.handleSave()
+                    self.handleSave()
                 })
                 eventBus.$on('selectAll', () => {
-                    this.handleSelectAll()
+                    self.handleSelectAll()
                 })
             },
             handleUndo() {
@@ -303,12 +285,6 @@
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
-                    const loading = this.$loading({
-                        lock: true,
-                        text: '保存中',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.8)'
-                    })
                     let graph = this.graph.save()
                     Object.assign(graph, { id: this.graphId })
                     let data = {
@@ -332,9 +308,7 @@
                         if (data.nodes.length) {
                             this.graph.fitView(100)
                         }
-                        loading.close()
                     }).catch(err => {
-                        loading.close()
                         Notification({
                             title: '错误',
                             message: err,
@@ -541,6 +515,7 @@
                 socket.onmessage = function (e) {
                     window.s.send('success')
                     let data = JSON.parse(e.data)
+                    console.log(data);
                     if (data.type === 1) {
                         if (data.status === 'begin') {
                             let item = self.graph.findById(data.name)
@@ -590,24 +565,20 @@
                 this.closeWebSocket()
             },
             runNode() {
-                let graph = this.graph.save()
-                Object.assign(graph, { id: this.graphId })
-                graphApi
-                    .runNode({ graph: JSON.stringify(graph), nodeId: this.selectedNodeId })
-                    .then(res => {
-                        console.log('正在运行')
-                        this.isRunning = true
+                graphApi.runNode({graphid: this.graphId, nodename: this.selectedNodeId}).then(res => {
+                    console.log('正在运行')
+                    this.isRunning = true
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err.data,
+                        type: 'error',
+                        duration: 3000
                     })
-                    .catch(err => {
-                        Notification({
-                            title: '错误',
-                            message: err.data,
-                            type: 'error',
-                            duration: 3000
-                        })
-                        this.isRunning = false
-                    })
+                    this.isRunning = false
+                })
             },
+
             addNode() {
 
             },
