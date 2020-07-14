@@ -2,36 +2,61 @@
 	<div>
 		<el-tabs :tab-position="tabPosition">
 			<el-tab-pane label="文件管理">
-				<el-button @click="toggleSelectionDelete()" size="small" type="primary" style="margin-left: 10px">
+				<el-button @click="toggleSelectionDelete()"
+						   size="small"
+						   type="primary"
+						   style="margin-left: 10px">
 					批量删除
 				</el-button>
-				<el-button @click="toggleSelection()" size="small" type="primary">取消选择</el-button>
+				<el-button @click="toggleSelection()"
+						   size="small"
+						   type="primary">
+					取消选择
+				</el-button>
 				<el-table ref="multipleTable"
 						  :data="fileTableData.filter(data => !search || data.filename.includes(search)).slice((listQuery.page - 1) * listQuery.page_size, listQuery.page * listQuery.page_size)"
 						  tooltip-effect="dark" style="width: 100%;"
 						  :default-sort="{prop: 'buildtime', order: 'descending'}"
 						  @selection-change="handleSelectionChange"
-						  @sort-change="getSortRes"
-				>
+						  @sort-change="getSortRes">
 					<!--				el-table备份筛选方法(问题已解决)	:data="fileTableData.filter(data => !search || data.filename.includes(search))"-->
-					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="buildtime" label="日期" width="150" sortable></el-table-column>
-					<el-table-column prop="filename" label="文件名" width="100"></el-table-column>
-					<el-table-column prop="size" label="文件大小" width="100" sortable="custom"
-					></el-table-column>
+					<el-table-column type="selection"
+									 width="55"></el-table-column>
+					<el-table-column prop="buildtime"
+									 label="日期"
+									 width="150"
+									 sortable></el-table-column>
+					<el-table-column prop="filename"
+									 label="文件名"
+									 width="100"></el-table-column>
+					<el-table-column prop="size"
+									 label="文件大小"
+									 width="100"
+									 sortable="custom"></el-table-column>
 					<el-table-column align="right">
-						<template slot="header" slot-scope="scope">
-							<el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
+						<template slot="header"
+								  slot-scope="scope">
+							<el-input v-model="search"
+									  size="mini"
+									  placeholder="输入关键字搜索"/>
 						</template>
-						<template slot-scope="scope" style="margin-left: 20px; display: flex">
-							<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-							<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete
+						<template slot-scope="scope"
+								  style="margin-left: 20px; display: flex">
+							<el-button size="mini"
+									   @click="handleEdit(scope.$index, scope.row)">
+								Edit
+							</el-button>
+							<el-button size="mini"
+									   type="danger"
+									   @click="handleDelete(scope.$index, scope.row)">D
+								elete
 							</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 				<div class="paginator">
-					<el-pagination :current-page="listQuery.page" :page-size="listQuery.page_size"
+					<el-pagination :current-page="listQuery.page"
+								   :page-size="listQuery.page_size"
 								   :page-sizes="[5]"
 								   :total="fileTableData.filter(data => !search || data.filename.includes(search)).length"
 								   @current-change="pageCurrentChange"
@@ -135,8 +160,7 @@
                     url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
                 }).then(res => {
                     this.fileTableData = Array(res.data.data.list)[0]
-
-                    console.log(this.fileTableData);
+                    // console.log(this.fileTableData);
 					this.fileTableDataNotSort = this.fileTableData.concat()
                     for (let i = 0; i < this.fileTableData.length; i++) {
                         let item = this.fileTableData[i]
@@ -218,8 +242,26 @@
                 }
             },
 
-            toggleSelectionDelete(rows) {
-
+            toggleSelectionDelete() {
+				this.multipleSelection.forEach(item => {
+					fileApi.deleteFile({
+						filelist: [item.id]
+					}).then(res => {
+						Notification({
+							title: '成功',
+							message: '文件移除成功',
+							type: 'success',
+							duration: 3000
+						})
+						this.$store.commit('app/SET_FILELIST', res.data)
+						this.getFileList()
+					}).catch(error => {
+						this.$message({
+							message: error,
+							type: 'error'
+						})
+					})
+				})
             },
 
             handleSelectionChange(val) {
