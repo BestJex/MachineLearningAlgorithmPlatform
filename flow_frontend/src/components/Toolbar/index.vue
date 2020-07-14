@@ -76,7 +76,6 @@
                   title="成组"
                 ></i>
                 <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-                <el-button @click="isShowNodeManage = true" type="primary">新增结点</el-button>
                 <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
                 <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
                 <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
@@ -134,13 +133,6 @@
                 title="导入文件">
             <import-manage :graph="graph"></import-manage>
         </el-dialog>
-        <el-dialog
-                :append-to-body="true"
-                :visible.sync="isShowNodeManage"
-                custom-class="preview-dialog"
-                title="新增结点">
-            <node-manage/>
-        </el-dialog>
     </div>
 </template>
 
@@ -153,7 +145,6 @@
     import api from "@/statics/config";
     import {Notification} from 'element-ui'
     import fileManage from './components/fileManage'
-    import nodeManage from './components/nodeManage'
     import importManage from "@/components/Toolbar/components/importManage";
 
     export default {
@@ -197,14 +188,6 @@
                     this.$store.commit('app/SET_TERMINALCONTENT', val)
                 }
             },
-            isShowNodeManage: {
-                get() {
-                    return this.$store.state.app.is_show_node_manage
-                },
-                set(val) {
-                    this.$store.commit('app/SET_ISSHOWNODEMANAGE', val)
-                }
-            },
             graphId: {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId
@@ -213,7 +196,6 @@
         },
         components: {
             fileManage,
-            nodeManage,
             importManage
         },
         created() {
@@ -238,47 +220,47 @@
                     self.graph = self.page.graph
                 })
                 eventBus.$on('add', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('update', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('delete', data => {
-                    this.redoList = data.redoList
-                    this.undoList = data.undoList
+                    self.redoList = data.redoList
+                    self.undoList = data.undoList
                 })
                 eventBus.$on('updateItem', item => {
-                    this.command.executeCommand('update', [item])
+                    self.command.executeCommand('update', [item])
                 })
                 eventBus.$on('addItem', item => {
-                    this.command.executeCommand('add', [item])
+                    self.command.executeCommand('add', [item])
                 })
                 eventBus.$on('nodeselectchange', () => {
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
-                    this.selectedItem = this.selectedItem.concat(
-                        ...this.graph.findAllByState('edge', 'selected')
+                    self.selectedItem = self.graph.findAllByState('node', 'selected')
+                    self.selectedItem = self.selectedItem.concat(
+                        ...self.graph.findAllByState('edge', 'selected')
                     )
                 })
                 eventBus.$on('deleteItem', () => {
-                    this.handleDelete()
+                    self.handleDelete()
                 })
                 eventBus.$on('muliteSelectEnd', () => {
-                    this.multiSelect = false
-                    this.selectedItem = this.graph.findAllByState('node', 'selected')
+                    self.multiSelect = false
+                    self.selectedItem = self.graph.findAllByState('node', 'selected')
                 })
                 eventBus.$on('undo', () => {
-                    this.handleUndo()
+                    self.handleUndo()
                 })
                 eventBus.$on('redo', () => {
-                    this.handleRedo()
+                    self.handleRedo()
                 })
                 eventBus.$on('save', () => {
-                    this.handleSave()
+                    self.handleSave()
                 })
                 eventBus.$on('selectAll', () => {
-                    this.handleSelectAll()
+                    self.handleSelectAll()
                 })
             },
             handleUndo() {
@@ -303,12 +285,6 @@
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
-                    const loading = this.$loading({
-                        lock: true,
-                        text: '保存中',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.8)'
-                    })
                     let graph = this.graph.save()
                     Object.assign(graph, {id: this.graphId})
                     let data = {
@@ -332,9 +308,7 @@
                         if (data.nodes.length) {
                             this.graph.fitView(100)
                         }
-                        loading.close()
                     }).catch(err => {
-                        loading.close()
                         Notification({
                             title: '错误',
                             message: err,
@@ -589,24 +563,20 @@
                 this.closeWebSocket()
             },
             runNode() {
-                let graph = this.graph.save()
-                Object.assign(graph, {id: this.graphId})
-                graphApi
-                    .runNode({graph: JSON.stringify(graph), nodeId: this.selectedNodeId})
-                    .then(res => {
-                        console.log('正在运行')
-                        this.isRunning = true
+                graphApi.runNode({graphid: this.graphId, nodename: this.selectedNodeId}).then(res => {
+                    console.log('正在运行')
+                    this.isRunning = true
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err.data,
+                        type: 'error',
+                        duration: 3000
                     })
-                    .catch(err => {
-                        Notification({
-                            title: '错误',
-                            message: err.data,
-                            type: 'error',
-                            duration: 3000
-                        })
-                        this.isRunning = false
-                    })
+                    this.isRunning = false
+                })
             },
+
             addNode() {
 
             },

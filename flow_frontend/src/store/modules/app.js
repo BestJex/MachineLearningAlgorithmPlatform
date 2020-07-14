@@ -16,7 +16,6 @@ const state = {
     allow_save: true,
     selected_node_id: null,
     is_running: false,
-    is_show_node_manage: false,
 
     file_list: [],
     node_list: [],
@@ -68,9 +67,6 @@ const mutations = {
     },
     SET_ISRUNNING: (state, is_running) => {
         state.is_running = is_running
-    },
-    SET_ISSHOWNODEMANAGE: (state, is_show_node_manage) => {
-        state.is_show_node_manage = is_show_node_manage
     },
     SET_FILELIST: (state, file_list) => {
         state.file_list = file_list

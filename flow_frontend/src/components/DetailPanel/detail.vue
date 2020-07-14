@@ -176,6 +176,8 @@
                 }).then(res => {
                     this.fileTableData = Array(res.data.data.list)[0]
                     this.fileTableDataNotSort = this.fileTableData.concat()
+                    this.csvFileTableData = []
+                    this.modelFileTableData = []
                     for (let i = 0; i < this.fileTableData.length; i++) {
                         let item = this.fileTableData[i]
                         let TIndex = item.buildtime.indexOf('T')
@@ -309,12 +311,6 @@
             },
 
             saveDetail() {
-                const loading = this.$loading({
-                    lock: true,
-                    text: '保存中',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.8)'
-                });
                 let graph = this.graph.save();
                 Object.assign(graph, {id: this.graphId});
                 let data = {
@@ -322,10 +318,8 @@
                     graph: JSON.stringify(graph),
                 };
                 graphApi.sendGraph(data).then(() => {
-                    loading.close()
                 }).catch(err => {
                     console.error(err);
-                    loading.close();
                 })
             }
         }

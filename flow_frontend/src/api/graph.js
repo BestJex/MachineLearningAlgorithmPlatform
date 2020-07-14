@@ -67,8 +67,8 @@ export default {
 
     runNode(data) {
         return request({
-            url: '/run_node',
-            method: 'put',
+            url: '/nodeinputcheck',
+            method: 'post',
             data
         })
     },
