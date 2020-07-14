@@ -189,6 +189,14 @@
                     this.$store.commit('app/SET_ISRUNNING', val)
                 }
             },
+            terminalContent: {
+                get() {
+                    return this.$store.state.app.terminalContent
+                },
+                set(val) {
+                    this.$store.commit('app/SET_TERMINALCONTENT', val)
+                }
+            },
             isShowNodeManage: {
                 get() {
                     return this.$store.state.app.is_show_node_manage
@@ -533,18 +541,20 @@
                 socket.onmessage = function (e) {
                     window.s.send("success")
                     let data = JSON.parse(e.data)
-                    console.log(data);
                     if (data.type === 1) {
                         if (data.status === "begin") {
                             let item = self.graph.findById(data.name);
                             self.graph.update(item, {status: 'loading'});
+                            self.terminalContent = data.name + "开始运行" + "<br>"
                         } else if (data.status === "finished") {
                             let item = self.graph.findById(data.name);
                             self.graph.update(item, {status: 'complete'});
+                            self.terminalContent = data.name + "运行完毕" + "<br>"
                         }
                     }
                     if (data.type === 3) {
                         self.addErrorFrame([data.name])
+                        self.terminalContent = data.name + "运行出错" + "<br>"
                     }
                     if (data.type === 4) {
                         Notification({
@@ -552,9 +562,11 @@
                             message: data.value,
                             type: 'error',
                         })
+                        self.terminalContent = data.value + "<br>"
                         self.stopRuning()
                     }
                     if (data.type === 5) {
+                        self.terminalContent = "项目运行完毕<br>"
                         self.graph.save()
                         self.stopRuning()
                     }
@@ -602,11 +614,11 @@
             },
             exportPythonFile() {
                 if (this.checkGraph()) {
-                    window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`);
+                    window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`)
                 }
             },
             exportJsonFile() {
-                window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`);
+                window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`)
             },
         }
     }

@@ -21,14 +21,14 @@
 						  @sort-change="getSortRes">
 					<!--				el-table备份筛选方法(问题已解决)	:data="fileTableData.filter(data => !search || data.filename.includes(search))"-->
 					<el-table-column type="selection"
-									 width="55"></el-table-column>
+									 width="45"></el-table-column>
 					<el-table-column prop="buildtime"
 									 label="日期"
 									 width="150"
 									 sortable></el-table-column>
 					<el-table-column prop="filename"
 									 label="文件名"
-									 width="100"></el-table-column>
+									 width="90"></el-table-column>
 					<el-table-column prop="size"
 									 label="文件大小"
 									 width="100"
@@ -41,15 +41,16 @@
 									  placeholder="输入关键字搜索"/>
 						</template>
 						<template slot-scope="scope"
-								  style="margin-left: 20px; display: flex">
+								  style="margin-left: 15px; display: flex">
 							<el-button size="mini"
-									   @click="handleEdit(scope.$index, scope.row)">
-								Edit
+									   type="success"
+									   @click="handleDownload(scope.$index, scope.row)">
+								Download
 							</el-button>
 							<el-button size="mini"
 									   type="danger"
-									   @click="handleDelete(scope.$index, scope.row)">D
-								elete
+									   @click="handleDelete(scope.$index, scope.row)">
+								Delete
 							</el-button>
 						</template>
 					</el-table-column>
@@ -208,7 +209,7 @@
                 console.log(item)
             },
 
-            handleEdit(index, row) {
+            handleDownload(index, row) {
                 console.log(index, row)
             },
 
