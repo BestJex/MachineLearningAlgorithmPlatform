@@ -20,24 +20,25 @@
 			width="400px"
 		>
 			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
-			<el-input v-model="input" placeholder="请输入内容"></el-input>
+			<el-input v-model="input.name" placeholder="请输入内容"></el-input>
 			<span slot="footer" class="dialog-footer">
 
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
   			</span>
-        </el-dialog>
+		</el-dialog>
 
-    </div>
+	</div>
 </template>
 
 <script>
     import G6 from '@antv/g6/build/g6'
-    import {initBehavors} from '@/behavior'
-    import {mapGetters} from 'vuex'
+    import { initBehavors } from '@/behavior'
+    import { mapGetters } from 'vuex'
     import graphApi from '@/api/graph'
-    import {Message} from 'element-ui'
+    import { Message } from 'element-ui'
     import Terminal from '../Terminal'
+    import eventBus from '@/utils/eventBus'
 
     export default {
         components: {
@@ -47,8 +48,12 @@
             return {
                 pageId: 'graph-container',
                 dialogVisible: false,
-                input: '',
+                input: {},
+                status: true,
+                interceptor: null, // 拦截器，防止用户的憨憨行为
                 terminalHei: 270, // 获取控制台高度
+                isRightClickNode: false, // 判断右击是否点了节点
+                isFirstBind: false,
                 graph: null,
                 data: null, // 图里元素信息
                 max_id: 0,
@@ -65,6 +70,7 @@
                     'keyboard',
                     'add-menu',
                 ],
+
             }
         },
 
@@ -113,6 +119,58 @@
         },
 
         methods: {
+            saveDetail() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '保存中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.8)'
+                })
+                let graph = this.graph.save()
+                Object.assign(graph, { id: this.id })
+                let data = {
+                    graphid: this.id,
+                    graph: JSON.stringify(graph),
+                }
+
+                graphApi.sendGraph(data).then(res => {
+                    loading.close()
+                    graphApi.getGraphById({ graphid: this.id }).then(res => {
+                        this.data = res.data.data
+                        this.isRunning = this.data.status === 'loading'
+                        this.forEach(this.data)
+                        this.$store.commit('app/SET_MAXID', this.max_id)
+                        this.graph.read(this.data)
+                        if (this.data.nodes.length) {
+                            this.graph.fitView(100)
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }).catch(err => {
+                    console.error(err)
+                    loading.close()
+                })
+            },
+
+            isClickNode() {
+                // if (this.isFirstBind) {
+                //     this.isFirstBind = true
+                //     eventBus.$off('getName')  // 先解绑，再绑定，防止出现重复发送从而影响性能
+                // }
+                eventBus.$off('getName')
+                eventBus.$on('getName', page => {
+                    console.log('page')
+                    if (page.name) {
+                        this.input = page
+                        this.isRightClickNode = true
+                    } else {
+                        this.isRightClickNode = false
+                    }
+                })
+                // console.log(this.isRightClickNode);
+            },
+
             onContextmenu(event) {
                 let e = event || window.event
                 if (this.$store.state.app.terminal_display === 'block') {
@@ -126,6 +184,7 @@
             },
 
             getContextMenu(event) {
+                this.isClickNode()
                 this.$contextmenu({
                     items: [
                         {
@@ -148,9 +207,8 @@
                             label: '修改节点名',
                             onClick: () => {
                                 this.dialogVisible = true
-                                ///////////////
                             },
-                            disabled: false,
+                            disabled: !this.isRightClickNode,
                             icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
                         },
                     ],
@@ -159,16 +217,17 @@
                     zIndex: 3,
                     minWidth: 230
                 })
+                this.isRightClickNode = false
             },
 
             // 获取节点
             getGraph() {
-                graphApi.getGraphById({graphid: this.id}).then(res => {
-                    this.data = res.data.data;
-                    this.isRunning = this.data.status === 'loading';
-                    this.forEach(this.data);
-                    this.$store.commit('app/SET_MAXID', this.max_id);
-                    this.graph.read(this.data);
+                graphApi.getGraphById({ graphid: this.id }).then(res => {
+                    this.data = res.data.data
+                    this.isRunning = this.data.status === 'loading'
+                    this.forEach(this.data)
+                    this.$store.commit('app/SET_MAXID', this.max_id)
+                    this.graph.read(this.data)
                     if (this.data.nodes.length) {
                         this.graph.fitView(100)
                     }
@@ -224,10 +283,10 @@
                         },
                     },
                     animate: true,			// 切换布局时是否使用动画过度，默认为 false
-                });
-                const {editor, command} = this.$parent;
-                editor.emit('afterAddPage', {graph: this.graph, command});
-                this.readData();
+                })
+                const { editor, command } = this.$parent
+                editor.emit('afterAddPage', { graph: this.graph, command })
+                this.readData()
             },
 
             readData() {
@@ -246,7 +305,34 @@
             },
 
             submitName() {
+                if (!this.input.name) {
+                    if (this.status) {
+                        this.$message({
+                            message: '请输入节点名',
+                            type: 'error'
+                        })
+                        this.status = false
+                        this.interceptor = setTimeout(() => {
+                            this.status = true
+                        }, 2500)
+                    }
+                } else {
+                    for (let i = 0; i < this.data.nodes.length; i++) {
+                        if (this.data.nodes[i].id === this.input.id) {
+                            console.log(this.data.nodes[i])
+                            this.data.nodes[i].label = this.input.name
 
+                            // this.reDrewGraph(this.init)
+
+                            // graphApi.
+                            this.saveDetail()
+
+                            setTimeout(() => {
+                                this.dialogVisible = false
+                            }, 500)
+                        }
+                    }
+                }
             }
         }
     }
