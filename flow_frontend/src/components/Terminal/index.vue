@@ -16,9 +16,9 @@
 			<div class="c" v-if="terminalOpen === 2"><span>实时数据(每分钟采样一次) 硬盘 0GB/100GB</span></div>
 			<div class="top-right" @click="offTerminal">×</div>
 		</div>
-		<div class="terminal-body" ref="bodyHei">
+		<div class="terminal-body" ref="terminal_body">
 			<div v-if="terminalOpen === 0" class="a"></div>
-    <div v-if="terminalOpen === 1" class="b" v-html="terminalContent"></div>
+			<div v-if="terminalOpen === 1" class="b" v-html="terminalContent"></div>
 			<div v-if="terminalOpen === 2" class="c">
 				<el-row>
 					<el-col :span="4">
@@ -59,11 +59,13 @@
     export default {
         data() {
             return {
-                terminalOpen: 1
+                terminalOpen: 1,
+                isOpen: false,
+                cont: ''
             }
         },
         mounted() {
-			this.$refs.hei.style.height = `${this.$store.state.app.terminal_height}px`
+            this.$refs.hei.style.height = `${this.$store.state.app.terminal_height}px`
         },
 
         methods: {
@@ -74,25 +76,23 @@
             doMove(e) {
                 e = window.event || e
 
-				// 实现拖拽
+                // 实现拖拽
                 document.onmousemove = (e) => {
-                    console.log(document.body.clientHeight - e.clientY)
                     if (document.body.clientHeight - e.clientY < 100) {
                         this.$refs.hei.style.height = 100
                     } else if (document.body.clientHeight - e.clientY > document.body.clientHeight * 0.6) {
                         this.$refs.hei.style.height = document.body.clientHeight * 0.6
                     } else {
                         this.$refs.hei.style.height = `${document.body.clientHeight - e.clientY}px`
-                        this.$refs.bodyHei.style.height = `${document.body.clientHeight - e.clientY - 70}px`
+                        this.$refs.terminal_body.style.height = `${document.body.clientHeight - e.clientY - 70}px`
                     }
-
                 }
 
                 // 取消鼠标移动的全局监听
                 document.onmouseup = () => {
                     document.onmousemove = null
                     this.$store.commit('app/SET_TERMINALHEIGHT', parseInt(this.$refs.hei.style.height.substring(0, this.$refs.hei.style.height.length - 2)))
-					// 把最后的单位px去除并强转数字类型，然后传给全局，以便在画布右键的时候检测它的高度，并在点击控制台的时候禁止弹出菜单
+                    // 把最后的单位px去除并强转数字类型，然后传给全局，以便在画布右键的时候检测它的高度，并在点击控制台的时候禁止弹出菜单
                 }
             },
 
@@ -100,9 +100,17 @@
                 this.$store.commit('app/SET_TERMINALDISPLAY', 'none')
             },
         },
-	computed: {
-		...mapGetters(['terminalDisplay', 'terminalContent'])
-	}
+        computed: {
+            ...mapGetters(['terminalDisplay', 'terminalContent'])
+        },
+		watch: {
+			terminalContent(val) {
+			    // 最后一下也可以顺利到底部
+			    setTimeout(() => {
+			        this.$refs.terminal_body.scrollTop = this.$refs.terminal_body.scrollHeight;
+				}, 20)
+			}
+		}
     }
 </script>
 
@@ -111,7 +119,7 @@
 
 	.main {
 		z-index: 1;
-		/*width: 100%;*/
+		width: 100%;
 		height: $hei;
 		position: absolute;
 		bottom: 8px;
@@ -229,10 +237,10 @@
 		background-color: rgb(191, 209, 226);
 		height: 35vh;
 	}
-  
-  
-// 隐藏滚动条
-::-webkit-scrollbar {
-	display: none
-}
+
+
+	// 隐藏滚动条
+	::-webkit-scrollbar {
+		display: none
+	}
 </style>

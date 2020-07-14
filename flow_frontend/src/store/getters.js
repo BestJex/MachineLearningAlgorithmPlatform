@@ -20,6 +20,7 @@ const getters = {
     operation: state => state.app.operation,
     clickNode: state => state.app.click_node,
     terminalHeight: state => state.app.terminal_height,
+    runningComplete: state => state.app.running_complete,
     token: state => state.user.token,
     username: state => state.user.username
 }
