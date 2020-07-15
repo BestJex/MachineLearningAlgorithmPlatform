@@ -537,7 +537,7 @@
                         self.stopRuning()
                     }
                     if (data.type === 5) {
-                        self.terminalContent = '<p style=\'color: #13ce66\'>项目运行完毕</p>'
+                        self.terminalContent = '<p style=\'color: #13ce66\'>项目运行完毕</p><hr>'
                         self.graph.save()
                         self.stopRuning()
                     }
