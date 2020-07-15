@@ -116,7 +116,6 @@
 <script>
     import eventBus from '@/utils/eventBus'
     import Grid from '@antv/g6/build/grid'
-    import detailPreview from './components/preview'
     import visualFile from './components/visualization'
     import graphApi from '@/api/graph'
     import {mapGetters} from 'vuex'
