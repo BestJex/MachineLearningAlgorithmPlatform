@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import Minimap from '@antv/g6/build/minimap'
+    import MiniMap from '@antv/g6/build/minimap'
     import eventBus from '@/utils/eventBus'
     import {mapGetters} from 'vuex'
 
@@ -27,7 +27,7 @@
             //     size: [width, height],
             //     container: 'minimap'
             //   }
-            //   this.minimap = new Minimap({ ...cfgs })
+            //   this.minimap = new MiniMap({ ...cfgs })
             // }
         },
         created() {
@@ -47,7 +47,7 @@
                     size: [width, height],
                     container: 'minimap'
                 }
-                this.minimap = new Minimap({...cfgs})
+                this.minimap = new MiniMap({...cfgs})
             },
             bindEvent() {
                 eventBus.$on('afterAddPage', page => {
