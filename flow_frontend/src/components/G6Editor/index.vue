@@ -71,6 +71,7 @@
             init() {
                 this.editor = new Editor();
                 this.command = new command(this.editor);
+                this.$store.dispatch("app/getFileList")
             }
         }
     };

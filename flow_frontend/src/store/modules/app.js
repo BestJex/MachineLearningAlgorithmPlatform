@@ -1,7 +1,10 @@
 import fileApi from '@/api/file'
 import graphApi from '@/api/graph'
+import {Message} from "element-ui";
 
 const state = {
+    fileList: [],           // 用户上传的所有文件
+
     is_focus_canvas: false,
     document_width: document.documentElement.clientWidth,
     document_height: document.documentElement.clientHeight,
@@ -18,13 +21,7 @@ const state = {
     is_running: false,  // 是否在跑算法
     running_complete: false, // 算法是否跑完了
     is_show_node_manage: false,
-
-    file_list: [],
     node_list: [],
-
-    is_show_preview: false,
-    is_show_visual: false,
-    is_show_echarts: false,
 
     max_id: 0,
     graph_id: 0,
@@ -36,6 +33,10 @@ const state = {
 }
 
 const mutations = {
+    // 设置用户上传的所有文件
+    SetFileList: (state, fileList) => {
+        state.fileList = fileList
+    },
     SET_ISFOCUSCANVAS: (state, is_focus_canvas) => {
         state.is_focus_canvas = is_focus_canvas
     },
@@ -68,9 +69,6 @@ const mutations = {
     },
     SET_ISRUNNING: (state, is_running) => {
         state.is_running = is_running
-    },
-    SET_FILELIST: (state, file_list) => {
-        state.file_list = file_list
     },
     SET_NODELIST: (state, node_list) => {
         state.node_list = node_list
@@ -111,23 +109,42 @@ const mutations = {
 }
 
 const actions = {
-    setIsFocusCanvas({ commit }, is_focus_canvas) {
+    getFileList({commit}) {
+        fileApi.getFile({username: localStorage.getItem('username')}).then(response => {
+            let fileList = response.data.list
+            for (let i = 0; i < fileList.length; i++) {
+                let item = fileList[i]
+                let TIndex = item.buildtime.indexOf('T')
+                let pointIndex = item.buildtime.indexOf('.')
+                item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)
+                item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB'
+            }
+            commit('SetFileList', fileList)
+        }).catch(error => {
+            Message({
+                message: error,
+                type: 'error',
+                duration: 3 * 1000
+            })
+        })
+    },
+    setIsFocusCanvas({commit}, is_focus_canvas) {
         commit('SET_ISFOCUSCANVAS', is_focus_canvas)
     },
-    setCanvasWidth({ commit }, canvas_width) {
+    setCanvasWidth({commit}, canvas_width) {
         commit('SET_CANVASWIDTH', canvas_width)
     },
-    setDetailPannelWidth({ commit, state }, detailpannel_width) {
+    setDetailPannelWidth({commit, state}, detailpannel_width) {
         commit('SET_DETAILPANNELWIDTH', detailpannel_width)
         var canvas_width = document.documentElement.clientWidth - state.detailpannel_width - state.itempannel_width
         commit('SET_CANVASWIDTH', canvas_width)
     },
-    setItemPannelWidth({ commit, state }, itempannel_width) {
+    setItemPannelWidth({commit, state}, itempannel_width) {
         commit('SET_ITEMPANNELWIDTH', itempannel_width)
         var canvas_width = document.documentElement.clientWidth - state.detailpannel_width - state.itempannel_width
         commit('SET_CANVASWIDTH', canvas_width)
     },
-    setDocument({ commit }, { document_width, document_height }) {
+    setDocument({commit}, {document_width, document_height}) {
         commit('SET_DOCUMENTWIDTH', document_width)
         commit('SET_DOCUMENTHEIGHT', document_height)
         var canvas_width = document_width - state.detailpannel_width - state.itempannel_width
@@ -135,7 +152,7 @@ const actions = {
         commit('SET_CANVASWIDTH', canvas_width)
         commit('SET_CANVASHEIGHT', canvas_height)
     },
-    uniqueId({ commit }) {
+    uniqueId({commit}) {
         return new Promise(resolve => {
             commit('SET_MAXID', state.max_id + 1)
             resolve(state.max_id + 1)

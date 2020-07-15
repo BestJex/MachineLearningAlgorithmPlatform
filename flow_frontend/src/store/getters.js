@@ -1,4 +1,5 @@
 const getters = {
+    fileList: state => state.app.fileList,
     isFocusCanvas: state => state.app.is_focus_canvas,
     canvasWidth: state => state.app.canvas_width,
     canvasHeight: state => state.app.canvas_height - 62,
@@ -11,9 +12,6 @@ const getters = {
     docWidth: state => state.app.document_width,
     docHeight: state => state.app.document_height,
     tbHeight: state => state.app.topbar_height,
-    isShowPreview: state => state.app.is_show_preview,
-    isShowVisual: state => state.app.is_show_visual,
-    isShowEcharts: state => state.app.is_show_echarts,
     graphId: state => state.app.graph_id,
     terminalDisplay: state => state.app.terminal_display,
     terminalContent: state => state.app.terminalContent,

@@ -61,10 +61,10 @@
                                 <el-option
                                         :label="item.filename"
                                         :value="item.id"
-                                        v-for="item in csvFileTableData">
+                                        v-for="item in csvFileList">
                                 </el-option>
                             </el-select>
-                            <!-- 选择MModel文件 -->
+                            <!-- 选择Model文件 -->
                             <el-select
                                     @change="changeValue"
                                     placeholder="请选择"
@@ -73,7 +73,7 @@
                                 <el-option
                                         :label="item.filename"
                                         :value="item.id"
-                                        v-for="item in modelFileTableData">
+                                        v-for="item in modelFileList">
                                 </el-option>
                             </el-select>
                             <!-- 选择算法 -->
@@ -87,24 +87,6 @@
                                         :value="item"
                                         v-for="item in node.selection"></el-option>
                             </el-select>
-                            <!-- 下载文件 -->
-                            <div style="text-align: center;"
-                                 v-if="node.type==='download'">
-                                <el-button
-                                        @click="downloadFile"
-                                        plain
-                                        type="info">
-                                    {{ node.name }}
-                                </el-button>
-                            </div>
-                            <!-- 预览文件 -->
-                            <detail-preview
-                                    :node_id="item.getModel().id"
-                                    v-if="node.type === 'preview'"/>
-                            <visual-file
-                                    :node_id="item.getModel().id"
-                                    v-if="node.type==='visualization'"
-                                    v-show="!isShowEcharts"/>
                         </el-form-item>
                     </el-form>
                 </el-scrollbar>
@@ -119,7 +101,6 @@
     import visualFile from './components/visualization'
     import graphApi from '@/api/graph'
     import {mapGetters} from 'vuex'
-    import configJS from '@/statics/config'
     import {Notification} from "element-ui";
 
     export default {
@@ -131,8 +112,6 @@
                 graph: {},
                 item: {},
                 visible: false,
-                csvFileTableData: [],
-                modelFileTableData: [],
                 node_detail: {},
                 point_detail: {},
                 point_options: [
@@ -149,52 +128,42 @@
             }
         },
         computed: {
-            ...mapGetters(['isShowPreview', 'isShowEcharts', 'docHeight']),
+            ...mapGetters(['docHeight', 'fileList']),
             graphId: {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId;
                 }
-            }
+            },
+
+            // 获取文件列表中的CSV文件
+            csvFileList() {
+                let ans = []
+                for (let i = 0; i < this.fileList.length; i++) {
+                    if (this.fileList[i].filename.endsWith("csv")) {
+                        ans.push(this.fileList[i])
+                    }
+                }
+                return ans
+            },
+
+            // 获取文件列表中的model文件
+            modelFileList() {
+                let ans = []
+                for (let i = 0; i < this.fileList.length; i++) {
+                    if (this.fileList[i].filename.endsWith("m")) {
+                        ans.push(this.fileList[i])
+                    }
+                }
+                return ans
+            },
         },
         components: {
             visualFile,
         },
         created() {
-            this.init();
             this.bindEvent();
         },
         methods: {
-            init() {
-                this.getFileList();
-            },
-            getFileList() {
-                this.axios({
-                    method: 'get',
-                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-                }).then(res => {
-                    this.fileTableData = Array(res.data.data.list)[0]
-                    this.fileTableDataNotSort = this.fileTableData.concat()
-                    this.csvFileTableData = []
-                    this.modelFileTableData = []
-                    for (let i = 0; i < this.fileTableData.length; i++) {
-                        let item = this.fileTableData[i]
-                        let TIndex = item.buildtime.indexOf('T')
-                        let pointIndex = item.buildtime.indexOf('.')
-                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)
-                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB'
-                        if (this.fileTableData[i].filename.endsWith("csv")) {
-                            this.csvFileTableData.push(this.fileTableData[i])
-                        } else {
-                            this.modelFileTableData.push(this.fileTableData[i])
-                        }
-                    }
-                }).catch(err => {
-                    this.$message({
-                        message: err,
-                        type: 'error'
-                    })
-                })
-            },
             bindEvent() {
                 let self = this
                 eventBus.$on('afterAddPage', page => {
@@ -210,7 +179,7 @@
                             );
                             self.node_detail = item.target.getModel().node_detail;
                             self.point_detail = item.target.getModel().point_detail;
-                            this.getFileList();
+                            this.$store.dispatch("app/getFileList")
                         } else {
                             self.status = 'canvas-selected';
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null);
@@ -221,12 +190,6 @@
                         }
                     })
                 })
-            },
-
-            downloadFile() {
-                location.href = `${configJS.BASE_API}download_file?graphId=${this.graphId}&nodeId=${
-                    this.item.getModel().id
-                }`;
             },
 
             changeValue(node) {
@@ -250,6 +213,7 @@
                 this.graph.update(this.item, model);
             },
 
+            // 检查输入内容中括号是否匹配
             checkBraces(braces) {
                 let leftBraReg = /[\(\{\[]/, stack = [], bracket, rightBracket
                 braces = braces.split('')

@@ -1,7 +1,7 @@
+import jwt from '@/utils/jwt'
 import auth from '@/utils/auth'
 import userApi from '@/api/user.js'
 import { Message } from 'element-ui'
-import jwt from '@/utils/jwt'
 
 const state = {
   token: auth.getToken(),

@@ -68,15 +68,9 @@
                         class="command iconfont icon-select"
                         data-command="multiSelect"
                         title="多选"></i>
-                <!-- <i
-                  :class="addGroup?'':'disable'"
-                  @click="handleAddGroup"
-                  class="command iconfont icon-group"
-                  data-command="addGroup"
-                  title="成组"
-                ></i>
-                <i class="command iconfont icon-ungroup disable" data-command="unGroup" title="解组"></i>-->
-                <el-button @click="isShowFileManagement = true" type="primary">项目文件管理</el-button>
+                <el-button @click="showFileManage()" type="primary">
+                    项目文件管理
+                </el-button>
                 <el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
                 <el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
                     {{testRunning ? "停止运行" : "运行项目"}}
@@ -89,9 +83,6 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <!--						<el-dropdown-item>-->
-                        <!--							<span @click="importPythonFile()">导入.py文件</span>-->
-                        <!--						</el-dropdown-item>-->
                         <el-dropdown-item>
                             <span @click="isShowImportManage = true">导入.gph文件</span>
                         </el-dropdown-item>
@@ -262,6 +253,12 @@
                 eventBus.$on('selectAll', () => {
                     self.handleSelectAll()
                 })
+            },
+            /**
+             * 显示项目文件管理dialog
+             */
+            showFileManage() {
+                this.isShowFileManagement = true
             },
             handleUndo() {
                 if (this.undoList.length > 0) this.command.undo()

@@ -83,7 +83,7 @@
                 title="恢复结点">
             <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
             <div style="margin: 15px 0;"></div>
-            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+            <el-checkbox-group v-model="checkedNodes" @change="handleCheckedNodesChange">
                 <el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
             </el-checkbox-group>
             <el-button
@@ -98,14 +98,14 @@
 
 
 <script>
-    import eventBus from '@/utils/eventBus'
     import {mapGetters} from 'vuex'
+    import eventBus from '@/utils/eventBus'
 
     export default {
         data() {
             return {
                 checkAll: false,
-                checkedCities: [],
+                checkedNodes: [],
                 cities: [],
                 isIndeterminate: true,
 
@@ -148,11 +148,11 @@
         },
         methods: {
             handleCheckAllChange(val) {
-                this.checkedCities = val ? this.cities : []
+                this.checkedNodes = val ? this.cities : []
                 this.isIndeterminate = false
             },
 
-            handleCheckedCitiesChange(value) {
+            handleCheckedNodesChange(value) {
                 let checkedCount = value.length
                 this.checkAll = checkedCount === this.cities.length
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
@@ -237,14 +237,14 @@
             },
 
             recoveryTreeNode() {
-                console.log(this.checkedCities)
+                console.log(this.checkedNodes)
                 let data = {
                     graphid: this.$route.params.id,
                     checked: [],
                 }
                 for (let i = 0; i < this.cities.length; i++) {
-                    for (let j = 0; j < this.checkedCities.length; j++) {
-                        if (this.cities[i].name === this.checkedCities[j]) {
+                    for (let j = 0; j < this.checkedNodes.length; j++) {
+                        if (this.cities[i].name === this.checkedNodes[j]) {
                             data.checked.push(this.cities[i])
                         }
                     }

@@ -146,10 +146,9 @@
 </template>
 
 <script>
+	import {mapGetters} from "vuex";
 	import fileApi from '@/api/file';
-	import {
-		Notification
-	} from 'element-ui';
+	import {Notification} from 'element-ui';
 	import Message from "element-ui/packages/message/src/main";
 
 	export default {
@@ -223,6 +222,9 @@
 
 				fileTableData: [],
 			};
+		},
+		computed: {
+			...mapGetters(['docHeight', 'fileList']),
 		},
 		methods: {
 			handleDelete(index, row) {
