@@ -15,11 +15,4 @@ export default {
             data
         })
     },
-    createNode(data) {
-        return request({
-            url: '/create_node',
-            method: 'post',
-            data
-        })
-    },
 }
