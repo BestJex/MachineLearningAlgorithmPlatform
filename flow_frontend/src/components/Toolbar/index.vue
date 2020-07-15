@@ -83,7 +83,7 @@
                 </el-button>
                 <el-button @click="checkGraph" type="success">检查图</el-button>
                 <el-button @click="getTerminal" type="success">运行信息</el-button>
-                <el-dropdown style="float: right; margin-right: 10px;">
+                <el-dropdown style="margin-left: 10px;">
                     <el-button type="primary">
                         文件
                         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -523,7 +523,8 @@
                         } else if (data.status === "finished") {
                             let item = self.graph.findById(data.name);
                             self.graph.update(item, {status: 'complete'});
-                            self.terminalContent = data.name + "运行完毕" + "<br>"
+                            self.terminalContent = `<p style="color: #3a8ee6;line-height: 10px">${data.name}运行完毕</p>`
+							self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                         }
                     }
                     if (data.type === 3) {
@@ -540,7 +541,7 @@
                         self.stopRuning()
                     }
                     if (data.type === 5) {
-                        self.terminalContent = "项目运行完毕<br>"
+                        self.terminalContent = "<p style='color: #13ce66'>项目运行完毕</p>"
                         self.graph.save()
                         self.stopRuning()
                     }
@@ -554,6 +555,7 @@
                 }
             },
             runProject() {
+                this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
                 this.testRunning = true
                 this.buildWebSocket(this.graphId)
             },

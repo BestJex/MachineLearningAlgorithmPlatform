@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main">
         <div
                 :style="`left: ${itemWidth}px; height: 500px; margin-top: 100px;display: ${$store.state.app.operation ? 'block' : 'none'}`"
                 @mousedown="onResizeMouseDown"
@@ -127,6 +127,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.main {
+		/*height: calc(100vh - 45px);*/
+	}
+
     // 隐藏滚动条
     ::-webkit-scrollbar {
         display: none
@@ -139,8 +143,8 @@
         background: rgb(246, 249, 252);
         border-right: 1px solid #e6e9ed;
         /*以下两行代码*/
-        height: 100%;
-        overflow: scroll;
+        height: calc(100vh - 60px);
+		overflow-y: scroll;
         /*设置超出滚动*/
     }
 

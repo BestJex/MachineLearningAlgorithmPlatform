@@ -8,7 +8,7 @@
                    :on-remove="handleRemove"
                    :on-success="onUploadSucc"
                    :headers="{Authorization: 'JWT ' + token}"
-                   accept=".json"
+                   accept=".gph"
                    :action="base_api + 'loadconf'"
                    class="upload-demo"
                    :show-file-list="true"

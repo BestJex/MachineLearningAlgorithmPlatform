@@ -21,6 +21,7 @@ const getters = {
     clickNode: state => state.app.click_node,
     terminalHeight: state => state.app.terminal_height,
     runningComplete: state => state.app.running_complete,
+    isOnCircle: state => state.app.is_on_circle,
     token: state => state.user.token,
     username: state => state.user.username
 }
