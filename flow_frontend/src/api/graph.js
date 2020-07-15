@@ -72,11 +72,4 @@ export default {
             data
         })
     },
-
-    getCategory() {
-        return request({
-            url: '/category/',
-            method: 'get'
-        })
-    }
 }

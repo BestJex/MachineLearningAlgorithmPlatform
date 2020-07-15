@@ -21,7 +21,6 @@ const state = {
 
     file_list: [],
     node_list: [],
-    category: [],
 
     is_show_preview: false,
     is_show_visual: false,
@@ -75,9 +74,6 @@ const mutations = {
     },
     SET_NODELIST: (state, node_list) => {
         state.node_list = node_list
-    },
-    SET_CATEGORY: (state, category) => {
-        state.category = category
     },
     SET_ISSHOWPREVIEW: (state, is_show_preview) => {
         state.is_show_preview = is_show_preview
@@ -138,11 +134,6 @@ const actions = {
         var canvas_height = document_height - state.topbar_height
         commit('SET_CANVASWIDTH', canvas_width)
         commit('SET_CANVASHEIGHT', canvas_height)
-    },
-    getCategory({ commit }) {
-        graphApi.getCategory().then(res => {
-            commit('SET_CATEGORY', res.data)
-        })
     },
     uniqueId({ commit }) {
         return new Promise(resolve => {
