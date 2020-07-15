@@ -1,6 +1,6 @@
 <template>
 	<div
-		:style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;`"
+		:style="`margin-left: ${itemWidth}px; margin-right: ${detailWidth}px; height: 90%;min-width: 800px`"
 		@click="clickCanvas"
 		@dragover.prevent
 		@drop="handleDrop">
@@ -9,9 +9,11 @@
 			class="graph-container"
 			style="position: relative; height: 100%;"
 			@contextmenu.prevent="onContextmenu">
+
 			<div :style="{display: this.$store.state.app.terminal_display}" ref="terminal">
 				<Terminal/>
 			</div>
+
 		</div>
 
 		<el-dialog
@@ -110,6 +112,7 @@
 
         watch: {
             canvasWidth: function (val) {
+                val = val <= 800 ? 800 : val  // 防止出现画布在浏览器尺寸压缩时候的白带（草！）
                 this.graph.changeSize(val, this.canvasHeight)
             },
             canvasHeight: function (val) {
@@ -271,7 +274,7 @@
                 this.graph = new G6.Graph({
                     container: 'graph-container',
                     height: height,
-                    width: width,
+                    width: width <= 800 ? 800 : width,
                     modes: {
                         default: this.supportBehavior,
                         moveCanvas: ['drag-canvas'],
