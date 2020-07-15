@@ -349,10 +349,10 @@
              */
             handleElDragEnd(node, _node, p, e) {
                 // console.log(node);
+				let data = {}
                 if (this.isAllowDrop) {
                     const item = JSON.parse(JSON.stringify(node.data))
                     item.template_id = item.id
-                    let data = {}
                     Object.assign(data, item)
                     if (this.page) {
                         const graph = this.page.graph
@@ -381,9 +381,13 @@
                         data.shape = 'customNode';
                         data.type = 'node';
                         this.command.executeCommand('add', [data])
+
                     }
                     this.$store.commit('app/SET_ALLOWDROP', false)
                 }
+                // 节点进入之后自动保存
+                let graphData = this.$store.state.app.graph_data
+				graphData.nodes.push(data)
             },
 
             /**

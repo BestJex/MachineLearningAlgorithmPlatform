@@ -42,7 +42,6 @@
     			<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   			</span>
 		</el-dialog>
-
 	</div>
 </template>
 
@@ -69,7 +68,7 @@
                 isRightClickNode: false, // 判断右击是否点了节点
                 graph: null,
                 data: null, // 图里元素信息
-				params: null,
+                params: null,
                 max_id: 0,
                 isLockCanvas: false,
                 supportBehavior: [
@@ -132,6 +131,7 @@
         },
 
         methods: {
+            // 提交数据
             saveDetail() {
                 let graph = this.graph.save()
                 Object.assign(graph, { id: this.id })
@@ -144,6 +144,7 @@
                         this.data = res.data.data
                         this.isRunning = this.data.status === 'loading'
                         this.forEach(this.data)
+						this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
                         this.$store.commit('app/SET_MAXID', this.max_id)
                         this.graph.read(this.data)
                         if (this.data.nodes.length) {
@@ -204,12 +205,11 @@
                             onClick: () => {
                                 this.params = 0
                                 this.dialogVisible = true
-								console.log(this.$store.state.app.running_complete);
                             },
                             disabled: !this.isRightClickNode,
                             icon: 'el-icon-edit',
                         },
-						{
+                        {
                             label: '查看输出结果',
                             onClick: () => {
                                 this.params = 1
@@ -225,7 +225,7 @@
                     minWidth: 230
                 })
                 this.isRightClickNode = false
-				this.$store.commit('app/SET_CLICKNODE', null)
+                this.$store.commit('app/SET_CLICKNODE', null)
             },
 
             // 获取节点
@@ -234,6 +234,7 @@
                     this.data = res.data.data
                     this.isRunning = this.data.status === 'loading'
                     this.forEach(this.data)
+					this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
                     this.$store.commit('app/SET_MAXID', this.max_id)
                     this.graph.read(this.data)
                     if (this.data.nodes.length) {
