@@ -2,14 +2,14 @@
     <div>
         <hr>
         <el-tooltip placement="top">
-            <div slot="content">{{ $store.state.app.operation ? '取消编辑' : '编辑' }}</div>
+            <div slot="content">{{ $store.state.app.operation ? '结束编辑' : '编辑' }}</div>
             <el-button
                     :type="$store.state.app.operation ? 'primary' : ''"
                     icon="el-icon-edit"
                     circle
                     style="margin-left: 5px;"
                     @click="handleOperation()"
-                    :title="$store.state.app.operation ? '取消编辑' : '编辑'"></el-button>
+                    :title="$store.state.app.operation ? '结束编辑' : '编辑'"></el-button>
         </el-tooltip>
         <el-tooltip placement="top">
             <div slot="content">恢复节点</div>
@@ -284,7 +284,6 @@
                         // 	console.log(this.nodeList[a])
                         // }
                         // }
-
                     }
                 }
                 //          for (let index = 0; index < res.length; index++) {

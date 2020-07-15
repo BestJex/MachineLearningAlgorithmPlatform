@@ -40,13 +40,17 @@
 			</div>
 		</div>
 		<div class="terminal-foot">
-			<div class="foot-left">命令模式</div>
+<!--			<div class="foot-left">命令模式</div>-->
 			<div class="foot-right">
-				<!--				<div class="actions" :style="{ backgroundColor: terminalOpen === 0 ? `#BFD1E2` : `` }" @click="terminalTrans(0)">变量监控</div>-->
+<!--				<div class="actions" :style="{ backgroundColor: terminalOpen === 0 ? `#BFD1E2` : `` }"-->
+<!--					 @click="terminalTrans(0)">变量监控-->
+<!--				</div>-->
 				<div class="actions" :style="{ backgroundColor: terminalOpen === 1 ? `#BFD1E2` : `` }"
 					 @click="terminalTrans(1)">运行历史
 				</div>
-				<!--				<div class="actions" :style="{ backgroundColor: terminalOpen === 2 ? `#BFD1E2` : `` }" @click="terminalTrans(2)">性能监控</div>-->
+<!--				<div class="actions" :style="{ backgroundColor: terminalOpen === 2 ? `#BFD1E2` : `` }"-->
+<!--					 @click="terminalTrans(2)">性能监控-->
+<!--				</div>-->
 			</div>
 		</div>
 	</div>
@@ -103,14 +107,14 @@
         computed: {
             ...mapGetters(['terminalDisplay', 'terminalContent'])
         },
-		watch: {
-			terminalContent(val) {
-			    // 最后一下也可以顺利到底部
-			    setTimeout(() => {
-			        this.$refs.terminal_body.scrollTop = this.$refs.terminal_body.scrollHeight;
-				}, 20)
-			}
-		}
+        watch: {
+            terminalContent(val) {
+                // 最后一下也可以顺利到底部
+                setTimeout(() => {
+                    this.$refs.terminal_body.scrollTop = this.$refs.terminal_body.scrollHeight
+                }, 20)
+            }
+        }
     }
 </script>
 

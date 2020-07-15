@@ -57,7 +57,7 @@
 						<span style="margin-left: 100px;">已上传文件总大小：</span>
 						<span>{{(userTotalSize / 1024).toFixed(2)}}KB / {{userLevel + 1}}G</span>
 					</div>
-					<el-table ref="multipleTable" :data="fileTableData" tooltip-effect="dark" style="width: 100%" :default-sort="{prop: 'buildtime', order: 'descending'}">
+					<el-table ref="multipleTable" :data="fileList" tooltip-effect="dark" style="width: 100%" :default-sort="{prop: 'buildtime', order: 'descending'}">
 						<el-table-column prop="buildtime" label="日期" width="200" sortable></el-table-column>
 						<el-table-column prop="filename" label="文件名" width="200"></el-table-column>
 						<el-table-column prop="size" label="文件大小" width="200" sortable></el-table-column>
@@ -219,8 +219,6 @@
 				newPassword: "",
 				confirmNewPassword: "",
 				changePasswordError: "",
-
-				fileTableData: [],
 			};
 		},
 		computed: {
@@ -327,6 +325,7 @@
 			}
 		},
 		created() {
+			this.$store.dispatch("app/getFileList")
 			// 1.获取用户个人资料
 			this.axios({
 				method: 'get',
@@ -350,26 +349,6 @@
 				this.userLevel = res.data.data.userlvl;
 				this.userTotalSize = res.data.data.totalsize;
 				this.userFileCount = res.data.data.filecount;
-			}).catch(err => {
-				this.$message({
-					message: err,
-					type: 'error'
-				});
-			});
-			// 3.获取用户所有上传文件
-			this.axios({
-				method: 'get',
-				url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-			}).then(res => {
-				this.fileTableData = Array(res.data.data.list)[0];
-				for (let i = 0; i < this.fileTableData.length; i++) {
-					let item = this.fileTableData[i];
-					let TIndex = item.buildtime.indexOf('T');
-					let pointIndex = item.buildtime.indexOf('.');
-					item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex);
-					item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB';
-				}
-				console.log(this.fileTableData);
 			}).catch(err => {
 				this.$message({
 					message: err,
