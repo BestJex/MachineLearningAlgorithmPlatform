@@ -79,7 +79,7 @@
 						   :show-file-list="true"
 						   multiple
 						   drag
-						   style="display: inline-block; margin-left: 20%">
+						   style="display: inline-block; margin-left: 20%;">
 					<i class="el-icon-upload"></i>
 					<div class="el-upload__text">将文件拖到此处，或<em>点击上传（.jpg, .csv, .png）</em></div>
 					<div class="el-upload__text">大小限制10MB</div>

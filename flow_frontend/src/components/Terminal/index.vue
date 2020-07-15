@@ -80,8 +80,8 @@
                 document.onmousemove = (e) => {
                     if (document.body.clientHeight - e.clientY < 100) {
                         this.$refs.hei.style.height = 100
-                    } else if (document.body.clientHeight - e.clientY > document.body.clientHeight * 0.6) {
-                        this.$refs.hei.style.height = document.body.clientHeight * 0.6
+                    } else if (document.body.clientHeight - e.clientY > document.body.clientHeight * 0.5) {
+                        this.$refs.hei.style.height = document.body.clientHeight * 0.5
                     } else {
                         this.$refs.hei.style.height = `${document.body.clientHeight - e.clientY}px`
                         this.$refs.terminal_body.style.height = `${document.body.clientHeight - e.clientY - 70}px`
@@ -122,8 +122,8 @@
 		width: 100%;
 		height: $hei;
 		position: absolute;
-		bottom: 8px;
-		max-height: 70%;
+		bottom: 10px;
+		max-height: 80%;
 	}
 
 	.terminal-top {
@@ -140,6 +140,8 @@
 		.top-right {
 			margin-right: 20px;
 			cursor: pointer;
+			width: 20px;
+			height: 20px;
 		}
 
 		.a {

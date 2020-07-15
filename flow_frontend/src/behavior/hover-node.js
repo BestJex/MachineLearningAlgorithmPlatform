@@ -1,15 +1,18 @@
+import store from '@/store/index.js'
+
 export default {
     getEvents() {
         return {
             'node:mouseover': 'onMouseover',
             'node:mouseleave': 'onMouseleave',
-            "node:mousedown": "onMousedown"
-        };
+            'node:mousedown': 'onMousedown'
+        }
     },
     onMouseover(e) {
-        const self = this;
-        const item = e.item;
-        const graph = self.graph;
+        // console.log(e)
+        const self = this
+        const item = e.item
+        const graph = self.graph
         const group = item.getContainer()
         group.find(g => {
             if (g._attrs.isOutPointText) {
@@ -19,40 +22,42 @@ export default {
         if (e.target._attrs.isOutPointOut || e.target._attrs.isOutPoint) {
             group.find(g => {
                 if (g._attrs.isInPoint || g._attrs.isOutPoint) {
-                    g.attr("fill", "#fff")
+                    g.attr('fill', '#fff')
+                    store.commit('app/SET_ISONCIRCLE', true)
                 }
                 if (g._attrs.isOutPoint) {
                     if (g._attrs.id === e.target._attrs.parent) {
                         group.find(gr => {
                             if (gr._attrs.id === g._attrs.id) {
-                                gr.attr('fill', "#1890ff")
-                                gr.attr('opacity',1)
+                                gr.attr('fill', '#1890ff')
+                                gr.attr('opacity', 1)
                             }
                         })
                     }
                     if (g._attrs.id === e.target._attrs.id) {
-                        g.attr("fill", "#1890ff")
-                        g.attr('opacity',1)
+                        g.attr('fill', '#1890ff')
+                        g.attr('opacity', 1)
                     }
 
                 }
-            });
-            e.target.attr("cursor", "crosshair");
-            this.graph.paint();
+            })
+            e.target.attr('cursor', 'crosshair')
+            this.graph.paint()
+
         }
         if (item.hasState('selected')) {
             // return
         } else {
             if (self.shouldUpdate.call(self, e)) {
-                graph.setItemState(item, 'hover', true);
+                graph.setItemState(item, 'hover', true)
             }
         }
-        graph.paint();
+        graph.paint()
     },
     onMouseleave(e) {
-        const self = this;
-        const item = e.item;
-        const graph = self.graph;
+        const self = this
+        const item = e.item
+        const graph = self.graph
         const group = item.getContainer()
         group.find(g => {
             if (g._attrs.isOutPointText) {
@@ -61,21 +66,22 @@ export default {
         })
         group.find(g => {
             if (g._attrs.isInPoint || g._attrs.isOutPoint) {
-                g.attr("fill", "#fff")
+                g.attr('fill', '#fff')
+                store.commit('app/SET_ISONCIRCLE', false)
             }
-        });
+        })
         if (self.shouldUpdate.call(self, e)) {
-            if(!item.hasState('selected'))
-            graph.setItemState(item, 'hover', false);
+            if (!item.hasState('selected'))
+                graph.setItemState(item, 'hover', false)
         }
-        graph.paint();
+        graph.paint()
     },
     onMousedown(e) {
-        if(e.target._attrs.isOutPoint ||e.target._attrs.isOutPointOut){
+        if (e.target._attrs.isOutPoint || e.target._attrs.isOutPointOut) {
             this.graph.setMode('addEdge')
-        }else{
+        } else {
             // this.graph.setMode('moveNode')
         }
     },
 
-};
+}
