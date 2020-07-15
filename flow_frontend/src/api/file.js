@@ -8,7 +8,7 @@ export default {
             data
         })
     },
-    isFilenamehValid(data) {
+    isFileNameValid(data) {
         return request({
             url: '/is_filename_valid',
             method: 'POST',

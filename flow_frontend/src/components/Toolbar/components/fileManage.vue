@@ -282,7 +282,7 @@
             beforeRemove(file, fileList) {
                 return new Promise((resolve, reject) => {
                     this.$confirm(`确定移除 ${file.name}？`).then(res => {
-                        return fileApi.isFilenamehValid({
+                        return fileApi.isFileNameValid({
                             filename: file.name,
                             graphId: this.graphId
                         })
@@ -315,7 +315,7 @@
                     return false
                 }
                 return new Promise((resolve, reject) => {
-                    fileApi.isFilenamehValid({
+                    fileApi.isFileNameValid({
                         filename: file.name,
                         graphId: this.graphId
                     }).then(res => {
