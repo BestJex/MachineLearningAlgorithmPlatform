@@ -77,7 +77,7 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .editor {
         position: relative;
         width: 100%;
@@ -86,6 +86,7 @@
         -webkit-user-select: none;
         -ms-user-select: none;
 		min-width: 1165px;
+		height: calc(100vh - 60px);
     }
 
     .bottom-container {

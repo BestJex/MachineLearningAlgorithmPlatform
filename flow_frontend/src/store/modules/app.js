@@ -29,7 +29,8 @@ const state = {
     terminal_display: 'none',
     terminalContent: '',
     operation: false,
-    clickNode: null
+    clickNode: null,
+    is_on_circle: false // 判断鼠标是否在节点的输入输出圈上
 }
 
 const mutations = {
@@ -105,6 +106,9 @@ const mutations = {
     },
     SET_RUNNINGCOMPLETE: (state, running_complete) => {
         state.running_complete = running_complete
+    },
+    SET_ISONCIRCLE: (state, is_on_circle) => {
+        state.is_on_circle = is_on_circle
     }
 }
 

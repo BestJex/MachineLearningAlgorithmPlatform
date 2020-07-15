@@ -133,8 +133,9 @@
 
 <style lang="scss" scoped>
     .detailpannel {
-        height: 100%;
+        height: calc(100vh - 60px);
         position: absolute;
+		top: 0;
         right: 0;
         z-index: 2;
         // background: #f7f9fb;

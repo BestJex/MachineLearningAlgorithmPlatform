@@ -18,7 +18,6 @@ const customNode = {
              * @return {G.Shape} 绘制的图形，通过 node.get('keyShape') 可以获取到
              */
             draw(cfg, group) {
-                // console.log(cfg);
                 const width = 200; // 节点宽高
                 const height = 34;
                 const color = "#1890ff";

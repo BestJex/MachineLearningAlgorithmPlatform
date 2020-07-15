@@ -38,7 +38,7 @@
         color: #2c3e50;
         line-height: 1.5;
         font-size: 15px;
-        height: 100%;
+        max-height: 100vh;
 		overflow: hidden;
         margin: 0;
         /* margin-top: 60px; */

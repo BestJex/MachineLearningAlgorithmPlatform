@@ -204,6 +204,7 @@
                             onClick: () => {
                                 this.params = 0
                                 this.dialogVisible = true
+								console.log(this.$store.state.app.running_complete);
                             },
                             disabled: !this.isRightClickNode,
                             icon: 'el-icon-edit',
@@ -214,7 +215,7 @@
                                 this.params = 1
                                 this.dialogVisible = true
                             },
-                            disabled: !this.$store.state.app.running_complete,
+                            disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
                             icon: 'el-icon-edit',
                         },
                     ],
