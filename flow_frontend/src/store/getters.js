@@ -21,6 +21,7 @@ const getters = {
     runningComplete: state => state.app.running_complete,
     isOnCircle: state => state.app.is_on_circle,
     graphData: state => state.app.graph_data,
+    circleInfo: state => state.app.circle_info,
     token: state => state.user.token,
     username: state => state.user.username
 }
