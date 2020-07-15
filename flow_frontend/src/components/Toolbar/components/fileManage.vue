@@ -67,7 +67,7 @@
 			<el-tab-pane label="上传文件">
 				<el-upload :before-remove="beforeRemove"
 						   :before-upload="beforeUpload"
-						   :data="uploadData"
+						   :data="{graphId: this.$route.params.id}"
 						   :file-list="uploadFileList"
 						   :on-error="onUploadErr"
 						   :on-remove="handleRemove"
@@ -91,9 +91,9 @@
 
 <script>
     import fileApi from '@/api/file'
-	import {mapGetters} from 'vuex'
-	import configJS from '@/statics/config'
-	import {Notification} from 'element-ui'
+    import { mapGetters } from 'vuex'
+    import configJS from '@/statics/config'
+    import { Notification } from 'element-ui'
 
     export default {
         name: 'file-mange',
@@ -103,7 +103,7 @@
                 search: '',
                 timeout: null,
                 restaurants: [],
-				uploadFileList: [],		// 上传文件列表
+                uploadFileList: [],		// 上传文件列表
                 fileListNotSort: [],
                 multipleSelection: [],
                 base_api: configJS.BASE_API,
@@ -187,7 +187,7 @@
                         type: 'success',
                         duration: 3000
                     })
-					this.$store.dispatch("app/getFileList")
+                    this.$store.dispatch('app/getFileList')
                 }).catch(error => {
                     this.$message({
                         message: error,
@@ -207,24 +207,24 @@
             },
 
             toggleSelectionDelete() {
-				this.multipleSelection.forEach(item => {
-					fileApi.deleteFile({
-						filelist: [item.id]
-					}).then(res => {
-						Notification({
-							title: '成功',
-							message: '文件移除成功',
-							type: 'success',
-							duration: 3000
-						})
-						this.$store.dispatch("app/getFileList")
-					}).catch(error => {
-						this.$message({
-							message: error,
-							type: 'error'
-						})
-					})
-				})
+                this.multipleSelection.forEach(item => {
+                    fileApi.deleteFile({
+                        filelist: [item.id]
+                    }).then(res => {
+                        Notification({
+                            title: '成功',
+                            message: '文件移除成功',
+                            type: 'success',
+                            duration: 3000
+                        })
+                        this.$store.dispatch('app/getFileList')
+                    }).catch(error => {
+                        this.$message({
+                            message: error,
+                            type: 'error'
+                        })
+                    })
+                })
             },
 
             handleSelectionChange(val) {
@@ -241,7 +241,7 @@
                         type: 'success',
                         duration: 3000
                     })
-					this.$store.dispatch("app/getFileList")
+                    this.$store.dispatch('app/getFileList')
                 })
             },
 
@@ -305,30 +305,7 @@
                     type: 'success',
                     duration: 3000
                 })
-                this.$store.commit('app/SET_FILELIST', res.data)
-                this.uploadData.graphId = this.graphId
-                let projectId = this.$route.params.id
-                this.axios({
-                    method: 'get',
-                    url: `http://39.105.21.62/flow/api/filelistall?username=${localStorage.getItem('username')}`,
-                }).then(res => {
-                    this.fileList = this.fileListNotSort = Array(res.data.data.list)[0]
-                    for (let i = 0; i < this.fileList.length; i++) {
-                        let item = this.fileList[i]
-                        if (item.graphid.toString() !== projectId) {
-                            this.fileList.splice(i, 1)
-                        }
-                        let TIndex = item.buildtime.indexOf('T')
-                        let pointIndex = item.buildtime.indexOf('.')
-                        item.buildtime = item.buildtime.substring(0, TIndex) + ' ' + item.buildtime.substring(TIndex + 1, pointIndex)
-                        item.size = (parseInt(item.size) / 1024).toFixed(2) + 'KB'
-                    }
-                }).catch(err => {
-                    this.$message({
-                        message: err,
-                        type: 'error'
-                    })
-                })
+                this.$store.dispatch('app/getFileList')
             },
             onUploadErr(res, file, fileList) {
                 console.log(res)
@@ -350,14 +327,14 @@
                             let size1, size2
                             size1 = parseFloat(a.size.substring(0, a.size.length - 2))
                             size2 = parseFloat(b.size.substring(0, b.size.length - 2))
-							return size1 - size2
+                            return size1 - size2
                         })
                     } else if (res.order === 'ascending') {
                         this.fileList.sort((a, b) => {
                             let size1, size2
                             size1 = parseFloat(a.size.substring(0, a.size.length - 2))
                             size2 = parseFloat(b.size.substring(0, b.size.length - 2))
-							return size2 - size1
+                            return size2 - size1
                         })
                     } else if (res.order === null) {
                         // 去他妈的深拷贝
@@ -365,17 +342,17 @@
                     }
                 } else if (res.prop === 'buildtime') {
                     if (res.order === 'descending') {
-						this.fileList.sort((a, b) => {
-						    return a.buildtime < b.buildtime ? 1 : -1
-						})
-					} else if (res.order === 'descending') {
-						this.fileList.sort((a, b) => {
-						    return a.buildtime > b.buildtime ? 1 : -1
-						})
-					} else if (res.order === null) {
+                        this.fileList.sort((a, b) => {
+                            return a.buildtime < b.buildtime ? 1 : -1
+                        })
+                    } else if (res.order === 'descending') {
+                        this.fileList.sort((a, b) => {
+                            return a.buildtime > b.buildtime ? 1 : -1
+                        })
+                    } else if (res.order === null) {
                         this.fileList = this.fileListNotSort.concat()
-					}
-				}
+                    }
+                }
             },
         }
     }

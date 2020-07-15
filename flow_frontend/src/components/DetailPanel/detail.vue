@@ -180,7 +180,7 @@
                             self.node_detail = item.target.getModel().node_detail
                             self.point_detail = item.target.getModel().point_detail
                             this.$store.dispatch('app/getFileList')
-                            console.log(self.node_detail)
+                            // console.log(self.node_detail)
                         } else {
                             self.status = 'canvas-selected'
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null)
