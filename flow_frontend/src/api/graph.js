@@ -72,4 +72,12 @@ export default {
             data
         })
     },
+
+    getOutputInfo(data) {
+        return request({
+            url: '/dataupload',
+            method: 'get',
+            params: data
+        })
+    }
 }

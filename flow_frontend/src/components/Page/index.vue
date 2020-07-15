@@ -217,6 +217,19 @@
                             onClick: () => {
                                 this.params = 1
                                 this.dialogVisible = true
+								let submitInfo = {
+                                    graphid: parseInt(this.$route.params.id),
+									circleid: this.$store.state.app.circle_info.id
+								}
+								console.log(submitInfo);
+								// console.log(this.$route.params.id)
+								// console.log(this.input.id)
+								console.log(this.$store.state.app.circle_info.id);
+                                graphApi.getOutputInfo(submitInfo).then(res => {
+                                    console.log(res);
+								}).catch(err => {
+								    console.log(err);
+								})
                             },
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
                             icon: 'el-icon-edit',

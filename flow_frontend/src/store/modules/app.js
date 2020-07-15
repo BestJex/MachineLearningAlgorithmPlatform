@@ -31,7 +31,8 @@ const state = {
     terminalContent: '',
     operation: false,
     clickNode: null,
-    is_on_circle: false // 判断鼠标是否在节点的输入输出圈上
+    is_on_circle: false, // 判断鼠标是否在节点的输入输出圈上
+    circle_info: null, // 输出结果
 }
 
 const mutations = {
@@ -113,6 +114,9 @@ const mutations = {
     },
     SET_GRAPHDATA: (state, graph_data) => {
         state.graph_data = graph_data
+    },
+    SET_CIRCLEINFO: (state, circle_info) => {
+        state.circle_info = circle_info
     }
 }
 

@@ -525,7 +525,7 @@
                     }
                     if (data.type === 3) {
                         self.addErrorFrame([data.name])
-                        self.terminalContent = data.name + '运行出错' + '<br>'
+                        self.terminalContent = `<p style="color: #dd6161">${data.name}运行出错</p>`
                     }
                     if (data.type === 4) {
                         Notification({
@@ -533,7 +533,7 @@
                             message: data.value,
                             type: 'error',
                         })
-                        self.terminalContent = data.value + '<br>'
+                        self.terminalContent = `<p style="color: #dd6161">${data.value}</p>`
                         self.stopRuning()
                     }
                     if (data.type === 5) {

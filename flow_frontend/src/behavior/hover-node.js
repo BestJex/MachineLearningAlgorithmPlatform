@@ -24,6 +24,12 @@ export default {
                 if (g._attrs.isInPoint || g._attrs.isOutPoint) {
                     g.attr('fill', '#fff')
                     store.commit('app/SET_ISONCIRCLE', true)
+                    // 拦截，防止给全局传空数据（本身机制问题）
+                    if (e.target._attrs.parent) {
+                        console.log(e);
+                        store.commit('app/SET_CIRCLEINFO', { id: e.target._attrs.parent })
+                    }
+
                 }
                 if (g._attrs.isOutPoint) {
                     if (g._attrs.id === e.target._attrs.parent) {
@@ -68,6 +74,7 @@ export default {
             if (g._attrs.isInPoint || g._attrs.isOutPoint) {
                 g.attr('fill', '#fff')
                 store.commit('app/SET_ISONCIRCLE', false)
+                // store.commit('app/SET_CIRCLEINFO', null)
             }
         })
         if (self.shouldUpdate.call(self, e)) {
