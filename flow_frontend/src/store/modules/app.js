@@ -3,6 +3,7 @@ import graphApi from '@/api/graph'
 import {Message} from "element-ui";
 
 const state = {
+    graphData: [],
     fileList: [],           // 用户上传的所有文件
 
     is_focus_canvas: false,
@@ -109,6 +110,9 @@ const mutations = {
     },
     SET_ISONCIRCLE: (state, is_on_circle) => {
         state.is_on_circle = is_on_circle
+    },
+    SET_GRAPHDATA: (state, graph_data) => {
+        state.graph_data = graph_data
     }
 }
 
