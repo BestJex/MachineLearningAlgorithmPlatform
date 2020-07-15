@@ -157,7 +157,6 @@
             }
         },
         components: {
-            detailPreview,
             visualFile,
         },
         created() {
