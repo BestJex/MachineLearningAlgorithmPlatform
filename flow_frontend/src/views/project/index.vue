@@ -75,7 +75,7 @@
 			</el-form>
 
 			<div class="dialog-footer" slot="footer">
-				<el-button :disabled="form.projectName === '' || form.owner === ''" @click="createProject"
+				<el-button :disabled="form.projectName === ''" @click="createProject"
 						   type="primary">完 成
 				</el-button>
 			</div>
