@@ -29,17 +29,29 @@
 								v-if="node.type==='object' || node.type==='str' || node.type==='model'"
 								v-model="node.value"></el-input>
 							<!-- int/随机数类型输入框 -->
-							<el-input-number
-								@change="changeValue(node)"
-								v-if="node.type === 'int' || node.type === 'RandomState'"
-								type="number"
-								v-model="node.value"></el-input-number>
+							<el-tooltip class="item" effect="dark" content="int类型" placement="left">
+								<el-input
+									@change="changeValue(node)"
+									v-if="(node.type === 'int' || node.type === 'RandomState') && node.value !== 'None'"
+									type="number" :DangerColor="node.value.toString().indexOf('.') !== -1 ? 'danger' : ''"
+									v-model="node.value"></el-input>
+							</el-tooltip>
+							<!-- int && value 可以为None或数字类型输入框 -->
+							<el-tooltip class="item" effect="dark" content="None或数字" placement="left">
+								<el-input
+									@change="changeValue(node)"
+									v-if="node.type === 'int' && node.value === 'None'"
+									type="text" :DangerColor="node.value.indexOf('.') !== -1 ? 'danger' : ''"
+									v-model="node.value"></el-input>
+							</el-tooltip>
 							<!-- float类型输入框 -->
-							<el-input-number
-								@change="changeValue"
-								v-if="node.type==='float'"
-								type="number"
-								v-model="node.value"></el-input-number>
+							<el-tooltip class="item" effect="dark" content="float类型" placement="left">
+								<el-input-number
+									@change="changeValue"
+									v-if="node.type==='float'"
+									type="number"
+									v-model="node.value"></el-input-number>
+							</el-tooltip>
 							<!-- 滑动器 -->
 							<el-slider
 								@change="changeValue"
@@ -248,8 +260,7 @@
             },
 
             checkIntInput(node) {
-                if (!(parseInt(node.value, 10) === node.value)) {
-                    node.value = Math.floor(node.value)
+                if (node.value.indexOf('.') !== -1) {
                     Notification({
                         title: '错误',
                         message: `${node.label}必须为整数！`,
@@ -346,5 +357,19 @@
 		.el-dialog__wrapper {
 			z-index: -1 !important;
 		}
+	}
+</style>
+
+<style>
+	.el-input__inner[DangerColor="danger"] {
+		background-color: #F56C6C;
+	}
+
+	.el-input__inner[WarningColor="warning"] {
+		background-color: #E6A23C;
+	}
+
+	.el-input__inner[SuccessColor="success"] {
+		background-color: #67C23A;
 	}
 </style>

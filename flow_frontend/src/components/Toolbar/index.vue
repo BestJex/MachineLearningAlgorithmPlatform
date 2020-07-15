@@ -506,7 +506,7 @@
                 let self = this
                 const socket = new WebSocket(api.WS_API + 'runproject')
                 socket.onopen = function () {
-                    console.log('WebSocket open')      //成功连接上Websocket
+                    // console.log('WebSocket open')      //成功连接上Websocket
                     window.s.send(data)
                 }
                 socket.onmessage = function (e) {
@@ -547,7 +547,7 @@
             closeWebSocket() {
                 if (window.s) {
                     window.s.close()		//关闭websocket
-                    console.log('websocket已关闭')
+                    // console.log('websocket已关闭')
                 }
             },
             runProject() {
