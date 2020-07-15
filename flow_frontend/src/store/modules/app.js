@@ -25,7 +25,7 @@ const state = {
     node_list: [],
 
     max_id: 0,
-    graph_id: 0,
+    graph_id: 0,  // 项目id
 
     terminal_display: 'none',
     terminalContent: '',

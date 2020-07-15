@@ -101,6 +101,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import eventBus from '@/utils/eventBus'
+    import graphApi from '@/api/graph'
 
     export default {
         data() {
@@ -141,6 +142,7 @@
             this.bindEvent()
             // 1.获取左侧树形图
             this.getTree()
+			this.id = this.$store.state.app.graph_id
         },
         watch: {
             filterText(val) {
@@ -388,6 +390,21 @@
                 // 节点进入之后自动保存
                 let graphData = this.$store.state.app.graph_data
 				graphData.nodes.push(data)
+
+				let subGraph = this.page.graph.save()
+				subGraph.id = this.$route.params.id,
+				console.log(subGraph);
+                let subData = {
+                    graphid: this.$route.params.id,
+                    graph: JSON.stringify(subGraph),
+                }
+                graphApi.sendGraph(subData).then(res => {
+					// 提交成功
+					console.log(res);
+                }).catch(err => {
+                    console.error(err)
+                })
+
             },
 
             /**
