@@ -520,7 +520,7 @@
                         } else if (data.status === "finished") {
                             let item = self.graph.findById(data.name);
                             self.graph.update(item, {status: 'complete'});
-                            self.terminalContent = `<p style="color: #3a8ee6;line-height: 10px">${data.name}运行完毕</p>`
+                            self.terminalContent = `<p style="color: #3a8ee6;line-height: 10px">${item.label}运行完毕</p>`
 							self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                         }
                     }

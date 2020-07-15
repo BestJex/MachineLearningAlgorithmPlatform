@@ -66,7 +66,8 @@
                 @check-change="handleCheckChange"
                 @node-drag-enter="handleDragEnter"
                 @node-drag-leave="handleDragLeave"
-                @node-drag-start="handleElDragStart">
+                @node-drag-start="handleElDragStart"
+				style="margin-bottom: 70px">
                   <span
                           class="custom-tree-node"
                           slot-scope="{ node, data }">
