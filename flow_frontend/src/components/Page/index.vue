@@ -59,14 +59,15 @@
 
 
 			</div>
-			<div v-if="resStatus === 2" style="display: flex;justify-content: space-between;overflow: auto;height: 300px;width: 140px;margin: 0 auto">
-				<div style="width: 50px" >
+			<div v-if="resStatus === 2"
+				 style="display: flex;justify-content: space-between;overflow: auto;height: 300px;width: 140px;margin: 0 auto">
+				<div style="width: 50px">
 					<p>键</p>
-					<p v-for="(item, i) in listInfo[0]">{{item}}</p>
+					<p v-for="(item, i) in listInfo[0]" :key="i">{{item}}</p>
 				</div>
-				<div style="width: 50px" >
+				<div style="width: 50px">
 					<p>值</p>
-					<p v-for="(item, i) in listInfo[1]">{{item}}</p>
+					<p v-for="(item, i) in listInfo[1]" :key="i">{{item}}</p>
 				</div>
 			</div>
 			<div v-if="resStatus === 3">
@@ -106,7 +107,7 @@
                 outputDetails: [],  // 存放具体的输出信息
                 matrixOutputTitle: [],
                 value: 0,
-				listInfo: [[], []],
+                listInfo: [[], []],
                 params: null,
                 max_id: 0,
                 isLockCanvas: false,
@@ -160,7 +161,7 @@
                     this.outputDetails = []
                     this.matrixOutputTitle = []
                     this.value = 0
-					this.list = [[], []]
+                    this.list = [[], []]
                 }
             }
 
@@ -272,44 +273,51 @@
                                 }
                                 graphApi.getOutputInfo(submitInfo).then(res => {
                                     let data = res.data
-                                    console.log(data)
                                     if (data.status === '不支持该节点的查看') {
                                         this.resStatus = 0
                                     } else if (data.status === 'finished') {
                                         if (data.type === 'matrix') {
                                             let value = JSON.parse(data.value)
+                                            console.log(value)
                                             let allInfo = []
                                             this.resStatus = 1
                                             let a = 0, b = 0 // a是宽 b/a是长
                                             for (let cont in value) {
                                                 a++
-                                                this.matrixOutputTitle.push(String(cont))
+
+                                                let regPos = /^\d+(\.\d+)?$/ //非负浮点数
+                                                let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/ //负浮点数
+                                                if (regNeg.test(cont) || regPos.test(cont)) {
+                                                    this.matrixOutputTitle.push(`列${a}`)
+                                                } else {
+                                                    this.matrixOutputTitle.push(cont)
+                                                }
+
                                                 for (let num in value[cont]) {
                                                     b++
                                                     allInfo.push(value[cont][num])
                                                 }
+
                                             }
                                             for (let i = 0; i < b / a; i++) {
                                                 this.outputDetails.push({})
                                                 for (let j = 0; j < a; j++) {
-                                                    Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": ${allInfo[b / a + j]}}`))
+                                                    Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": "${String(allInfo[b / a + j])}"}`))
                                                 }
-
                                             }
                                             console.log(this.outputDetails)
                                         } else if (data.type === 'list') {
                                             this.resStatus = 2
                                             let value = JSON.parse(data.value)
-                                            console.log(value);
+                                            console.log(value)
                                             for (let cont in value) {
-												this.listInfo[0].push(cont)
-												this.listInfo[1].push(value[cont])
-											}
+                                                this.listInfo[0].push(cont)
+                                                this.listInfo[1].push(value[cont])
+                                            }
                                         } else if (data.type === 'num') {
                                             this.resStatus = 3
                                             this.value = data.value
                                         }
-
                                     }
                                 }).catch(err => {
                                     console.log(err)
@@ -320,9 +328,12 @@
                         },
                     ],
                     event,
-                    customClass: 'class-a',
-                    zIndex: 3,
-                    minWidth: 230
+                    customClass:
+                        'class-a',
+                    zIndex:
+                        3,
+                    minWidth:
+                        230
                 })
                 this.isRightClickNode = false
                 this.$store.commit('app/SET_CLICKNODE', null)
@@ -347,7 +358,8 @@
                         duration: 3000,
                     })
                 })
-            },
+            }
+            ,
 
             // 递归读取元素信息
             forEach(json) {
@@ -362,7 +374,8 @@
                         this.forEach(json[val])
                     }
                 }
-            },
+            }
+            ,
 
             init() {
                 const height = this.canvasHeight
@@ -398,22 +411,26 @@
                 this.readData()
                 // 把图信息（整张图）存到全局
                 this.$store.commit('app/SET_GRAPHINFO', this.graph)
-            },
+            }
+            ,
 
             readData() {
                 let data = this.data
                 if (data) {
                     this.graph.read(data)
                 }
-            },
+            }
+            ,
 
             clickCanvas() {
                 this.$store.dispatch('app/setIsFocusCanvas', true)
-            },
+            }
+            ,
 
             handleDrop(e) {
                 this.$store.commit('app/SET_ALLOWDROP', true)
-            },
+            }
+            ,
 
             submitName() {
                 if (!this.input.name) {
