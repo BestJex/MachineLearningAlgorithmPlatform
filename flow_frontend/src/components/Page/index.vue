@@ -26,7 +26,6 @@
 
 			<el-input v-model="input.name" placeholder="请输入内容"></el-input>
 			<span slot="footer" class="dialog-footer">
-
    				<el-button @click="dialogVisible = false">取 消</el-button>
     			<el-button type="primary" @click="submitName">确 定</el-button>
   			</span>
@@ -36,10 +35,37 @@
 			v-else
 			title="修改节点名"
 			:visible.sync="dialogVisible"
-			width="400px"
+			width="700px"
 		>
 			<!--	el-dialog处减少报错，暂时移除 :before-close="handleClose" -->
-			内容
+			<div v-if="resStatus === 0">
+				此节点内容不可查看！
+			</div>
+			<div class="matrix" v-if="resStatus === 1">
+				矩阵信息
+				<!--				<p v-for="(item, name, i) in outputDetails">{{name}}</p>-->
+						<el-table
+							:data="outputDetails"
+							style="margin: 0 auto;"
+						>
+							<el-table-column
+								v-for="(item, i) in matrixOutputTitle" :key="i"
+								:prop="item"
+								:label="item"
+								width="200"
+							>
+							</el-table-column>
+
+						</el-table>
+
+
+			</div>
+			<div v-if="resStatus === 2">
+				数列信息
+			</div>
+			<div v-if="resStatus === 3">
+				单个数字
+			</div>
 			<span slot="footer" class="dialog-footer">
     			<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   			</span>
@@ -66,10 +92,13 @@
                 dialogVisible: false,
                 input: {},
                 status: true,
+                resStatus: 0, // 返回数据的类型 0为不可查看 1为矩阵 2为数列 3位数字
                 interceptor: null, // 拦截器，防止用户的憨憨行为
                 isRightClickNode: false, // 判断右击是否点了节点
                 graph: null,
                 data: null, // 图里元素信息
+                outputDetails: [],  // 存放具体的输出信息
+                matrixOutputTitle: [],
                 params: null,
                 max_id: 0,
                 isLockCanvas: false,
@@ -147,7 +176,7 @@
                         this.data = res.data.data
                         this.isRunning = this.data.status === 'loading'
                         this.forEach(this.data)
-						this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
+                        this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
                         this.$store.commit('app/SET_MAXID', this.max_id)
                         this.graph.read(this.data)
                         if (this.data.nodes.length) {
@@ -213,23 +242,52 @@
                             icon: 'el-icon-edit',
                         },
                         {
+                            // 还需解决问题，对于上面的circle进行拦截
                             label: '查看输出结果',
                             onClick: () => {
                                 this.params = 1
-                                this.dialogVisible = true
-								let submitInfo = {
+                                setTimeout(() => {
+                                    this.dialogVisible = true
+                                }, 100)
+                                let submitInfo = {
                                     graphid: parseInt(this.$route.params.id),
-									circleid: this.$store.state.app.circle_info.id
-								}
-								console.log(submitInfo);
-								// console.log(this.$route.params.id)
-								// console.log(this.input.id)
-								console.log(this.$store.state.app.circle_info.id);
+                                    circleid: this.$store.state.app.circle_info.id
+                                }
                                 graphApi.getOutputInfo(submitInfo).then(res => {
-                                    console.log(res);
-								}).catch(err => {
-								    console.log(err);
-								})
+                                    console.log(res)
+                                    let data = res.data
+                                    if (data.status === '不支持该节点的查看') {
+                                        this.resStatus = 0
+                                    } else if (data.status === 'finished') {
+                                        if (data.type === 'matrix') {
+                                            let value = JSON.parse(data.value)
+                                            console.log(data)
+                                            let allInfo = []
+                                            this.resStatus = 1
+                                            let a = 0, b = 0 // a是宽 b/a是长
+                                            for (let cont in value) {
+                                                a++
+                                                this.matrixOutputTitle.push(cont)
+                                                for (let num in value[cont]) {
+                                                    b++
+                                                    allInfo.push(value[cont][num])
+                                                }
+                                            }
+                                            for (let i = 0; i < b / a; i++) {
+                                                this.outputDetails.push({})
+                                                for (let j = 0; j < a; j++) {
+                                                    Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": ${allInfo[b / a + j]}}`))
+                                                }
+
+                                            }
+                                            console.log(this.matrixOutputTitle)
+                                            console.log(this.outputDetails)
+                                        }
+
+                                    }
+                                }).catch(err => {
+                                    console.log(err)
+                                })
                             },
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
                             icon: 'el-icon-tickets',
@@ -250,7 +308,7 @@
                     this.data = res.data.data
                     this.isRunning = this.data.status === 'loading'
                     this.forEach(this.data)
-					this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
+                    this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
                     this.$store.commit('app/SET_MAXID', this.max_id)
                     this.graph.read(this.data)
                     if (this.data.nodes.length) {
@@ -312,6 +370,8 @@
                 const { editor, command } = this.$parent
                 editor.emit('afterAddPage', { graph: this.graph, command })
                 this.readData()
+                // 把图信息（整张图）存到全局
+                this.$store.commit('app/SET_GRAPHINFO', this.graph)
             },
 
             readData() {
@@ -364,6 +424,22 @@
 </script>
 
 <style lang="scss" scoped>
+	.matrix {
+		height: 450px;
+		min-width: 500px;
+		max-width: 700px;
+		overflow: auto;
+		position: relative;
+	}
 
+	.el-scrollbar__wrap {
+		overflow-x: hidden;
+	}
+
+	.el-table {
+		position: absolute;
+		width: auto;
+		max-width: none;
+	}
 
 </style>

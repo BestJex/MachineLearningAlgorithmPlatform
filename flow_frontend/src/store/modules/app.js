@@ -3,8 +3,9 @@ import graphApi from '@/api/graph'
 import {Message} from "element-ui";
 
 const state = {
-    graphData: [],
+    graph_data: [],          // 图信息(节点和指针）
     fileList: [],           // 用户上传的所有文件
+    graph_info: {},                // 整张图的信息
 
     is_focus_canvas: false,
     document_width: document.documentElement.clientWidth,
@@ -117,6 +118,9 @@ const mutations = {
     },
     SET_CIRCLEINFO: (state, circle_info) => {
         state.circle_info = circle_info
+    },
+    SET_GRAPHINFO: (state, graph_info) => {
+        state.graph_info = graph_info
     }
 }
 

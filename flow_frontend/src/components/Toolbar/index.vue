@@ -204,6 +204,8 @@
                 this.editor = editor
                 this.command = command
             },
+
+            // 所有的方法来源于 behaviors!
             bindEvent() {
                 let self = this
                 eventBus.$on('afterAddPage', page => {
@@ -234,9 +236,12 @@
                         ...self.graph.findAllByState('edge', 'selected')
                     )
                 })
+
+                // 触发删除节点事件
                 eventBus.$on('deleteItem', () => {
                     self.handleDelete()
                 })
+
                 eventBus.$on('muliteSelectEnd', () => {
                     self.multiSelect = false
                     self.selectedItem = self.graph.findAllByState('node', 'selected')
@@ -279,6 +284,40 @@
                     }
                 }
             },
+			// 保存，但是不弹出消息
+            handleSilentSave() {
+                if (this.isAllowSave) {
+                    this.$store.commit('app/SET_ALLOWSAVE', false)
+                    let graph = this.graph.save()
+                    Object.assign(graph, { id: this.graphId })
+                    let data = {
+                        graphid: this.graphId,
+                        graph: JSON.stringify(graph),
+                    }
+                    graphApi.sendGraph(data).then(res => {
+
+                    }).then(() => {
+                        // 注释是为了提高用户体验
+                        // return graphApi.getGraphById({ graphid: this.graphId })
+                    }).then(res => {
+                        // const data = res.data.data
+                        // this.forEach(data)
+                        // this.$store.commit('app/SET_MAXID', this.max_id)
+                        // this.graph.read(data)
+                        // if (data.nodes.length) {
+                        //     this.graph.fitView(100)
+                        // }
+                    }).catch(err => {
+                        Notification({
+                            title: '错误',
+                            message: err,
+                            type: 'error',
+                            duration: 3000
+                        })
+                    })
+                }
+            },
+
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -319,6 +358,7 @@
                 if (this.selectedItem.length > 0) {
                     this.command.executeCommand('delete', this.selectedItem)
                     this.selectedItem = []
+                    this.handleSilentSave()  // 可能不需要提示，可以做两手保存方法，一个是有提示的保存，一个数没有提示的保存，最好是只有在用户自己主动点击保存的时候才会弹出 “保存成功！”
                 }
             },
             getFormatPadding() {

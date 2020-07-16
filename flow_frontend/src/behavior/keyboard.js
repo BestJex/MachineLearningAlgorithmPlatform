@@ -31,8 +31,10 @@ export default {
         switch (code) {
             case this.deleteKeyCode:
             case this.backKeyCode:
-                if (store.getters.isFocusCanvas)
+                if (store.getters.isFocusCanvas) {
                     eventBus.$emit('deleteItem')
+                } 
+                    
                 break
             case this._a:
                 if (e.ctrlKey)
