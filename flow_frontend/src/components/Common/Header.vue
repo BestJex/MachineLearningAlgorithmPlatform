@@ -1,5 +1,5 @@
 <template>
-    <div class="header" v-if="localStorage.getItem('username')">
+    <div class="header" v-if="username">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="2">
                 <el-link href="#">首页</el-link>
@@ -10,7 +10,7 @@
             <el-submenu index="5" style="float: right">
                 <template slot="title">
                     <img class="user-avatar" src="@/assets/img/logo.jpg" alt="avatar"/>
-                    <span class="user-avatar-span">{{ localStorage.getItem('username') }}</span>
+                    <span class="user-avatar-span">{{ username }}</span>
                 </template>
                 <el-menu-item index="5-1">
                     <i class="iconfont icon-gerenzhongxin"></i>
@@ -43,6 +43,9 @@
                 localStorage.removeItem('username');
                 location.reload();
             }
+        },
+        computed: {
+            ...mapGetters(['token', 'username'])
         },
     }
 </script>
