@@ -162,6 +162,7 @@
                     this.matrixOutputTitle = []
                     this.value = 0
                     this.list = [[], []]
+					this.resStatus = 0
                 }
             }
 
