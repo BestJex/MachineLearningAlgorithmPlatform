@@ -472,9 +472,15 @@
                 }
             },
 
-			// 检查图结构
+            // 检查图结构
             checkGraph() {
-                console.log(this.graph)
+                if (this.graph._cfg.nodes.length === 0) {
+                    this.$message({
+                        message: '图不能为空！',
+                        type: 'error'
+                    })
+					return
+                }
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
@@ -504,7 +510,7 @@
                 this.isShowImportManage = false
             },
 
-			// 建立WebSocket并赋值给window.s
+            // 建立WebSocket并赋值给window.s
             buildWebSocket(data, urlPath) {
                 if (window.s) {
                     window.s.close()
@@ -518,7 +524,7 @@
                 socket.onmessage = function (e) {
                     window.s.send('success')
                     let data = JSON.parse(e.data)
-					let time = new Date()
+                    let time = new Date()
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
@@ -561,6 +567,13 @@
             },
 
             runProject() {
+                if (this.graph._cfg.nodes.length === 0) {
+                    this.$message({
+                        message: '图不能为空！',
+                        type: 'error'
+                    })
+                    return
+                }
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
@@ -594,21 +607,28 @@
             },
 
             runNode() {
+                if (this.graph._cfg.nodes.length === 0) {
+                    this.$message({
+                        message: '图不能为空！',
+                        type: 'error'
+                    })
+                    return
+                }
                 graphApi.runNode({ graphid: this.graphId, nodename: this.selectedNodeId }).then(res => {
-					if (!res.data.error) {
+                    if (!res.data.error) {
                         this.$message({
                             message: res.data.message,
                             type: 'success'
                         })
                         this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
                         this.testRunning = true
-						this.buildWebSocket(this.graphId + "+" + this.selectedNodeId, 'runnode')
-					} else {
+                        this.buildWebSocket(this.graphId + '+' + this.selectedNodeId, 'runnode')
+                    } else {
                         this.$message({
                             message: res.data.error,
                             type: 'error'
                         })
-					}
+                    }
                 }).catch(err => {
                     Notification({
                         title: '错误',
