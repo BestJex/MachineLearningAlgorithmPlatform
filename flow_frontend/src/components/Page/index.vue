@@ -59,15 +59,16 @@
 
 
 			</div>
-			<div v-if="resStatus === 2"
-				 style="display: flex;justify-content: space-between;overflow: auto;height: 300px;width: 140px;margin: 0 auto">
-				<div style="width: 50px">
+			<div v-if="resStatus === 2" class="list">
+				<div style="display: flex;justify-content: space-between;" :key="i">
 					<p>键</p>
-					<p v-for="(item, i) in listInfo[0]" :key="i">{{item}}</p>
-				</div>
-				<div style="width: 50px">
 					<p>值</p>
-					<p v-for="(item, i) in listInfo[1]" :key="i">{{item}}</p>
+				</div>
+				<div style="display: flex;justify-content: space-between;border-bottom: 1px solid #eeeeee"
+					 v-for="(item, i) in listInfo_key" :key="i">
+					<p style="border-right: 1px solid #eeeeee; padding-right: 5px">
+						{{item}}</p>
+					<p style="padding-left: 5px">{{listInfo_value[i]}}</p>
 				</div>
 			</div>
 			<div v-if="resStatus === 3">
@@ -107,7 +108,8 @@
                 outputDetails: [],  // 存放具体的输出信息
                 matrixOutputTitle: [],
                 value: 0,
-                listInfo: [[], []],
+                listInfo_value: [],
+                listInfo_key: [],
                 params: null,
                 max_id: 0,
                 isLockCanvas: false,
@@ -161,8 +163,9 @@
                     this.outputDetails = []
                     this.matrixOutputTitle = []
                     this.value = 0
-                    this.list = [[], []]
-					this.resStatus = 0
+                    this.listInfo_value = []
+                    this.listInfo_key = []
+                    this.resStatus = 0
                 }
             }
 
@@ -299,7 +302,7 @@
                                                 let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/ //负浮点数
                                                 if (regNeg.test(cont) || regPos.test(cont)) {
                                                     this.matrixOutputTitle.push(`列${a}`)
-													allInfo.push(cont)
+                                                    allInfo.push(cont)
                                                 } else {
                                                     this.matrixOutputTitle.push(cont)
                                                 }
@@ -321,8 +324,8 @@
                                             let value = JSON.parse(data.value)
                                             console.log(value)
                                             for (let cont in value) {
-                                                this.listInfo[0].push(cont)
-                                                this.listInfo[1].push(value[cont])
+                                                this.listInfo_key.push(cont)
+                                                this.listInfo_value.push(value[cont])
                                             }
                                         } else if (data.type === 'num') {
                                             this.resStatus = 3
@@ -493,6 +496,13 @@
 		position: absolute;
 		width: auto;
 		max-width: none;
+	}
+
+	.list {
+		overflow: auto;
+		height: 350px;
+		margin: 0 auto;
+		padding: 0 15px;
 	}
 
 </style>
