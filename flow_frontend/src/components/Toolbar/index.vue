@@ -525,6 +525,10 @@
                     window.s.send('success')
                     let data = JSON.parse(e.data)
                     let time = new Date()
+
+					if (data.type === 0) {
+					    console.log(data)
+					}
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
@@ -551,7 +555,7 @@
                         self.stopRuning()
                     }
                     if (data.type === 5) {
-                        self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p>`
+                        self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p><hr>`
                         self.graph.save()
                         self.stopRuning()
                     }
@@ -561,6 +565,8 @@
 
             closeWebSocket() {
                 if (window.s) {
+                    // 重新获取文件
+                    this.$store.dispatch('app/getFileList')
                     window.s.close()		//关闭websocket
                     // console.log('websocket已关闭')
                 }
