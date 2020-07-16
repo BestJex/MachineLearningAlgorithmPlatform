@@ -32,14 +32,14 @@
 <!--                    title="隐藏节点"></el-button>-->
 <!--        </el-tooltip>-->
         <el-tooltip placement="top">
-            <div slot="content">删除节点</div>
+            <div slot="content">隐藏节点</div>
             <el-button
                     v-show="this.$store.state.app.operation"
                     type="danger"
-                    icon="el-icon-delete"
+                    icon="el-icon-view"
                     circle
                     @click="deleteNodes()"
-                    title="删除"></el-button>
+                    title="隐藏"></el-button>
         </el-tooltip>
         <el-input
                 v-show="!$store.state.app.operation"
@@ -82,16 +82,17 @@
                 :append-to-body="true"
                 :visible.sync="isShowTreeNodeManage"
                 custom-class="preview-dialog"
-                title="恢复结点">
+                title="恢复结点"
+				style="min-width: 700px"
+		>
             <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-            <div style="margin: 15px 0;"></div>
             <el-checkbox-group v-model="checkedNodes" @change="handleCheckedNodesChange">
                 <el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
             </el-checkbox-group>
             <el-button
                     @click="recoveryTreeNode()"
                     size="small"
-                    style="margin-top: 20px; margin-left: 450px;"
+                    style="margin: 20px 50% 10px 50%"
                     type="success">确认
             </el-button>
         </el-dialog>

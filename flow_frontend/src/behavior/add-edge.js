@@ -1,6 +1,9 @@
-import eventBus from "@/utils/eventBus"
+import eventBus from '@/utils/eventBus'
 import { uniqueId } from '@/utils'
-import store from "@/store"
+import store from '@/store/index.js'
+import { Notification } from 'element-ui'
+import graphApi from '@/api/graph'
+
 let startPoint = null
 let startPointId = null
 let startItem = null
@@ -40,12 +43,14 @@ export default {
             }
             if (curInPoint) {
                 // 判断该入点是否已经被连接
+
                 var t_edges = this.graph.findAll('edge', edge => {
                     return edge.getModel().endPointId === curInPoint._attrs.id
                 })
                 // 判断该入点是否是该node的入点
                 var is_inpoint_in_startNode = curInPoint._cfg.parent.get('item') === startItem
 
+                let model // 先声明，整好作用域
                 if (!t_edges.length && activeItem && !is_inpoint_in_startNode) {
                     const endX = parseInt(curInPoint._attrs.x)
                     const endY = parseInt(curInPoint._attrs.y)
@@ -53,7 +58,7 @@ export default {
                     if (this.edge) {
                         this.graph.removeItem(this.edge)
                         store.dispatch('app/uniqueId')
-                        const model = {
+                        let model = {
                             id: 'edge' + store.state.app.max_id,
                             source: startItem,
                             target: item,
@@ -71,26 +76,60 @@ export default {
                 } else if (this.edge) {
                     this.graph.removeItem(this.edge)
                 }
+                ///////////////////////////
+                let graph = store.state.app.graph_info.save()
+                let allInfo = store.state.app.graph_data
+                allInfo.edges.push(model)
+                store.commit('app/SET_GRAPHDATA', allInfo)
+                ///////////////////////
+
+                Object.assign(graph, { id: store.state.app.graph_id })
+                let data = {
+                    graphid: store.state.app.graph_id,
+                    graph: JSON.stringify(graph),
+                }
+                graphApi.sendGraph(data).then(res => {
+
+                }).then(() => {
+                    // 注释是为了提高用户体验
+                    // return graphApi.getGraphById({ graphid: this.graphId })
+                }).then(res => {
+                    // const data = res.data.data
+                    // this.forEach(data)
+                    // this.$store.commit('app/SET_MAXID', this.max_id)
+                    // this.graph.read(data)
+                    // if (data.nodes.length) {
+                    //     this.graph.fitView(100)
+                    // }
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err,
+                        type: 'error',
+                        duration: 3000
+                    })
+                })
+
             } else if (this.edge) {
                 this.graph.removeItem(this.edge)
             }
         } else if (this.edge) {
             this.graph.removeItem(this.edge)
         }
-        this.graph.find("node", node => {
+        this.graph.find('node', node => {
             const group = node.get('group')
             const children = group._cfg.children
             children.map(child => {
                 if (child._attrs.isInPointOut) {
-                    child.attr("opacity", "0")
+                    child.attr('opacity', '0')
                     child._attrs.fillStyle = '#1890ff'
                 }
                 if (child._attrs.isInPoint) {
-                    child.attr("opacity", "0")
+                    child.attr('opacity', '0')
                 }
                 if (child._attrs.isOutPoint) {
-                    child.attr("opacity", "0")
-                    child.attr("fill", "#fff")
+                    child.attr('opacity', '0')
+                    child.attr('fill', '#fff')
                 }
                 if (child._attrs.isOutPointText) {
                     child.attr('opacity', 0)
@@ -118,17 +157,17 @@ export default {
             startPoint = { x: startX, y: startY }
             startPointId = e.target._attrs.parent ? e.target._attrs.parent : e.target._attrs.id
             startItem = item
-            this.graph.find("node", node => {
+            this.graph.find('node', node => {
                 const group = node.get('group')
                 const children = group._cfg.children
                 children.map(child => {
                     // 为连接点设置样式，已经连接过的入点显示红色
                     var c_item = child._attrs
                     if (c_item.isInPointOut) {
-                        child.attr("opacity", "0.3")
+                        child.attr('opacity', '0.3')
                     }
                     if (c_item.isInPoint) {
-                        child.attr("opacity", "1")
+                        child.attr('opacity', '1')
                     }
                     if (child._cfg.parent.get('item') === startItem) {
                         if (c_item.isInPointOut || c_item.isInPoint) {
@@ -181,7 +220,7 @@ export default {
         }
     },
     onMouseleave() {
-        this.graph.find("node", node => {
+        this.graph.find('node', node => {
             const group = node.get('group')
             const children = group._cfg.children
             children.map(child => {
