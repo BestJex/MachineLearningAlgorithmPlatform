@@ -33,7 +33,7 @@
 
 		<el-dialog
 			v-else
-			title="修改节点名"
+			title="具体信息"
 			:visible.sync="dialogVisible"
 			width="700px"
 		>
@@ -43,28 +43,34 @@
 			</div>
 			<div class="matrix" v-if="resStatus === 1">
 				矩阵信息
-				<!--				<p v-for="(item, name, i) in outputDetails">{{name}}</p>-->
-						<el-table
-							:data="outputDetails"
-							style="margin: 0 auto;"
-						>
-							<el-table-column
-								v-for="(item, i) in matrixOutputTitle" :key="i"
-								:prop="item"
-								:label="item"
-								width="200"
-							>
-							</el-table-column>
+				<el-table
+					:data="outputDetails"
+					style="margin: 0 auto;"
+				>
+					<el-table-column
+						v-for="(item, i) in matrixOutputTitle" :key="i"
+						:prop="item"
+						:label="item"
+						width="200"
+					>
+					</el-table-column>
 
-						</el-table>
+				</el-table>
 
 
 			</div>
-			<div v-if="resStatus === 2">
-				数列信息
+			<div v-if="resStatus === 2" style="display: flex;justify-content: space-between;overflow: auto;height: 300px;width: 140px;margin: 0 auto">
+				<div style="width: 50px" >
+					<p>键</p>
+					<p v-for="(item, i) in listInfo[0]">{{item}}</p>
+				</div>
+				<div style="width: 50px" >
+					<p>值</p>
+					<p v-for="(item, i) in listInfo[1]">{{item}}</p>
+				</div>
 			</div>
 			<div v-if="resStatus === 3">
-				单个数字
+				{{value}}
 			</div>
 			<span slot="footer" class="dialog-footer">
     			<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -99,6 +105,8 @@
                 data: null, // 图里元素信息
                 outputDetails: [],  // 存放具体的输出信息
                 matrixOutputTitle: [],
+                value: 0,
+				listInfo: [[], []],
                 params: null,
                 max_id: 0,
                 isLockCanvas: false,
@@ -146,7 +154,16 @@
             },
             canvasHeight: function (val) {
                 this.graph.changeSize(this.canvasWidth, val)
+            },
+            dialogVisible: function (val) {
+                if (val === false) {
+                    this.outputDetails = []
+                    this.matrixOutputTitle = []
+                    this.value = 0
+					this.list = [[], []]
+                }
             }
+
         },
 
         created() {
@@ -254,14 +271,13 @@
                                     circleid: this.$store.state.app.circle_info.id
                                 }
                                 graphApi.getOutputInfo(submitInfo).then(res => {
-                                    console.log(res)
                                     let data = res.data
+                                    console.log(data)
                                     if (data.status === '不支持该节点的查看') {
                                         this.resStatus = 0
                                     } else if (data.status === 'finished') {
                                         if (data.type === 'matrix') {
                                             let value = JSON.parse(data.value)
-                                            console.log(data)
                                             let allInfo = []
                                             this.resStatus = 1
                                             let a = 0, b = 0 // a是宽 b/a是长
@@ -280,8 +296,18 @@
                                                 }
 
                                             }
-                                            console.log(this.matrixOutputTitle)
                                             console.log(this.outputDetails)
+                                        } else if (data.type === 'list') {
+                                            this.resStatus = 2
+                                            let value = JSON.parse(data.value)
+                                            console.log(value);
+                                            for (let cont in value) {
+												this.listInfo[0].push(cont)
+												this.listInfo[1].push(value[cont])
+											}
+                                        } else if (data.type === 'num') {
+                                            this.resStatus = 3
+                                            this.value = data.value
                                         }
 
                                     }
