@@ -26,7 +26,7 @@ export default {
                     store.commit('app/SET_ISONCIRCLE', true)
                     // 拦截，防止给全局传空数据（本身机制问题）
                     if (e.target._attrs.parent) {
-                        console.log(e);
+                        // console.log(e);
                         store.commit('app/SET_CIRCLEINFO', { id: e.target._attrs.parent })
                     }
 

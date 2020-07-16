@@ -21,16 +21,16 @@
                     @click="recoveryNode()"
                     title="恢复节点"></el-button>
         </el-tooltip>
-        <el-tooltip placement="top">
-            <div slot="content">隐藏节点</div>
-            <el-button
-                    v-show="$store.state.app.operation"
-                    type="info"
-                    icon="el-icon-view"
-                    circle
-                    @click="hideNodes()"
-                    title="隐藏节点"></el-button>
-        </el-tooltip>
+<!--        <el-tooltip placement="top">-->
+<!--            <div slot="content">隐藏节点</div>-->
+<!--            <el-button-->
+<!--                    v-show="$store.state.app.operation"-->
+<!--                    type="info"-->
+<!--                    icon="el-icon-view"-->
+<!--                    circle-->
+<!--                    @click="hideNodes()"-->
+<!--                    title="隐藏节点"></el-button>-->
+<!--        </el-tooltip>-->
         <el-tooltip placement="top">
             <div slot="content">删除节点</div>
             <el-button
@@ -70,7 +70,8 @@
 				style="margin-bottom: 70px">
                   <span
                           class="custom-tree-node"
-                          slot-scope="{ node, data }">
+                          slot-scope="{ node, data }"
+						  :id="node.label">
                         <span v-show="!$store.state.app.operation">{{ node.label }}</span>
                         <label>
                             <input type="text" v-model="data.name" v-show="$store.state.app.operation">
@@ -189,10 +190,7 @@
                 // 全局
                 this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
                 this.operation = !this.operation
-                let itempannel = document.getElementById('itempannel');
-                let itemResizer = document.getElementById('item-resizer');
                 if (!this.$store.state.app.operation) {
-
                     // 保存修改的树形图
                     let data = {
                         graph_id: this.$route.params.id,
@@ -202,7 +200,7 @@
                         method: 'post',
                         url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/updatetree`,
                         data: data,
-                    }).then(res => {
+                    }).then(() => {
                         this.getTree()
                     }).catch(err => {
                         this.$message({
@@ -257,7 +255,7 @@
                     url: `http://39.105.21.62/flow/api/recovernode`,
                     data: data,
                 }).then(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.getTree()
                     this.isShowTreeNodeManage = false
                 }).catch(err => {
@@ -272,23 +270,23 @@
              * 隐藏节点
              */
             hideNodes() {
-                console.log(this.nodeList)
-                let checkArr = this.$refs.tree.getCheckedNodes()
-                let res = []
-                for (let i = 0; i < checkArr.length; i++) {
-                    res.push(checkArr[i].$treeNodeId)
-                    if (!checkArr[i].children) {
-
-                        // for (let a = 0; a < this.nodeList.length; a++) {
-                        // console.log(checkArr[i].id)
-                        // console.log(this.nodeList[a].id)
-                        // if (checkArr[i].id === this.nodeList[a].id) {
-                        // 	Object.assign(this.nodeList[a], { visible: false })
-                        // 	console.log(this.nodeList[a])
-                        // }
-                        // }
-                    }
-                }
+                // let checkArr = this.$refs.tree.getCheckedNodes()
+                // console.log(checkArr)
+                // for (let i = 0; i < checkArr.length; i++) {
+                //     let item = document.getElementById(checkArr[i].name).parentNode.parentNode
+				// 	item.style.display = 'none'
+                //     res.push(checkArr[i].$treeNodeId)
+                //     if (!checkArr[i].children) {
+                //         for (let a = 0; a < this.nodeList.length; a++) {
+                //         console.log(checkArr[i].id)
+                //         console.log(this.nodeList[a].id)
+                //         if (checkArr[i].id === this.nodeList[a].id) {
+                //         	Object.assign(this.nodeList[a], { visible: false })
+                //         	console.log(this.nodeList[a])
+                //         }
+                //         }
+                //     }
+                // }
                 //          for (let index = 0; index < res.length; index++) {
                 //              let item = res[index]
                 //              for (let i = 0; i < this.nodeList.length; i++) {

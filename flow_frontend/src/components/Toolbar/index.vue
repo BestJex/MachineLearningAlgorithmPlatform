@@ -471,6 +471,8 @@
                     }, 3000)
                 }
             },
+
+			// 检查图结构
             checkGraph() {
                 this.axios({
                     method: 'get',
@@ -496,9 +498,12 @@
                     })
                 })
             },
+
             success() {
                 this.isShowImportManage = false
             },
+
+			// 建立WebSocket并赋值给window.s
             buildWebSocket(data) {
                 if (window.s) {
                     window.s.close()
@@ -544,12 +549,14 @@
                 }
                 window.s = socket
             },
+
             closeWebSocket() {
                 if (window.s) {
                     window.s.close()		//关闭websocket
                     // console.log('websocket已关闭')
                 }
             },
+
             runProject() {
                 this.axios({
                     method: 'get',
@@ -577,13 +584,16 @@
                     })
                 })
             },
+
             stopRuning() {
                 this.testRunning = false
                 this.closeWebSocket()
             },
+
             runNode() {
                 graphApi.runNode({ graphid: this.graphId, nodename: this.selectedNodeId }).then(res => {
                     console.log('正在运行')
+					console.log(res)
                     this.isRunning = true
                 }).catch(err => {
                     Notification({
@@ -596,9 +606,6 @@
                 })
             },
 
-            addNode() {
-
-            },
             getTerminal() {
                 this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
             },
