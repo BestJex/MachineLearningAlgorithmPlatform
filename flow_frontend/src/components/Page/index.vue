@@ -249,6 +249,15 @@
                         //     disabled: false,
                         //     icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
                         // },
+                        // {
+                        //     label: '删除',
+                        //     onClick: () => {
+                        //         this.params = 0
+                        //         this.dialogVisible = true
+                        //     },
+                        //     disabled: !this.isRightClickNode,
+                        //     icon: 'el-icon-close',
+                        // },
                         {
                             label: '修改节点名',
                             onClick: () => {

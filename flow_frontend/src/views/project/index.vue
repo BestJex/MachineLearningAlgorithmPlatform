@@ -5,18 +5,29 @@
 				<div class="action-group">
 					<el-row justify="space-between" type="flex">
 						<el-col class="action-group-left">
-							<el-button :disabled="!multipleSelection.length" @click="deleteProjects" circle
-									   class="action-btn" icon="el-icon-delete"
-									   type="danger" size="small"></el-button>
-							<el-button :disabled="!multipleSelection.length" @click="copyProjects" circle
-									   class="action-btn" icon="el-icon-copy-document"
-									   type="primary" size="small"></el-button>
-
-							<el-input v-model="search" style="margin-left: 20px; width: 250px" size="mini"
+							<el-button :disabled="!multipleSelection.length"
+									   @click="deleteProjects"
+									   circle
+									   class="action-btn"
+									   icon="el-icon-delete"
+									   type="danger"
+									   size="small"></el-button>
+							<el-button :disabled="!multipleSelection.length"
+									   @click="copyProjects"
+									   circle
+									   class="action-btn"
+									   icon="el-icon-copy-document"
+									   type="primary"
+									   size="small"></el-button>
+							<el-input v-model="search"
+									  style="margin-left: 20px; width: 250px"
+									  size="mini"
 									  placeholder="输入关键字搜索"/>
 						</el-col>
 						<el-col class="action-group-right">
-							<el-button @click="isShowDialog = true" class="action-btn" size="medium">
+							<el-button @click="isShowDialog = true"
+									   class="action-btn"
+									   size="medium">
 								创建项目
 							</el-button>
 						</el-col>
@@ -25,11 +36,13 @@
 
 				<el-divider/>
 
-				<el-table :data="search ? search_project_list : project_list" @selection-change="handleSelectionChange"
+				<el-table :data="search ? search_project_list : project_list"
+						  @selection-change="handleSelectionChange"
 						  border highlight-current-row
 						  style="width: 100%"
 						  v-loading="loading">
-					<el-table-column type="selection" width="55"/>
+					<el-table-column type="selection"
+									 width="55"/>
 					<el-table-column label="项目名">
 						<template slot-scope="scope">
 							<el-link @click="$router.push({path: `/graph/${scope.row.id}`})">
@@ -37,17 +50,23 @@
 							</el-link>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" label="状态" width="100px">
+					<el-table-column align="center"
+									 label="状态"
+									 width="100px">
 						<template slot-scope="scope">
 							<span>{{ scope.row.status | statusFilter}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" label="所有者" width="150px">
+					<el-table-column align="center"
+									 label="所有者"
+									 width="150px">
 						<template slot-scope="scope">
 							<span>{{ scope.row.owner }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" label="编辑时间" width="150px">
+					<el-table-column align="center"
+									 label="编辑时间"
+									 width="150px">
 						<template slot-scope="scope">
 							<span>{{ scope.row.modified_time }}</span>
 						</template>
@@ -56,27 +75,42 @@
 
 				<!-- 分页器 -->
 				<div class="paginator">
-					<el-pagination :current-page="listQuery.page" :page-size="listQuery.page_size"
-								   :page-sizes="[10, 20]" :total="search ? search_project_list.length : count"
-								   @current-change="pageCurrentChange" @size-change="pageSizeChange"
+					<el-pagination :current-page="listQuery.page"
+								   :page-size="listQuery.page_size"
+								   :page-sizes="[10, 20]"
+								   :total="search ? search_project_list.length : count"
+								   @current-change="pageCurrentChange"
+								   @size-change="pageSizeChange"
 								   layout="total, sizes, prev, pager, next, jumper"
 								   style="text-align: center"/>
 				</div>
 			</el-col>
 		</el-row>
 
-		<el-dialog :append-to-body="false" :close-on-click-modal="false" :modal-append-to-body="true"
+		<el-dialog :append-to-body="false"
+				   :close-on-click-modal="false"
+				   :modal-append-to-body="true"
 				   :visible.sync="isShowDialog"
-				   custom-class="preview-dialog" title="创建项目">
-			<el-form :model="form" :rules="rules" label-position="top" ref="ruleForm">
-				<el-form-item label="项目名称" prop="projectName">
-					<el-input @keyup.native.enter="createProject" size="small" v-model="form.projectName"></el-input>
+				   custom-class="preview-dialog"
+				   title="创建项目">
+			<el-form :model="form"
+					 :rules="rules"
+					 label-position="top"
+					 ref="ruleForm">
+				<el-form-item label="项目名称"
+							  prop="projectName">
+					<el-input @keyup.native.enter="createProject"
+							  size="small"
+							  v-model="form.projectName"></el-input>
 				</el-form-item>
 			</el-form>
 
-			<div class="dialog-footer" slot="footer">
-				<el-button :disabled="form.projectName === ''" @click="createProject"
-						   type="primary">完 成
+			<div class="dialog-footer"
+				 slot="footer">
+				<el-button :disabled="form.projectName === ''"
+						   @click="createProject"
+						   type="primary">
+					完 成
 				</el-button>
 			</div>
 		</el-dialog>
@@ -164,28 +198,25 @@
             createProject() {
                 this.$refs['ruleForm'].validate(valid => {
                     if (valid) {
-                        graphApi
-                            .createGraph(this.form)
-                            .then(res => {
-                                Notification({
-                                    title: '成功',
-                                    message: '创建项目成功',
-                                    type: 'success',
-                                    duration: 500
-                                })
-                                this.getGraphs()
-                                this.isShowDialog = false
-                                this.form.projectName = ''
-                                this.form.owner = ''
+                        graphApi.createGraph(this.form).then(res => {
+                            Notification({
+                                title: '成功',
+                                message: '创建项目成功',
+                                type: 'success',
+                                duration: 500
                             })
-                            .catch(err => {
-                                Notification({
-                                    title: '错误',
-                                    message: err.data,
-                                    type: 'error',
-                                    duration: 500
-                                })
+                            this.getGraphs()
+                            this.isShowDialog = false
+                            this.form.projectName = ''
+                            this.form.owner = ''
+                        }).catch(err => {
+                            Notification({
+                                title: '错误',
+                                message: err.data,
+                                type: 'error',
+                                duration: 500
                             })
+                        })
                     }
                 })
             },

@@ -533,7 +533,7 @@
                         this.addErrorFrame(response.data.data.node)
                     } else {
                         this.$message({
-                            message: 'Successful',
+                            message: '检查图成功！',
                             type: 'success'
                         })
                         return true
@@ -690,9 +690,36 @@
                 this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
             },
             exportPythonFile() {
-                if (this.checkGraph()) {
-                    window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`)
+                if (this.graph._cfg.nodes.length === 0) {
+                    this.$message({
+                        message: '图不能为空！',
+                        type: 'error'
+                    })
+                    return
                 }
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
+                }).then(response => {
+                    if (response.data.data.error) {
+                        this.$message({
+                            message: response.data.data.error,
+                            type: 'error'
+                        })
+                        this.addErrorFrame(response.data.data.node)
+                    } else {
+                        this.$message({
+                            message: '检查图成功！',
+                            type: 'success'
+                        })
+                        window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`)
+                    }
+                }).catch(error => {
+                    this.$message({
+                        message: error,
+                        type: 'error'
+                    })
+                })
             },
             exportJsonFile() {
                 window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`)

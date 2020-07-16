@@ -15,7 +15,7 @@
                    drag
                    style="display: inline-block">
             <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传（.json）</em>大小限制10MB</div>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传（.gph）</em>大小限制10MB</div>
         </el-upload>
     </div>
 </template>

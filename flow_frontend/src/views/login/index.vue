@@ -215,7 +215,6 @@
                     url: 'http://39.105.21.62/flow/api/user/chapassword',
                     data: formData,
                 }).then(res => {
-                    alert(res)
                     location.reload()
                 }).catch(err => {
                     this.$message({
