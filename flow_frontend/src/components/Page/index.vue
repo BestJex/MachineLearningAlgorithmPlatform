@@ -283,7 +283,7 @@
                                             let a = 0, b = 0 // a是宽 b/a是长
                                             for (let cont in value) {
                                                 a++
-                                                this.matrixOutputTitle.push(cont)
+                                                this.matrixOutputTitle.push(String(cont))
                                                 for (let num in value[cont]) {
                                                     b++
                                                     allInfo.push(value[cont][num])
