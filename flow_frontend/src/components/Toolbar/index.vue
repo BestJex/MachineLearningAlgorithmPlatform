@@ -71,7 +71,7 @@
 				<el-button @click="showFileManage()" type="primary">
 					项目文件管理
 				</el-button>
-				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行结点</el-button>
+				<el-button :disabled="selectedNodeId==null" @click="runNode" type="success">运行至结点</el-button>
 				<el-button @click="runProject" :type="testRunning ? 'danger' : 'success'">
 					{{testRunning ? '停止运行' : '运行项目'}}
 				</el-button>
@@ -504,12 +504,12 @@
             },
 
 			// 建立WebSocket并赋值给window.s
-            buildWebSocket(data) {
+            buildWebSocket(data, urlPath) {
                 if (window.s) {
                     window.s.close()
                 }
                 let self = this
-                const socket = new WebSocket(api.WS_API + 'runproject')
+                const socket = new WebSocket(api.WS_API + urlPath)
                 socket.onopen = function () {
                     // console.log('WebSocket open')      //成功连接上Websocket
                     window.s.send(data)
@@ -517,20 +517,22 @@
                 socket.onmessage = function (e) {
                     window.s.send('success')
                     let data = JSON.parse(e.data)
+					let time = new Date()
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
                             self.graph.update(item, { status: 'loading' })
-                            self.terminalContent = item._cfg.model.label + '开始运行' + '<br>'
+                            self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #54FF9F;line-height: 10px">${item._cfg.model.label}开始运行</span></p>`
                         } else if (data.status === 'finished') {
                             self.graph.update(item, { status: 'complete' })
-                            self.terminalContent = `<p style="color: #3a8ee6;line-height: 10px">${item._cfg.model.label}运行完毕</p>`
+                            self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #3a8ee6;line-height: 10px">${item._cfg.model.label}运行完毕</span></p>`
                             self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                         }
                     }
                     if (data.type === 3) {
+                        let item = self.graph.findById(data.name)
                         self.addErrorFrame([data.name])
-                        self.terminalContent = `<p style="color: #dd6161">${data.name}运行出错</p>`
+                        self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #dd6161;line-height: 10px">${item._cfg.model.label}运行出错</span></p>`
                     }
                     if (data.type === 4) {
                         Notification({
@@ -542,7 +544,7 @@
                         self.stopRuning()
                     }
                     if (data.type === 5) {
-                        self.terminalContent = '<p style=\'color: #13ce66\'>项目运行完毕</p><hr>'
+                        self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p>`
                         self.graph.save()
                         self.stopRuning()
                     }
@@ -575,7 +577,7 @@
                         })
                         this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
                         this.testRunning = true
-                        this.buildWebSocket(this.graphId)
+                        this.buildWebSocket(this.graphId, 'runproject')
                     }
                 }).catch(error => {
                     this.$message({
@@ -592,9 +594,20 @@
 
             runNode() {
                 graphApi.runNode({ graphid: this.graphId, nodename: this.selectedNodeId }).then(res => {
-                    console.log('正在运行')
-					console.log(res)
-                    this.isRunning = true
+					if (!res.data.error) {
+                        this.$message({
+                            message: res.data.message,
+                            type: 'success'
+                        })
+                        this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+                        this.testRunning = true
+						this.buildWebSocket(this.graphId + "+" + this.selectedNodeId, 'runnode')
+					} else {
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        })
+					}
                 }).catch(err => {
                     Notification({
                         title: '错误',
