@@ -41,11 +41,11 @@
 						</template>
 						<template slot-scope="scope"
 								  style="margin-left: 15px; display: flex">
-<!--							<el-button size="mini"-->
-<!--									   type="success"-->
-<!--									   @click="handleDownload(scope.$index, scope.row)">-->
-<!--								Download-->
-<!--							</el-button>-->
+							<!--							<el-button size="mini"-->
+							<!--									   type="success"-->
+							<!--									   @click="handleDownload(scope.$index, scope.row)">-->
+							<!--								Download-->
+							<!--							</el-button>-->
 							<el-button size="mini"
 									   type="danger"
 									   @click="handleDelete(scope.$index, scope.row)">
@@ -187,7 +187,14 @@
                         type: 'success',
                         duration: 3000
                     })
-                    this.$store.dispatch('app/getFileList')
+                    this.$store.dispatch('app/getFileList').then(() => {
+                        let fileListLength = this.fileList.length
+                        console.log(fileListLength)
+                        if (this.listQuery.page_size * (this.listQuery.page - 1) + 1 >= fileListLength) {
+                            this.listQuery.page--
+                        }
+                    })
+                    // if ()
                 }).catch(error => {
                     this.$message({
                         message: error,
@@ -218,6 +225,7 @@
                             duration: 3000
                         })
                         this.$store.dispatch('app/getFileList')
+
                     }).catch(error => {
                         this.$message({
                             message: error,
