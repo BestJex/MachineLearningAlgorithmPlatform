@@ -474,6 +474,7 @@
 
 			// 检查图结构
             checkGraph() {
+                console.log(this.graph)
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
