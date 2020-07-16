@@ -289,6 +289,7 @@
                                                 let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/ //负浮点数
                                                 if (regNeg.test(cont) || regPos.test(cont)) {
                                                     this.matrixOutputTitle.push(`列${a}`)
+													allInfo.push(cont)
                                                 } else {
                                                     this.matrixOutputTitle.push(cont)
                                                 }
@@ -297,12 +298,11 @@
                                                     b++
                                                     allInfo.push(value[cont][num])
                                                 }
-
                                             }
                                             for (let i = 0; i < b / a; i++) {
                                                 this.outputDetails.push({})
                                                 for (let j = 0; j < a; j++) {
-                                                    Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": "${String(allInfo[b / a + j])}"}`))
+                                                    Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": "${String(allInfo[a * i + j])}"}`))
                                                 }
                                             }
                                             console.log(this.outputDetails)
