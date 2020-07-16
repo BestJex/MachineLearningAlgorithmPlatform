@@ -1,6 +1,6 @@
 <template>
-    <div class="header" v-if="header_username">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <div class="header" v-if="username">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="2">
                 <el-link href="#">首页</el-link>
             </el-menu-item>
@@ -10,7 +10,7 @@
             <el-submenu index="5" style="float: right">
                 <template slot="title">
                     <img class="user-avatar" src="@/assets/img/logo.jpg" alt="avatar"/>
-                    <span class="user-avatar-span">{{ header_username }}</span>
+                    <span class="user-avatar-span">{{ username }}</span>
                 </template>
                 <el-menu-item index="5-1">
                     <i class="iconfont icon-gerenzhongxin"></i>
@@ -32,23 +32,15 @@
         name: "Header",
         data() {
             return {
-                header_username: localStorage.getItem('username'),
                 activeIndex: '1',
             };
         },
-        beforeCreate() {
-            this.header_username = localStorage.getItem('username');
-        },
         methods: {
-            handleSelect(key, keyPath) {
-
-            },
             logout() {
                 this.$store.dispatch('user/Logout').then(res => {
                     this.$router.push('/login')
                 });
                 localStorage.removeItem('username');
-                localStorage.removeItem('expires');
                 location.reload();
             }
         },

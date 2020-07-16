@@ -41,11 +41,11 @@
 						</template>
 						<template slot-scope="scope"
 								  style="margin-left: 15px; display: flex">
-							<el-button size="mini"
-									   type="success"
-									   @click="handleDownload(scope.$index, scope.row)">
-								Download
-							</el-button>
+<!--							<el-button size="mini"-->
+<!--									   type="success"-->
+<!--									   @click="handleDownload(scope.$index, scope.row)">-->
+<!--								Download-->
+<!--							</el-button>-->
 							<el-button size="mini"
 									   type="danger"
 									   @click="handleDelete(scope.$index, scope.row)">
