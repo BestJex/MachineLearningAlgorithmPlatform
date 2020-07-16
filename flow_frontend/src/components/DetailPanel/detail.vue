@@ -23,24 +23,27 @@
 							prop="node.label"
 							v-for="node in node_detail">
 							<!-- 输入框 -->
-							<el-input
-								type="text"
-								@change="changeValue(node)"
-								v-if="node.type==='object' || node.type==='str' || node.type==='model'"
-								v-model="node.value"></el-input>
+							<el-tooltip class="item" effect="dark" content="str类型" placement="left">
+								<el-input
+									type="text"
+									@change="changeValue(node)"
+									v-if="node.type==='object' || node.type==='str' || node.type==='model'"
+									v-model="node.value"></el-input>
+							</el-tooltip>
 							<!-- int/随机数类型输入框 -->
 							<el-tooltip class="item" effect="dark" content="int类型" placement="left">
 								<el-input
 									@change="changeValue(node)"
 									v-if="(node.type === 'int' || node.type === 'RandomState') && node.value !== 'None'"
-									type="number" :DangerColor="node.value.toString().indexOf('.') !== -1 ? 'danger' : ''"
+									type="number"
+									:DangerColor="node.value.toString().indexOf('.') !== -1 ? 'danger' : ''"
 									v-model="node.value"></el-input>
 							</el-tooltip>
 							<!-- int && value 可以为None或数字类型输入框 -->
-							<el-tooltip class="item" effect="dark" content="None或数字" placement="left">
+							<el-tooltip class="item" effect="dark" content="None或int类型" placement="left">
 								<el-input
 									@change="changeValue(node)"
-									v-if="node.type === 'int' && node.value === 'None'"
+									v-if="(node.type === 'int' || node.type === 'RandomState') && node.value === 'None'"
 									type="text" :DangerColor="node.value.indexOf('.') !== -1 ? 'danger' : ''"
 									v-model="node.value"></el-input>
 							</el-tooltip>
@@ -65,29 +68,33 @@
 								v-if="node.type==='checkbox'"
 								v-model="node.value"></el-checkbox>
 							<!-- 选择CSV文件 -->
-							<el-select
-								@change="changeValue"
-								placeholder="请选择"
-								v-if="node.type==='file' && node.label==='文件'"
-								v-model="node.value">
-								<el-option
-									:label="item.filename"
-									:value="item.id"
-									v-for="item in csvFileList">
-								</el-option>
-							</el-select>
+							<el-tooltip class="item" effect="dark" content="选择CSV文件" placement="left">
+								<el-select
+									@change="changeValue"
+									placeholder="请选择"
+									v-if="node.type==='file' && node.label==='文件'"
+									v-model="node.value">
+									<el-option
+										:label="item.filename"
+										:value="item.id"
+										v-for="item in csvFileList">
+									</el-option>
+								</el-select>
+							</el-tooltip>
 							<!-- 选择Model文件 -->
-							<el-select
-								@change="changeValue"
-								placeholder="请选择"
-								v-if="node.type==='file' && node.label==='模型'"
-								v-model="node.value">
-								<el-option
-									:label="item.filename"
-									:value="item.id"
-									v-for="item in modelFileList">
-								</el-option>
-							</el-select>
+							<el-tooltip class="item" effect="dark" content="选择Model文件" placement="left">
+								<el-select
+									@change="changeValue"
+									placeholder="请选择"
+									v-if="node.type==='file' && node.label==='模型'"
+									v-model="node.value">
+									<el-option
+										:label="item.filename"
+										:value="item.id"
+										v-for="item in modelFileList">
+									</el-option>
+								</el-select>
+							</el-tooltip>
 							<!-- 选择算法 -->
 							<el-select
 								@change="changeValue"

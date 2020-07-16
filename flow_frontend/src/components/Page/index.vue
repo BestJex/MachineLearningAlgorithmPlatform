@@ -233,22 +233,22 @@
                 this.isClickNode()
                 this.$contextmenu({
                     items: [
-                        {
-                            label: '返回(B)',
-                            onClick: () => {
-                                // console.log("返回(B)");
-                            },
-                            disabled: false,
-                            icon: 'el-icon-back',
-                        },
-                        {
-                            label: this.isLockCanvas ? '解除锁定' : '锁定画布',
-                            onClick: () => {
-                                this.isLockCanvas = !this.isLockCanvas
-                            },
-                            disabled: false,
-                            icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
-                        },
+                        // {
+                        //     label: '返回(B)',
+                        //     onClick: () => {
+                        //         // console.log("返回(B)");
+                        //     },
+                        //     disabled: false,
+                        //     icon: 'el-icon-back',
+                        // },
+                        // {
+                        //     label: this.isLockCanvas ? '解除锁定' : '锁定画布',
+                        //     onClick: () => {
+                        //         this.isLockCanvas = !this.isLockCanvas
+                        //     },
+                        //     disabled: false,
+                        //     icon: this.isLockCanvas ? 'el-icon-unlock' : 'el-icon-lock',
+                        // },
                         {
                             label: '修改节点名',
                             onClick: () => {
@@ -316,7 +316,7 @@
                                 })
                             },
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
-                            icon: 'el-icon-edit',
+                            icon: 'el-icon-tickets',
                         },
                     ],
                     event,
