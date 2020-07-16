@@ -57,7 +57,7 @@
 				<div class="paginator">
 					<el-pagination :current-page="listQuery.page"
 								   :page-size="listQuery.page_size"
-								   :page-sizes="[5]"
+								   :page-sizes="[10]"
 								   :total="fileList.filter(data => !search || data.filename.includes(search)).length"
 								   @current-change="pageCurrentChange"
 								   layout="total, sizes, prev, pager, next, jumper"
@@ -112,7 +112,7 @@
                 },
                 listQuery: {
                     page: 1,
-                    page_size: 5
+                    page_size: 10
                 },
                 count: 0,
                 status: true,
