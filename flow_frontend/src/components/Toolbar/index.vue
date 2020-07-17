@@ -76,7 +76,7 @@
 					{{testRunning ? '停止运行' : '运行项目'}}
 				</el-button>
 				<el-button @click="checkGraph" type="success">检查图</el-button>
-				<el-button @click="getTerminal" type="success">运行信息</el-button>
+				<el-button @click="setTerminal" type="success">运行信息</el-button>
 				<el-dropdown style="margin-left: 10px;">
 					<el-button type="primary">
 						文件
@@ -107,7 +107,7 @@
 					rel="stylesheet"
 					type="text/css"/>
 				<el-button @click="runProject" type="success">重启项目</el-button>
-				<el-button @click="stopRuning" type="danger">停止运行</el-button>
+				<el-button @click="stopRunning" type="danger">停止运行</el-button>
 			</div>
 		</transition>
 		<el-dialog
@@ -162,7 +162,7 @@
             }
         },
         computed: {
-            ...mapGetters(['isAllowSave', 'selectedNodeId']),
+            ...mapGetters(['isAllowSave', 'selectedNodeId', 'terminalDisplay']),
             isRunning: {
                 get() {
                     return this.$store.state.app.is_running
@@ -317,7 +317,6 @@
                     })
                 }
             },
-
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -511,7 +510,6 @@
                     }, 3000)
                 }
             },
-
             // 检查图结构
             checkGraph() {
                 if (this.graph._cfg.nodes.length === 0) {
@@ -545,11 +543,9 @@
                     })
                 })
             },
-
             success() {
                 this.isShowImportManage = false
             },
-
             // 建立WebSocket并赋值给window.s
             buildWebSocket(data, urlPath) {
                 if (window.s) {
@@ -592,22 +588,23 @@
                             type: 'error',
                         })
                         self.terminalContent = `<p style="color: #dd6161">${data.value}</p>`
-                        self.stopRuning()
+                        self.stopRunning()
                     }
                     if (data.type === 5) {
                         self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p><hr>`
                         self.graph.save()
-                        self.stopRuning()
+                        self.stopRunning()
                     }
                 }
                 window.s = socket
             },
-
+            /**
+			 * 关闭WebSocket，重新获取用户文件列表，因为运行项目会生成模型文件
+             */
             closeWebSocket() {
                 if (window.s) {
-                    // 重新获取文件
                     this.$store.dispatch('app/getFileList')
-                    window.s.close()		//关闭websocket
+                    window.s.close()
                     // console.log('websocket已关闭')
                 }
             },
@@ -647,7 +644,7 @@
                 })
             },
 
-            stopRuning() {
+            stopRunning() {
                 this.testRunning = false
                 this.closeWebSocket()
             },
@@ -686,8 +683,12 @@
                 })
             },
 
-            getTerminal() {
-                this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+            /**
+			 * 设置控制台显示与隐藏
+             */
+            setTerminal() {
+                let status = this.terminalDisplay==='block' ? 'none' : 'block'
+                this.$store.commit('app/SET_TERMINALDISPLAY', status)
             },
             exportPythonFile() {
                 if (this.graph._cfg.nodes.length === 0) {

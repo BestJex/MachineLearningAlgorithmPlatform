@@ -4,6 +4,7 @@ import {Message} from "element-ui";
 
 const state = {
     fileList: [],           // 用户上传的所有文件
+    terminal_display: 'none',
     graph_data: [],          // 图信息(节点和指针）
     graph_info: {},                // 整张图的信息
 
@@ -28,7 +29,6 @@ const state = {
     max_id: 0,
     graph_id: 0,  // 项目id
 
-    terminal_display: 'none',
     terminalContent: '',
     operation: false,
     clickNode: null,
@@ -40,6 +40,12 @@ const mutations = {
     // 设置用户上传的所有文件
     SetFileList: (state, fileList) => {
         state.fileList = fileList
+    },
+    SET_TERMINALDISPLAY: (state, terminal_display) => {
+        state.terminal_display = terminal_display
+    },
+    SET_TERMINALCONTENT: (state, terminalContent) => {
+        state.terminalContent += terminalContent
     },
     SET_ISFOCUSCANVAS: (state, is_focus_canvas) => {
         state.is_focus_canvas = is_focus_canvas
@@ -91,12 +97,6 @@ const mutations = {
     },
     SET_GRAPHID: (state, graph_id) => {
         state.graph_id = graph_id
-    },
-    SET_TERMINALDISPLAY: (state, terminal_display) => {
-        state.terminal_display = terminal_display
-    },
-    SET_TERMINALCONTENT: (state, terminalContent) => {
-        state.terminalContent += terminalContent
     },
     SET_OPERATION: (state, operation) => {
         state.operation = operation
