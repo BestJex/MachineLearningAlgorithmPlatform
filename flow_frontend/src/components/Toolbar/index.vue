@@ -565,6 +565,8 @@
 					if (data.type === 0) {
 					    console.log(data)
 					}
+
+					// type为1表示节点的运行信息
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
@@ -576,11 +578,13 @@
                             self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                         }
                     }
+
                     if (data.type === 3) {
                         let item = self.graph.findById(data.name)
                         self.addErrorFrame([data.name])
                         self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #dd6161;line-height: 10px">${item._cfg.model.label}运行出错</span></p>`
                     }
+
                     if (data.type === 4) {
                         Notification({
                             title: '错误',
