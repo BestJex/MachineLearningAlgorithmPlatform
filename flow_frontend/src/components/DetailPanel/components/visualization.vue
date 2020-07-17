@@ -16,8 +16,7 @@
       :modal-append-to-body="true"
       :visible.sync="isShowVisual"
       custom-class="preview-dialog"
-      title="可视化文件"
-    >
+      title="可视化文件">
       <el-form label-position="top">
         <el-form-item label="选择可视化行（暂不支持字符类型可视化）">
           <el-table

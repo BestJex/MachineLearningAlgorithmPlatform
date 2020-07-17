@@ -5,24 +5,27 @@
 				<div class="action-group">
 					<el-row justify="space-between" type="flex">
 						<el-col class="action-group-left">
-							<el-button :disabled="!multipleSelection.length"
-									   @click="deleteProjects"
-									   circle
-									   class="action-btn"
-									   icon="el-icon-delete"
-									   type="danger"
-									   size="small"></el-button>
-							<el-button :disabled="!multipleSelection.length"
-									   @click="copyProjects"
-									   circle
-									   class="action-btn"
-									   icon="el-icon-copy-document"
-									   type="primary"
-									   size="small"></el-button>
-							<el-input v-model="search"
-									  style="margin-left: 20px; width: 250px"
-									  size="mini"
-									  placeholder="输入关键字搜索"/>
+							<el-button
+								:disabled="!multipleSelection.length"
+								@click="deleteProjects"
+								circle
+								class="action-btn"
+								icon="el-icon-delete"
+								type="danger"
+								size="small"></el-button>
+							<el-button
+								:disabled="!multipleSelection.length"
+								@click="copyProjects"
+								circle
+								class="action-btn"
+								icon="el-icon-copy-document"
+								type="primary"
+								size="small"></el-button>
+							<el-input
+								v-model="search"
+								style="margin-left: 20px; width: 250px"
+								size="mini"
+								placeholder="输入关键字搜索"/>
 						</el-col>
 						<el-col class="action-group-right">
 							<el-button @click="isShowDialog = true"
@@ -232,13 +235,11 @@
                     confirmButtonText: '确 定',
                     cancelButtonText: '取 消',
                     type: 'warning'
-                })
-                    .then(() => {
+                }).then(() => {
                         return graphApi.deleteGraphs({
                             projectIds: this.multipleSelection
                         })
-                    })
-                    .then(res => {
+                    }).then(() => {
                         Notification({
                             title: '成功',
                             message: '文件移除成功',
@@ -246,37 +247,34 @@
                             duration: 500
                         })
                         this.getGraphs()
-                    })
-                    .catch(err => {
+                    }).catch(err => {
                         this.$message({
                             type: err === 'cancel' ? 'info' : 'error',
                             message: err === 'cancel' ? '已取消删除' : err.data
                         })
                     })
             },
+
+			// 复制项目
             copyProjects() {
-                this.axios({
-                    method: 'post',
-                    url: 'http://39.105.21.62/flow/api/graph/copy/',
-                    withCredentials: true,
-                    data: { projectIds: this.multipleSelection },
-                }).then(res => {
+                graphApi.copyGraphs({ projectIds: this.multipleSelection }).then(res => {
+                    console.log(res)
+                    this.getGraphs()
                     Notification({
                         title: '成功',
                         message: '文件复制成功',
                         type: 'success',
                         duration: 500
                     })
-                    this.getGraphs()
-                }).catch(err => {
+				}).catch(err => {
                     this.$message({
                         type: err === 'cancel' ? 'info' : 'error',
                         message: err === 'cancel' ? '已取消复制' : err.data
                     })
                 })
-                // })
             },
         },
+
         watch: {
             search(cont) {
                 if (cont) { // 拦截器，提高性能
