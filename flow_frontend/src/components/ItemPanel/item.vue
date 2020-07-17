@@ -1,107 +1,97 @@
 <template>
-    <div>
-        <hr>
-        <el-tooltip placement="top">
-            <div slot="content">{{ $store.state.app.operation ? '结束编辑' : '编辑' }}</div>
-            <el-button
-                    :type="$store.state.app.operation ? 'primary' : ''"
-                    icon="el-icon-edit"
-                    circle
-                    style="margin-left: 5px;"
-                    @click="handleOperation()"
-                    :title="$store.state.app.operation ? '结束编辑' : '编辑'"></el-button>
-        </el-tooltip>
-        <el-tooltip placement="top">
-            <div slot="content">恢复节点</div>
-            <el-button
-                    v-show="$store.state.app.operation"
-                    type="warning"
-                    icon="el-icon-refresh-left"
-                    circle
-                    @click="recoveryNode()"
-                    title="恢复节点"></el-button>
-        </el-tooltip>
-<!--        <el-tooltip placement="top">-->
-<!--            <div slot="content">隐藏节点</div>-->
-<!--            <el-button-->
-<!--                    v-show="$store.state.app.operation"-->
-<!--                    type="info"-->
-<!--                    icon="el-icon-view"-->
-<!--                    circle-->
-<!--                    @click="hideNodes()"-->
-<!--                    title="隐藏节点"></el-button>-->
-<!--        </el-tooltip>-->
-        <el-tooltip placement="top">
-            <div slot="content">隐藏节点</div>
-            <el-button
-                    v-show="this.$store.state.app.operation"
-                    type="danger"
-                    icon="el-icon-view"
-                    circle
-                    @click="deleteNodes()"
-                    title="隐藏"></el-button>
-        </el-tooltip>
-        <el-input
-                v-show="!$store.state.app.operation"
-                placeholder="输入关键字进行过滤"
-                v-model="filterText"
-                style="display: inline-block; width: 80%"></el-input>
-        <hr>
-        <el-tree
-                ref="tree"
-                class="filter-tree"
-                default-expand-all
-                :data="nodeList"
-                :draggable="true"
-                :props="defaultProps"
-                :allow-drop="allowDrop"
-                :allow-drag="allowDrag"
-                :highlight-current="true"
-                :show-checkbox="$store.state.app.operation"
-                :filter-node-method="filterNode"
-                :expand-on-click-node="!$store.state.app.operation"
-                @node-drop="handleDrop"
-                @node-drag-over="handleDragOver"
-                @node-drag-end="handleElDragEnd"
-                @check-change="handleCheckChange"
-                @node-drag-enter="handleDragEnter"
-                @node-drag-leave="handleDragLeave"
-                @node-drag-start="handleElDragStart"
-				style="margin-bottom: 70px">
+	<div>
+		<hr>
+		<el-tooltip placement="top">
+			<div slot="content">{{ $store.state.app.operation ? '结束编辑' : '编辑' }}</div>
+			<el-button
+				:type="$store.state.app.operation ? 'primary' : ''"
+				icon="el-icon-edit"
+				circle
+				style="margin-left: 5px;"
+				@click="handleOperation()"
+				:title="$store.state.app.operation ? '结束编辑' : '编辑'"></el-button>
+		</el-tooltip>
+		<el-tooltip placement="top">
+			<div slot="content">恢复节点</div>
+			<el-button
+				v-show="$store.state.app.operation"
+				type="warning"
+				icon="el-icon-refresh-left"
+				circle
+				@click="recoveryNode()"
+				title="恢复节点"></el-button>
+		</el-tooltip>
+		<el-tooltip placement="top">
+			<div slot="content">隐藏节点</div>
+			<el-button
+				v-show="this.$store.state.app.operation"
+				type="danger"
+				icon="el-icon-view"
+				circle
+				@click="deleteNodes()"
+				title="隐藏"></el-button>
+		</el-tooltip>
+		<el-input
+			v-show="!$store.state.app.operation"
+			placeholder="输入关键字进行过滤"
+			v-model="filterText"
+			style="display: inline-block; width: 80%"></el-input>
+		<hr>
+		<el-tree
+			ref="tree"
+			class="filter-tree"
+			default-expand-all
+			:data="nodeList"
+			:draggable="true"
+			:props="defaultProps"
+			:allow-drop="allowDrop"
+			:allow-drag="allowDrag"
+			:highlight-current="true"
+			:show-checkbox="$store.state.app.operation"
+			:filter-node-method="filterNode"
+			:expand-on-click-node="!$store.state.app.operation"
+			@node-drop="handleDrop"
+			@node-drag-over="handleDragOver"
+			@node-drag-end="handleElDragEnd"
+			@check-change="handleCheckChange"
+			@node-drag-enter="handleDragEnter"
+			@node-drag-leave="handleDragLeave"
+			@node-drag-start="handleElDragStart"
+			style="margin-bottom: 70px">
                   <span
-                          class="custom-tree-node"
-                          slot-scope="{ node, data }"
-						  :id="node.label">
+					  class="custom-tree-node"
+					  slot-scope="{ node, data }"
+					  :id="node.label">
                         <span v-show="!$store.state.app.operation">{{ node.label }}</span>
                         <label>
                             <input type="text" v-model="data.name" v-show="$store.state.app.operation">
                         </label>
                   </span>
-        </el-tree>
-        <el-dialog
-                :append-to-body="true"
-                :visible.sync="isShowTreeNodeManage"
-                custom-class="preview-dialog"
-                title="恢复结点"
-				style="min-width: 700px"
+		</el-tree>
+		<el-dialog
+			:append-to-body="true"
+			:visible.sync="isShowTreeNodeManage"
+			custom-class="preview-dialog"
+			title="恢复结点"
+			style="min-width: 700px"
 		>
-            <!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-            <el-checkbox-group v-model="checkedNodes" @change="handleCheckedNodesChange">
-                <el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
-            </el-checkbox-group>
-            <el-button
-                    @click="recoveryTreeNode()"
-                    size="small"
-                    style="margin: 20px 50% 10px 50%"
-                    type="success">确认
-            </el-button>
-        </el-dialog>
-    </div>
+			<!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
+			<el-checkbox-group v-model="checkedNodes" @change="handleCheckedNodesChange">
+				<el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
+			</el-checkbox-group>
+			<el-button
+				@click="recoveryTreeNode()"
+				size="small"
+				style="margin: 20px 50% 10px 50%"
+				type="success">确认
+			</el-button>
+		</el-dialog>
+	</div>
 </template>
 
 
 <script>
-    import {mapGetters} from 'vuex'
+    import { mapGetters } from 'vuex'
     import eventBus from '@/utils/eventBus'
     import graphApi from '@/api/graph'
 
@@ -142,9 +132,8 @@
         },
         created() {
             this.bindEvent()
-            // 1.获取左侧树形图
             this.getTree()
-			this.id = this.$store.state.app.graph_id
+            this.id = this.$store.state.app.graph_id
         },
         watch: {
             filterText(val) {
@@ -221,7 +210,7 @@
             },
 
             /**
-             * 新增节点
+             * 恢复节点
              */
             recoveryNode() {
                 this.isShowTreeNodeManage = true
@@ -268,46 +257,6 @@
             },
 
             /**
-             * 隐藏节点
-             */
-            hideNodes() {
-                // let checkArr = this.$refs.tree.getCheckedNodes()
-                // console.log(checkArr)
-                // for (let i = 0; i < checkArr.length; i++) {
-                //     let item = document.getElementById(checkArr[i].name).parentNode.parentNode
-				// 	item.style.display = 'none'
-                //     res.push(checkArr[i].$treeNodeId)
-                //     if (!checkArr[i].children) {
-                //         for (let a = 0; a < this.nodeList.length; a++) {
-                //         console.log(checkArr[i].id)
-                //         console.log(this.nodeList[a].id)
-                //         if (checkArr[i].id === this.nodeList[a].id) {
-                //         	Object.assign(this.nodeList[a], { visible: false })
-                //         	console.log(this.nodeList[a])
-                //         }
-                //         }
-                //     }
-                // }
-                //          for (let index = 0; index < res.length; index++) {
-                //              let item = res[index]
-                //              for (let i = 0; i < this.nodeList.length; i++) {
-                //                  if (this.nodeList[i].$treeNodeId === item) {
-                // // console.log(this.nodeList[i]);
-                //                      continue
-                //                  }
-                //                  if (!this.nodeList[i].children) {
-                // console.log(this.nodeList[i])
-                //                      for (let j = 0; j < this.nodeList[i].children.length; j++) {
-                //                          if (this.nodeList[i].children[j].$treeNodeId === item) {
-                // 		console.log(this.nodeList[i]);
-                //                          }
-                //                      }
-                //                  }
-                //              }
-                //          }
-            },
-
-            /**
              * 删除节点
              */
             deleteNodes() {
@@ -350,7 +299,7 @@
              */
             handleElDragEnd(node, _node, p, e) {
                 // console.log(node);
-				let data = {}
+                let data = {}
                 if (this.isAllowDrop) {
                     const item = JSON.parse(JSON.stringify(node.data))
                     item.template_id = item.id
@@ -368,7 +317,7 @@
                         data.status = 'init'
                         // 加载输入节点
                         for (const [key, value] of Object.entries(node.data.information.inputattibute)) {
-                            value.disable = "Yes";
+                            value.disable = 'Yes'
                             data.point_detail.push(value)
                         }
                         // 加载参数列表
@@ -379,8 +328,8 @@
                         for (const [key, value] of Object.entries(node.data.information.outputattibute)) {
                             data.point_detail.push(value)
                         }
-                        data.shape = 'customNode';
-                        data.type = 'node';
+                        data.shape = 'customNode'
+                        data.type = 'node'
                         this.command.executeCommand('add', [data])
 
                     }
@@ -388,18 +337,18 @@
                 }
                 // 节点进入之后自动保存
                 let graphData = this.$store.state.app.graph_data
-				graphData.nodes.push(data)
+                graphData.nodes.push(data)
 
-				let subGraph = this.page.graph.save()
-				subGraph.id = this.$route.params.id,
-				console.log(subGraph);
+                let subGraph = this.page.graph.save()
+                subGraph.id = this.$route.params.id,
+                    console.log(subGraph)
                 let subData = {
                     graphid: this.$route.params.id,
                     graph: JSON.stringify(subGraph),
                 }
                 graphApi.sendGraph(subData).then(res => {
-					// 提交成功
-					console.log(res);
+                    // 提交成功
+                    console.log(res)
                 }).catch(err => {
                     console.error(err)
                 })
@@ -454,82 +403,82 @@
 </script>
 
 <style lang="scss">
-    .itempannel {
-        .el-tree {
-            background: #f6f9fc;
+	.itempannel {
+		.el-tree {
+			background: #f6f9fc;
 
-            .el-tree-node__content {
-                background: #f6f9fc;
+			.el-tree-node__content {
+				background: #f6f9fc;
 
-                &:hover {
-                    background: rgba(0, 0, 0, 0.05);
-                    color: rgb(51, 51, 51);
-                }
-            }
+				&:hover {
+					background: rgba(0, 0, 0, 0.05);
+					color: rgb(51, 51, 51);
+				}
+			}
 
-            .el-tree-node {
-                &:focus {
-                    background: rgba(0, 0, 0, 0.05);
-                }
+			.el-tree-node {
+				&:focus {
+					background: rgba(0, 0, 0, 0.05);
+				}
 
-                &:focus > .el-tree-node__content {
-                    background: rgba(0, 0, 0, 0.05);
-                }
-            }
-        }
-    }
+				&:focus > .el-tree-node__content {
+					background: rgba(0, 0, 0, 0.05);
+				}
+			}
+		}
+	}
 </style>
 
 <style scoped>
-    .itempannel ul {
-        padding: 0 0 0 16px;
-    }
+	.itempannel ul {
+		padding: 0 0 0 16px;
+	}
 
-    .itempannel li {
-        color: rgba(0, 0, 0, 0.65);
-        border-radius: 4px;
-        width: 160px;
-        height: 28px;
-        line-height: 26px;
-        padding-left: 8px;
-        border: 1px solid rgba(0, 0, 0, 0);
-        list-style-type: none;
-    }
+	.itempannel li {
+		color: rgba(0, 0, 0, 0.65);
+		border-radius: 4px;
+		width: 160px;
+		height: 28px;
+		line-height: 26px;
+		padding-left: 8px;
+		border: 1px solid rgba(0, 0, 0, 0);
+		list-style-type: none;
+	}
 
-    .itempannel li:hover {
-        background: white;
-        border: 1px solid #ced4d9;
-        cursor: move;
-    }
+	.itempannel li:hover {
+		background: white;
+		border: 1px solid #ced4d9;
+		cursor: move;
+	}
 
-    .grabbable {
-        cursor: move;
-    }
+	.grabbable {
+		cursor: move;
+	}
 
-    .grabbable:active {
-        cursor: grabbing;
-    }
+	.grabbable:active {
+		cursor: grabbing;
+	}
 
-    .itempannel .pannel-type-icon {
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 8px;
-    }
+	.itempannel .pannel-type-icon {
+		width: 16px;
+		height: 16px;
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 8px;
+	}
 
-    .tree {
-        position: relative;
-        cursor: default;
-        color: #606266;
-    }
+	.tree {
+		position: relative;
+		cursor: default;
+		color: #606266;
+	}
 
-    .custom-tree-node {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 14px;
-        padding-right: 8px;
-    }
+	.custom-tree-node {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 14px;
+		padding-right: 8px;
+	}
 </style>

@@ -15,7 +15,7 @@ const state = {
     canvas_width: document.documentElement.clientWidth - 400,
     canvas_height: document.documentElement.clientHeight - 42,
     detailpannel_width: 200,
-    itempannel_width: 240,
+    itempannel_width: 250,
     terminal_height: 270,
 
     allow_drop: false,
