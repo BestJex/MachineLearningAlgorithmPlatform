@@ -116,12 +116,13 @@ const mutations = {
     SET_GRAPHDATA: (state, graph_data) => {
         state.graph_data = graph_data
     },
+    SET_GRAPHINFO: (state, graph_info) => {
+        state.graph_info = graph_info
+    },
     SET_CIRCLEINFO: (state, circle_info) => {
         state.circle_info = circle_info
     },
-    SET_GRAPHINFO: (state, graph_info) => {
-        state.graph_info = graph_info
-    }
+
 }
 
 const actions = {

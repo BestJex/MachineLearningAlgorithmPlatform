@@ -187,9 +187,9 @@
                         type: 'success',
                         duration: 3000
                     })
-                    this.$store.dispatch('app/getFileList').then(() => {
-                        let fileListLength = this.fileList.length
-                        console.log(fileListLength)
+                    this.$store.dispatch('app/getFileList').then((res) => {
+                        ////////////////////////细节问题日后再说
+                        let fileListLength = this.$store.state.app.fileList.length
                         if (this.listQuery.page_size * (this.listQuery.page - 1) + 1 >= fileListLength) {
                             this.listQuery.page--
                         }
