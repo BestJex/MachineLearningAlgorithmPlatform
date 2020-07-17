@@ -2,84 +2,98 @@
 	<div>
 		<el-tabs :tab-position="'left'">
 			<el-tab-pane label="文件管理">
-				<el-button @click="toggleSelectionDelete()"
-						   size="small"
-						   type="primary"
-						   style="margin-left: 10px">
+				<el-button
+					@click="toggleSelectionDelete()"
+					size="small"
+					type="primary"
+					style="margin-left: 10px">
 					批量删除
 				</el-button>
-				<el-button @click="toggleSelection()"
-						   size="small"
-						   type="primary">
+				<el-button
+					@click="toggleSelection()"
+					size="small"
+					type="primary">
 					取消选择
 				</el-button>
-				<el-table ref="multipleTable"
-						  :data="fileList.filter(data => !search || data.filename.includes(search)).slice((listQuery.page - 1) * listQuery.page_size, listQuery.page * listQuery.page_size)"
-						  tooltip-effect="dark" style="width: 100%;"
-						  :default-sort="{prop: 'buildtime', order: 'descending'}"
-						  @selection-change="handleSelectionChange"
-						  @sort-change="getSortRes">
-					<el-table-column type="selection"
-									 width="45"></el-table-column>
-					<el-table-column prop="buildtime"
-									 label="日期"
-									 width="150"
-									 sortable></el-table-column>
-					<el-table-column prop="filename"
-									 label="文件名"
-									 width="90"></el-table-column>
-					<el-table-column prop="size"
-									 label="文件大小"
-									 width="100"
-									 sortable="custom"></el-table-column>
-					<el-table-column align="right">
-						<template slot="header"
-								  slot-scope="scope">
-							<el-input v-model="search"
-									  size="mini"
-									  placeholder="输入关键字搜索"/>
+				<el-table
+					ref="multipleTable"
+					:data="fileList.filter(data => !search || data.filename.includes(search)).slice((listQuery.page - 1) * listQuery.page_size, listQuery.page * listQuery.page_size)"
+					tooltip-effect="dark" style="width: 100%;"
+					:default-sort="{prop: 'buildtime', order: 'descending'}"
+					@selection-change="handleSelectionChange"
+					@sort-change="getSortRes">
+					<el-table-column
+						type="selection"
+						width="45"></el-table-column>
+					<el-table-column
+						prop="buildtime"
+						label="日期"
+						width="150"
+						sortable></el-table-column>
+					<el-table-column
+						prop="filename"
+						label="文件名"
+						width="90"></el-table-column>
+					<el-table-column
+						prop="size"
+						label="文件大小"
+						width="100"
+						sortable="custom"></el-table-column>
+					<el-table-column
+						align="right">
+						<template
+							slot="header"
+							slot-scope="scope">
+							<el-input
+								v-model="search"
+								size="mini"
+								placeholder="输入关键字搜索"/>
 						</template>
-						<template slot-scope="scope"
-								  style="margin-left: 15px; display: flex">
+						<template
+							slot-scope="scope"
+							style="margin-left: 15px; display: flex">
 							<!--							<el-button size="mini"-->
 							<!--									   type="success"-->
 							<!--									   @click="handleDownload(scope.$index, scope.row)">-->
 							<!--								Download-->
 							<!--							</el-button>-->
-							<el-button size="mini"
-									   type="danger"
-									   @click="handleDelete(scope.$index, scope.row)">
+							<el-button
+								size="mini"
+								type="danger"
+								@click="handleDelete(scope.$index, scope.row)">
 								Delete
 							</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 				<div class="paginator">
-					<el-pagination :current-page="listQuery.page"
-								   :page-size="listQuery.page_size"
-								   :page-sizes="[10]"
-								   :total="fileList.filter(data => !search || data.filename.includes(search)).length"
-								   @current-change="pageCurrentChange"
-								   layout="total, sizes, prev, pager, next, jumper"
-								   style="text-align: center"/>
+					<el-pagination
+						:current-page="listQuery.page"
+						:page-size="listQuery.page_size"
+						:page-sizes="[10]"
+						:total="fileList.filter(data => !search || data.filename.includes(search)).length"
+						@current-change="pageCurrentChange"
+						layout="total, sizes, prev, pager, next, jumper"
+						style="text-align: center"/>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane label="上传文件">
-				<el-upload :before-remove="beforeRemove"
-						   :before-upload="beforeUpload"
-						   :data="{graphId: this.$route.params.id}"
-						   :file-list="uploadFileList"
-						   :on-error="onUploadErr"
-						   :on-remove="handleRemove"
-						   :on-success="onUploadSucc"
-						   :headers="{Authorization: 'JWT ' + token}"
-						   accept=".jpg, .csv, .png"
-						   :action="base_api + 'upload_file'"
-						   class="upload-demo"
-						   :show-file-list="true"
-						   multiple
-						   drag
-						   style="display: inline-block; margin-left: 20%;">
+				<el-upload
+					:before-remove="beforeRemove"
+					:before-upload="beforeUpload"
+					:data="{graphId: this.$route.params.id}"
+					:file-list="uploadFileList"
+					:on-error="onUploadErr"
+					:on-remove="handleRemove"
+					:on-success="onUploadSuccess"
+					:headers="{Authorization: 'JWT ' + token}"
+					accept=".jpg, .csv, .png"
+					:action="base_api + 'upload_file'"
+					class="upload-demo"
+					:show-file-list="true"
+					multiple
+					drag
+					style="display: inline-block; margin-left: 20%;">
 					<i class="el-icon-upload"></i>
 					<div class="el-upload__text">将文件拖到此处，或<em>点击上传（.jpg, .csv, .png）</em></div>
 					<div class="el-upload__text">大小限制10MB</div>
@@ -99,34 +113,26 @@
         name: 'file-mange',
         data() {
             return {
+                count: 0,
                 state: '',
                 search: '',
+                status: true,
+                sortCount: 0, // 修复element-ui排序特性用的参数
                 timeout: null,
                 restaurants: [],
                 uploadFileList: [],		// 上传文件列表
                 fileListNotSort: [],
                 multipleSelection: [],
                 base_api: configJS.BASE_API,
-                uploadData: {
-                    graphId: 0
-                },
                 listQuery: {
                     page: 1,
                     page_size: 10
                 },
-                count: 0,
-                status: true,
-                sortCount: 0, // 修复element-ui排序特性用的参数
             }
         },
         computed: {
             ...mapGetters(['token', 'fileList']),
             graphId: {
-                get() {
-                    return this.$route.params.id || this.$store.getters.graphId
-                }
-            },
-            'uploadData.graphId': {
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId
                 }
@@ -178,9 +184,7 @@
             },
 
             handleDelete(index, row) {
-                fileApi.deleteFile({
-                    filelist: [row.id]
-                }).then(res => {
+                fileApi.deleteFile({ filelist: [row.id] }).then(() => {
                     Notification({
                         title: '成功',
                         message: '文件移除成功',
@@ -194,7 +198,6 @@
                             this.listQuery.page--
                         }
                     })
-                    // if ()
                 }).catch(error => {
                     this.$message({
                         message: error,
@@ -215,9 +218,7 @@
 
             toggleSelectionDelete() {
                 this.multipleSelection.forEach(item => {
-                    fileApi.deleteFile({
-                        filelist: [item.id]
-                    }).then(res => {
+                    fileApi.deleteFile({ filelist: [item.id] }).then(() => {
                         Notification({
                             title: '成功',
                             message: '文件移除成功',
@@ -225,7 +226,6 @@
                             duration: 3000
                         })
                         this.$store.dispatch('app/getFileList')
-
                     }).catch(error => {
                         this.$message({
                             message: error,
@@ -239,20 +239,20 @@
                 this.multipleSelection = val
             },
 
+            // 删除文件
             handleRemove(file, fileList) {
-                fileApi.deleteFile({
-                    id: file.id
-                }).then(res => {
+                fileApi.deleteFile({ id: file.id }).then(() => {
                     Notification({
                         title: '成功',
                         message: '文件移除成功',
                         type: 'success',
-                        duration: 3000
+                        duration: 1000
                     })
                     this.$store.dispatch('app/getFileList')
                 })
             },
 
+            // 在删除文件之间需要用户确认并且判断用户要删除的文件是否存在
             beforeRemove(file, fileList) {
                 return new Promise((resolve, reject) => {
                     this.$confirm(`确定移除 ${file.name}？`).then(res => {
@@ -277,9 +277,11 @@
                     })
                 })
             },
+
+            // 上传文件之间的检查操作
             beforeUpload(file) {
-                const sizeFlag = file.size / 1024 / 1024 < 10
-                if (!sizeFlag) {
+                // 上传文件大小不能超过 10MB
+                if (!(file.size / 1024 / 1024 < 10)) {
                     Notification({
                         title: '错误',
                         message: '上传文件大小不能超过 10MB!',
@@ -289,24 +291,26 @@
                     return false
                 }
                 return new Promise((resolve, reject) => {
+                    // 判断文件是否已存在
                     fileApi.isFileNameValid({
                         filename: file.name,
                         graphId: this.graphId
                     }).then(res => {
                         if (res.data) {
-                            // 存在重名文件
                             return this.$confirm(`文件 ${file.name} 已存在，确认覆盖吗？`)
                         } else {
                             return resolve()
                         }
-                    }).then(res => {
+                    }).then(() => {
                         return resolve()
-                    }).catch(err => {
+                    }).catch(() => {
                         return reject()
                     })
                 })
             },
-            onUploadSucc(res, file, fileList) {
+
+            // 文件上传成功时
+            onUploadSuccess(res, file, fileList) {
                 Notification({
                     title: '成功',
                     message: '文件上传成功',
@@ -315,8 +319,10 @@
                 })
                 this.$store.dispatch('app/getFileList')
             },
+
+            // 上传文件出现错误时
             onUploadErr(res, file, fileList) {
-                console.log(res)
+                // console.log(res)
                 this.$message({
                     message: res,
                     type: 'error',
@@ -328,7 +334,7 @@
             },
 
             getSortRes(res) {
-                console.log(res)
+                // console.log(res)
                 if (res.prop === 'size') {
                     if (res.order === 'descending') {
                         this.fileList.sort((a, b) => {

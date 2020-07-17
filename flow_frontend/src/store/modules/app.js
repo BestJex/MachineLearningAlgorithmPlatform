@@ -3,8 +3,8 @@ import graphApi from '@/api/graph'
 import {Message} from "element-ui";
 
 const state = {
-    graph_data: [],          // 图信息(节点和指针）
     fileList: [],           // 用户上传的所有文件
+    graph_data: [],          // 图信息(节点和指针）
     graph_info: {},                // 整张图的信息
 
     is_focus_canvas: false,
