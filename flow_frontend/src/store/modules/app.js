@@ -3,10 +3,11 @@ import graphApi from '@/api/graph'
 import {Message} from "element-ui";
 
 const state = {
-    fileList: [],           // 用户上传的所有文件
+    fileList: [],               // 用户上传的所有文件
+    graphName: null,            // 图名
     terminal_display: 'none',
-    graph_data: [],          // 图信息(节点和指针）
-    graph_info: {},                // 整张图的信息
+    graph_data: [],             // 图信息(节点和指针）
+    graph_info: {},             // 整张图的信息
 
     is_focus_canvas: false,
     document_width: document.documentElement.clientWidth,
@@ -41,12 +42,17 @@ const mutations = {
     SetFileList: (state, fileList) => {
         state.fileList = fileList
     },
+    // 设置用户选中的图名
+    SetGraphName: (state, graphName) => {
+        state.graphName = graphName
+    },
     SET_TERMINALDISPLAY: (state, terminal_display) => {
         state.terminal_display = terminal_display
     },
     SET_TERMINALCONTENT: (state, terminalContent) => {
         state.terminalContent += terminalContent
     },
+
     SET_ISFOCUSCANVAS: (state, is_focus_canvas) => {
         state.is_focus_canvas = is_focus_canvas
     },

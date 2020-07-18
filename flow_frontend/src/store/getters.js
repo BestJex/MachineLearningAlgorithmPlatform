@@ -1,5 +1,6 @@
 const getters = {
     fileList: state => state.app.fileList,                  // 用户上传的文件列表
+    graphName: state => state.app.graphName,                // 图的名字
     terminalDisplay: state => state.app.terminal_display,   // 控制台是否显示
 
     isFocusCanvas: state => state.app.is_focus_canvas,
@@ -24,7 +25,9 @@ const getters = {
     graphData: state => state.app.graph_data,
     circleInfo: state => state.app.circle_info,
     graphInfo: state => state.app.graph_info,
+
     token: state => state.user.token,
-    username: state => state.user.username
+    userId: state => state.user.userId,
+    username: state => state.user.username,
 }
 export default getters

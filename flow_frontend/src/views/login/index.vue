@@ -241,18 +241,12 @@
                     if (valid) {
                         this.loading = true
                         // 通过验证之后才请求登录接口
-                        this.$store
-                            .dispatch('user/Login', formData)
-                            .then(() => {
-                                let expires = (new Date().getTime() + 3 * 24 * 60 * 60 * 1000)
-                                localStorage.setItem('username', user.username)
-                                this.loading = false
-                                this.$router.push({ path: '/project' })
-                                location.reload()
-                            })
-                            .catch(e => {
-                                this.loading = false
-                            })
+                        this.$store.dispatch('user/Login', formData).then(() => {
+                            this.loading = false
+                            this.$router.push({ path: '/project' })
+                        }).catch(e => {
+                            this.loading = false
+                        })
                     } else {
                         this.$message.error('error submit!')
                         return false

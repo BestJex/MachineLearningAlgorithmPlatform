@@ -284,7 +284,7 @@
                     }
                 }
             },
-			// 保存，但是不弹出消息
+            // 保存，但是不弹出消息
             handleSilentSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -357,7 +357,8 @@
                 if (this.selectedItem.length > 0) {
                     this.command.executeCommand('delete', this.selectedItem)
                     this.selectedItem = []
-                    this.handleSilentSave()  // 可能不需要提示，可以做两手保存方法，一个是有提示的保存，一个数没有提示的保存，最好是只有在用户自己主动点击保存的时候才会弹出 “保存成功！”
+                    // 可能不需要提示，可以做两手保存方法，一个是有提示的保存，一个数没有提示的保存，最好是只有在用户自己主动点击保存的时候才会弹出 “保存成功！”
+                    this.handleSilentSave()
                 }
             },
             getFormatPadding() {
@@ -517,7 +518,7 @@
                         message: '图不能为空！',
                         type: 'error'
                     })
-					return
+                    return
                 }
                 this.axios({
                     method: 'get',
@@ -562,11 +563,11 @@
                     let data = JSON.parse(e.data)
                     let time = new Date()
 
-					if (data.type === 0) {
-					    console.log(data)
-					}
+                    if (data.type === 0) {
+                        console.log(data)
+                    }
 
-					// type为1表示节点的运行信息
+                    // type为1表示节点的运行信息
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
@@ -603,7 +604,7 @@
                 window.s = socket
             },
             /**
-			 * 关闭WebSocket，重新获取用户文件列表，因为运行项目会生成模型文件
+             * 关闭WebSocket，重新获取用户文件列表，因为运行项目会生成模型文件
              */
             closeWebSocket() {
                 if (window.s) {
@@ -688,10 +689,10 @@
             },
 
             /**
-			 * 设置控制台显示与隐藏
+             * 设置控制台显示与隐藏
              */
             setTerminal() {
-                let status = this.terminalDisplay==='block' ? 'none' : 'block'
+                let status = this.terminalDisplay === 'block' ? 'none' : 'block'
                 this.$store.commit('app/SET_TERMINALDISPLAY', status)
             },
             exportPythonFile() {
