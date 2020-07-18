@@ -25,7 +25,7 @@ const getters = {
     graphData: state => state.app.graph_data,
     circleInfo: state => state.app.circle_info,
     graphInfo: state => state.app.graph_info,
-
+    clickEdge: state => state.app.clickEdge,
     token: state => state.user.token,
     userId: state => state.user.userId,
     username: state => state.user.username,
