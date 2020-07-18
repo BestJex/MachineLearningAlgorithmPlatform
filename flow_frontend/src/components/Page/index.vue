@@ -26,6 +26,7 @@
     import { Message } from 'element-ui'
     import Terminal from '../Terminal'
     import Menu from './Menu/index.vue'
+    import eventBus from '@/utils/eventBus'
     import { Notification } from 'element-ui'
 
     export default {
@@ -95,6 +96,7 @@
             this.initEvent()
             initBehavors()
             this.getGraph()
+            this.bindEvent()
             // this.$store.dispatch('app/getProjectFileList', this.id);
             document.body.style.overflow = 'hidden'
         },
@@ -106,13 +108,19 @@
         },
 
         methods: {
+            bindEvent() {
+                eventBus.$on('fleshGraph', item => {
+					this.graph._cfg.data = item.data
+                    // this.graph.read(item.data)
+                })
+            },
             initEvent() {
                 const { editor, command } = this.$parent
                 this.editor = editor
                 this.command = command
             },
             changeGraph(event) {
-                console.log(event)
+                console.log(event, 'ok')
                 this.command.executeCommand('delete', event)
                 let graph = this.graph.save()
                 Object.assign(graph, { id: this.$route.params.id })
@@ -151,6 +159,7 @@
             getGraph() {
                 graphApi.getGraphById({ graphid: this.id }).then(res => {
                     this.data = res.data.data
+                    console.log(this.data)
                     this.isRunning = this.data.status === 'loading'
                     this.forEach(this.data)
                     this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
@@ -217,10 +226,10 @@
                 this.readData()
                 // 把图信息（整张图）存到全局
                 this.$store.commit('app/SET_GRAPHINFO', this.graph)
-                console.log(this.graph)
             },
 
             readData() {
+
                 let data = this.data
                 if (data) {
                     this.graph.read(data)

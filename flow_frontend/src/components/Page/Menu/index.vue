@@ -379,6 +379,7 @@
                 }
             },
             doDeleteEdge() {
+                console.log(this.$parent.graph._cfg.data.edges);
                 for (let i = 0; i < this.$parent.graph._cfg.data.edges.length; i++) {
                     // 遍历，寻找id符合的节点
                     if (this.$parent.graph._cfg.data.edges[i].id === this.locateClickEdge._cfg.id) {
@@ -386,6 +387,7 @@
                         this.$emit('changeGraph', [subInfo])
                         setTimeout(() => {
                             this.dialogVisible = false
+							this.locateClickEdge = null
                         }, 500)
                     } else {
                         // 查询失败

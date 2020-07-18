@@ -684,6 +684,8 @@
 	}
 
 	.acc_pass_con {
+		overflow-y: auto;
+		height: 450px;
 		padding: 28px 0 30px;
 	}
 

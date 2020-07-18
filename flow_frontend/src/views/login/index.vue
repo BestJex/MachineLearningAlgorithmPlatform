@@ -147,9 +147,11 @@
                 }
             }
             let checkVerificationCode = (rule, value, cb) => {
+                console.log(value);
                 if (!value) {
                     return cb(new Error('验证码不能为空！'))
-                } else if (this.formLogin.code !== this.rightVerificationCode) {
+                } else if (this.formLogin.code.toLowerCase() !== this.rightVerificationCode.toLowerCase()) {
+
                     return cb(new Error('验证码不正确！'))
                 } else {
                     cb()
@@ -181,7 +183,7 @@
                 rules: {
                     username: [{ validator: checkUserName, trigger: 'blur' }],
                     password: [{ validator: checkPassword, trigger: 'blur' }],
-                    code: [{ validator: checkVerificationCode, trigger: 'blur' }],
+                    code: [{ validator: checkVerificationCode, trigger: 'change' }],
                 },
                 loading: false,
             }

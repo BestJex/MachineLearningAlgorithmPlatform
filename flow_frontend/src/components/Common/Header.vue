@@ -106,6 +106,7 @@
 <style scoped>
 	.header {
 		height: 60px;
+		min-width: 400px;
 	}
 
 	.user-avatar {

@@ -17,6 +17,7 @@ export default {
         if (item.hasState('selected')) {
             return
         } else {
+            // console.log(e.item);
             store.commit('app/SET_CLICKEDGE', e.item)
             if (self.shouldUpdate.call(self, e)) {
                 graph.setItemState(item, 'hover', true)

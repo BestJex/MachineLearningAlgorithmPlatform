@@ -89,9 +89,12 @@ export default {
                     graph: JSON.stringify(graph),
                 }
                 graphApi.sendGraph(data).then(res => {
-
+                    
                 }).then(() => {
                     // 注释是为了提高用户体验
+                    graphApi.getGraphById({ graphid: store.state.app.graph_id }).then(res => {
+                        eventBus.$emit('fleshGraph', res.data)
+                    })
                     // return graphApi.getGraphById({ graphid: this.graphId })
                 }).then(res => {
                     // const data = res.data.data

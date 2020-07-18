@@ -234,7 +234,6 @@
                     self.selectedItem = self.selectedItem.concat(
                         ...self.graph.findAllByState('edge', 'selected')
                     )
-					console.log(self.selectedItem);
                 })
 
                 // 触发删除节点事件
