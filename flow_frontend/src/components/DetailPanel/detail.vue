@@ -96,16 +96,17 @@
 								</el-select>
 							</el-tooltip>
 							<!-- 选择算法 -->
-							<el-select
-								@change="changeValue"
-								placeholder="请选择"
-								v-if="node.type==='selection'"
-								v-model="node.value">
-								<el-option
-									:label="item"
-									:value="item"
-									v-for="item in node.selection"></el-option>
-							</el-select>
+							<el-tooltip class="item" effect="dark" content="选择" placement="left">
+								<el-select
+									@change="changeValue"
+									v-if="node.type==='selection'"
+									v-model="node.value">
+									<el-option
+										:label="item"
+										:value="item"
+										v-for="item in node.selection"></el-option>
+								</el-select>
+							</el-tooltip>
 						</el-form-item>
 					</el-form>
 				</el-scrollbar>
@@ -117,7 +118,6 @@
 <script>
     import eventBus from '@/utils/eventBus'
     import Grid from '@antv/g6/build/grid'
-    import visualFile from './components/visualization'
     import graphApi from '@/api/graph'
     import { mapGetters } from 'vuex'
     import { Notification } from 'element-ui'
@@ -176,9 +176,6 @@
                 return ans
             },
         },
-        components: {
-            visualFile,
-        },
         created() {
             this.bindEvent()
         },
@@ -199,7 +196,14 @@
                             self.node_detail = item.target.getModel().node_detail
                             self.point_detail = item.target.getModel().point_detail
                             this.$store.dispatch('app/getFileList')
-                            // console.log(self.node_detail)
+                            // self.node_detail.forEach(item => {
+                            //     if (item.label === '文件第一行是否是索引') {
+                            //         for (let i = 0; i < item.selection.length; i++) {
+                            //             item.selection[i] = (item.selection[i] === 0 ? '是' : '否')
+							// 		}
+                            //     }
+                            // })
+                            console.log(self.node_detail)
                         } else {
                             self.status = 'canvas-selected'
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null)

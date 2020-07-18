@@ -8,7 +8,6 @@ export default {
             data
         })
     },
-
     getGraphs(data) {
         return request({
             url: '/graph/',
@@ -16,7 +15,6 @@ export default {
             params: data,
         })
     },
-
     getGraphById(data) {
         return request({
             url: '/loadgraph',
@@ -24,7 +22,6 @@ export default {
             params: data,
         })
     },
-
     createGraph(data) {
         return request({
             url: '/graph/',
@@ -32,15 +29,13 @@ export default {
             data,
         })
     },
-	
-    copyGraph(data) {
+    copyGraphs(data) {
         return request({
-            url: '/graph/copy',
+            url: '/graph/copy/',
             method: 'post',
             data
         })
     },
-
     deleteGraphs(data) {
         return request({
             url: '/graph/multiple_delete/',
@@ -48,7 +43,6 @@ export default {
             params: data
         })
     },
-
     sendGraph(data) {
         return request({
             url: `/savegraph`,
@@ -56,7 +50,13 @@ export default {
             data
         })
     },
-
+    getGraphTree(data) {
+        return request({
+            url: '/node_template/',
+            method: 'get',
+            params: data,
+        })
+    },
     runProject(data) {
         return request({
             url: '/run_project',
@@ -64,7 +64,6 @@ export default {
             data
         })
     },
-
     runNode(data) {
         return request({
             url: '/nodeinputcheck',
@@ -72,12 +71,11 @@ export default {
             data
         })
     },
-
     getOutputInfo(data) {
         return request({
             url: '/dataupload',
             method: 'get',
             params: data
         })
-    }
+    },
 }

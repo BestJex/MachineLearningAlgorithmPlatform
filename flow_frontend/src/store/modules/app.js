@@ -3,9 +3,11 @@ import graphApi from '@/api/graph'
 import {Message} from "element-ui";
 
 const state = {
-    graph_data: [],          // 图信息(节点和指针）
-    fileList: [],           // 用户上传的所有文件
-    graph_info: {},                // 整张图的信息
+    fileList: [],               // 用户上传的所有文件
+    graphName: null,            // 图名
+    terminal_display: 'none',   // 运行项目控制台显示
+    graph_data: [],             // 图信息(节点和指针）
+    graph_info: {},             // 整张图的信息
 
     is_focus_canvas: false,
     document_width: document.documentElement.clientWidth,
@@ -14,7 +16,7 @@ const state = {
     canvas_width: document.documentElement.clientWidth - 400,
     canvas_height: document.documentElement.clientHeight - 42,
     detailpannel_width: 200,
-    itempannel_width: 240,
+    itempannel_width: 250,
     terminal_height: 270,
 
     allow_drop: false,
@@ -28,7 +30,6 @@ const state = {
     max_id: 0,
     graph_id: 0,  // 项目id
 
-    terminal_display: 'none',
     terminalContent: '',
     operation: false,
     clickNode: null,
@@ -41,6 +42,17 @@ const mutations = {
     SetFileList: (state, fileList) => {
         state.fileList = fileList
     },
+    // 设置用户选中的图名
+    SetGraphName: (state, graphName) => {
+        state.graphName = graphName
+    },
+    SET_TERMINALDISPLAY: (state, terminal_display) => {
+        state.terminal_display = terminal_display
+    },
+    SET_TERMINALCONTENT: (state, terminalContent) => {
+        state.terminalContent += terminalContent
+    },
+
     SET_ISFOCUSCANVAS: (state, is_focus_canvas) => {
         state.is_focus_canvas = is_focus_canvas
     },
@@ -91,12 +103,6 @@ const mutations = {
     },
     SET_GRAPHID: (state, graph_id) => {
         state.graph_id = graph_id
-    },
-    SET_TERMINALDISPLAY: (state, terminal_display) => {
-        state.terminal_display = terminal_display
-    },
-    SET_TERMINALCONTENT: (state, terminalContent) => {
-        state.terminalContent += terminalContent
     },
     SET_OPERATION: (state, operation) => {
         state.operation = operation

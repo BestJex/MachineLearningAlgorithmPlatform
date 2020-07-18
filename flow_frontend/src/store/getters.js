@@ -1,5 +1,8 @@
 const getters = {
-    fileList: state => state.app.fileList,
+    fileList: state => state.app.fileList,                  // 用户上传的文件列表
+    graphName: state => state.app.graphName,                // 图的名字
+    terminalDisplay: state => state.app.terminal_display,   // 控制台是否显示
+
     isFocusCanvas: state => state.app.is_focus_canvas,
     canvasWidth: state => state.app.canvas_width,
     canvasHeight: state => state.app.canvas_height - 62,
@@ -13,7 +16,6 @@ const getters = {
     docHeight: state => state.app.document_height,
     tbHeight: state => state.app.topbar_height,
     graphId: state => state.app.graph_id,
-    terminalDisplay: state => state.app.terminal_display,
     terminalContent: state => state.app.terminalContent,
     operation: state => state.app.operation,
     clickNode: state => state.app.click_node,
@@ -23,7 +25,9 @@ const getters = {
     graphData: state => state.app.graph_data,
     circleInfo: state => state.app.circle_info,
     graphInfo: state => state.app.graph_info,
+
     token: state => state.user.token,
-    username: state => state.user.username
+    userId: state => state.user.userId,
+    username: state => state.user.username,
 }
 export default getters

@@ -8,12 +8,18 @@ export default {
             data
         })
     },
-
     register(data) {
         return request({
             url: '/user/register',
             method: 'post',
             data
+        })
+    },
+    userInfo(data) {
+        return request({
+            url: '/user/information',
+            method: 'get',
+            params: data
         })
     },
 }

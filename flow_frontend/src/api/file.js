@@ -15,6 +15,13 @@ export default {
             data
         })
     },
+    renameFile(data) {
+        return request({
+            url: '/filerename',
+            method: 'POST',
+            data
+        })
+    },
     isFileNameValid(data) {
         return request({
             url: '/is_filename_valid',

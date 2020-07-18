@@ -26,8 +26,6 @@
                 isActive: false,
                 startX: 0,
                 endX: 0,
-                DEFAULT_ITEM_WIDTH: 200,
-                DEFAULT_RESIZER_LEFT: 190,
                 MAX_ITEM_WIDTH: 400,
                 MIN_ITEM_WIDTH: 200
             }

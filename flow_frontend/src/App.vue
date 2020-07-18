@@ -23,14 +23,7 @@
 </script>
 
 <style>
-    /* html, body {
-        overflow: hidden;
-        margin: 0;
-        font-size: 12px;
-    } */
-    html,
-    body,
-    #app {
+    html, body, #app {
         font-family: sans-serif, Helvetica, Arial;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;

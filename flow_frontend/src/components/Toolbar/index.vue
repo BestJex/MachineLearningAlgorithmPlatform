@@ -61,7 +61,6 @@
 					data-command="toFront"
 					title="层级前置"></i>
 				<span class="separator"></span>
-				<span class="separator"></span>
 				<i
 					:class="multiSelect?'disable':''"
 					@click="handleMuiltSelect"
@@ -76,7 +75,7 @@
 					{{testRunning ? '停止运行' : '运行项目'}}
 				</el-button>
 				<el-button @click="checkGraph" type="success">检查图</el-button>
-				<el-button @click="getTerminal" type="success">运行信息</el-button>
+				<el-button @click="setTerminal" type="success">运行信息</el-button>
 				<el-dropdown style="margin-left: 10px;">
 					<el-button type="primary">
 						文件
@@ -84,13 +83,13 @@
 					</el-button>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>
-							<span @click="isShowImportManage = true">导入.gph文件</span>
+							<p @click="isShowImportManage = true">导入.gph文件</p>
 						</el-dropdown-item>
 						<el-dropdown-item>
-							<span @click="exportPythonFile()">导出.py文件</span>
+							<p @click="exportPythonFile()">导出.py文件</p>
 						</el-dropdown-item>
 						<el-dropdown-item>
-							<span @click="exportJsonFile()">导出.gph文件</span>
+							<p @click="exportJsonFile()">导出.gph文件</p>
 						</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -107,7 +106,7 @@
 					rel="stylesheet"
 					type="text/css"/>
 				<el-button @click="runProject" type="success">重启项目</el-button>
-				<el-button @click="stopRuning" type="danger">停止运行</el-button>
+				<el-button @click="stopRunning" type="danger">停止运行</el-button>
 			</div>
 		</transition>
 		<el-dialog
@@ -162,7 +161,7 @@
             }
         },
         computed: {
-            ...mapGetters(['isAllowSave', 'selectedNodeId']),
+            ...mapGetters(['isAllowSave', 'selectedNodeId', 'terminalDisplay']),
             isRunning: {
                 get() {
                     return this.$store.state.app.is_running
@@ -284,7 +283,7 @@
                     }
                 }
             },
-			// 保存，但是不弹出消息
+            // 保存，但是不弹出消息
             handleSilentSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -317,7 +316,6 @@
                     })
                 }
             },
-
             handleSave() {
                 if (this.isAllowSave) {
                     this.$store.commit('app/SET_ALLOWSAVE', false)
@@ -358,7 +356,8 @@
                 if (this.selectedItem.length > 0) {
                     this.command.executeCommand('delete', this.selectedItem)
                     this.selectedItem = []
-                    this.handleSilentSave()  // 可能不需要提示，可以做两手保存方法，一个是有提示的保存，一个数没有提示的保存，最好是只有在用户自己主动点击保存的时候才会弹出 “保存成功！”
+                    // 可能不需要提示，可以做两手保存方法，一个是有提示的保存，一个数没有提示的保存，最好是只有在用户自己主动点击保存的时候才会弹出 “保存成功！”
+                    this.handleSilentSave()
                 }
             },
             getFormatPadding() {
@@ -511,7 +510,6 @@
                     }, 3000)
                 }
             },
-
             // 检查图结构
             checkGraph() {
                 if (this.graph._cfg.nodes.length === 0) {
@@ -519,7 +517,7 @@
                         message: '图不能为空！',
                         type: 'error'
                     })
-					return
+                    return
                 }
                 this.axios({
                     method: 'get',
@@ -533,7 +531,7 @@
                         this.addErrorFrame(response.data.data.node)
                     } else {
                         this.$message({
-                            message: 'Successful',
+                            message: '检查图成功！',
                             type: 'success'
                         })
                         return true
@@ -545,11 +543,9 @@
                     })
                 })
             },
-
             success() {
                 this.isShowImportManage = false
             },
-
             // 建立WebSocket并赋值给window.s
             buildWebSocket(data, urlPath) {
                 if (window.s) {
@@ -566,9 +562,11 @@
                     let data = JSON.parse(e.data)
                     let time = new Date()
 
-					if (data.type === 0) {
-					    console.log(data)
-					}
+                    if (data.type === 0) {
+                        console.log(data)
+                    }
+
+                    // type为1表示节点的运行信息
                     if (data.type === 1) {
                         let item = self.graph.findById(data.name)
                         if (data.status === 'begin') {
@@ -580,11 +578,13 @@
                             self.$store.commit('app/SET_RUNNINGCOMPLETE', true)
                         }
                     }
+
                     if (data.type === 3) {
                         let item = self.graph.findById(data.name)
                         self.addErrorFrame([data.name])
                         self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #dd6161;line-height: 10px">${item._cfg.model.label}运行出错</span></p>`
                     }
+
                     if (data.type === 4) {
                         Notification({
                             title: '错误',
@@ -592,22 +592,23 @@
                             type: 'error',
                         })
                         self.terminalContent = `<p style="color: #dd6161">${data.value}</p>`
-                        self.stopRuning()
+                        self.stopRunning()
                     }
                     if (data.type === 5) {
                         self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p><hr>`
                         self.graph.save()
-                        self.stopRuning()
+                        self.stopRunning()
                     }
                 }
                 window.s = socket
             },
-
+            /**
+             * 关闭WebSocket，重新获取用户文件列表，因为运行项目会生成模型文件
+             */
             closeWebSocket() {
                 if (window.s) {
-                    // 重新获取文件
                     this.$store.dispatch('app/getFileList')
-                    window.s.close()		//关闭websocket
+                    window.s.close()
                     // console.log('websocket已关闭')
                 }
             },
@@ -647,7 +648,7 @@
                 })
             },
 
-            stopRuning() {
+            stopRunning() {
                 this.testRunning = false
                 this.closeWebSocket()
             },
@@ -686,13 +687,44 @@
                 })
             },
 
-            getTerminal() {
-                this.$store.commit('app/SET_TERMINALDISPLAY', 'block')
+            /**
+             * 设置控制台显示与隐藏
+             */
+            setTerminal() {
+                let status = this.terminalDisplay === 'block' ? 'none' : 'block'
+                this.$store.commit('app/SET_TERMINALDISPLAY', status)
             },
             exportPythonFile() {
-                if (this.checkGraph()) {
-                    window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`)
+                if (this.graph._cfg.nodes.length === 0) {
+                    this.$message({
+                        message: '图不能为空！',
+                        type: 'error'
+                    })
+                    return
                 }
+                this.axios({
+                    method: 'get',
+                    url: `http://39.105.21.62/flow/api/inputcheck?graphid=${this.$route.params.id}`,
+                }).then(response => {
+                    if (response.data.data.error) {
+                        this.$message({
+                            message: response.data.data.error,
+                            type: 'error'
+                        })
+                        this.addErrorFrame(response.data.data.node)
+                    } else {
+                        this.$message({
+                            message: '检查图成功！',
+                            type: 'success'
+                        })
+                        window.open(`http://39.105.21.62/flow/api/downloadpy?graphid=${this.graphId}`)
+                    }
+                }).catch(error => {
+                    this.$message({
+                        message: error,
+                        type: 'error'
+                    })
+                })
             },
             exportJsonFile() {
                 window.open(`http://39.105.21.62/flow/api/downloadconf?graphid=${this.graphId}`)

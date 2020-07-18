@@ -2,7 +2,8 @@
 	<div class="container view">
 		<div class="left_box">
 			<ul class="aside">
-				<li v-for="(item, _) in asideList" :key="item.id" :class="{asideActive: item.id === asideIndex}" @click="asideClick(item.id)">
+				<li v-for="(item, _) in asideList" :key="item.id" :class="{asideActive: item.id === asideIndex}"
+					@click="asideClick(item.id)">
 					<a class="zl" style="cursor: pointer">{{item.title}}</a>
 				</li>
 			</ul>
@@ -31,9 +32,10 @@
 									<div>
 										<span>{{item.title}}：</span>
 										<span v-if="!changeInformationFlag">
-											{{item.value ? item.value : "不告诉你！"}}
+											{{item.value ? item.value : '不告诉你！'}}
 										</span>
-										<input v-model="item.value" v-if="changeInformationFlag" :disabled="item.id === 1"></input>
+										<input v-model="item.value" v-if="changeInformationFlag"
+											   :disabled="item.id === 1"></input>
 									</div>
 								</li>
 							</ul>
@@ -55,9 +57,10 @@
 						<span style="margin-left: 100px;">已上传文件总数：</span>
 						<span>{{userFileCount}}</span>
 						<span style="margin-left: 100px;">已上传文件总大小：</span>
-						<span>{{(userTotalSize / 1024).toFixed(2)}}KB / {{userLevel + 1}}G</span>
+						<span>{{(userTotalSize / 1024).toFixed(2)}}KB / {{userLevel + 1}}00M</span>
 					</div>
-					<el-table ref="multipleTable" :data="fileList" tooltip-effect="dark" style="width: 100%" :default-sort="{prop: 'buildtime', order: 'descending'}">
+					<el-table ref="multipleTable" :data="fileList" tooltip-effect="dark" style="width: 100%"
+							  :default-sort="{prop: 'buildtime', order: 'descending'}">
 						<el-table-column prop="buildtime" label="日期" width="200" sortable></el-table-column>
 						<el-table-column prop="filename" label="文件名" width="200"></el-table-column>
 						<el-table-column prop="size" label="文件大小" width="200" sortable></el-table-column>
@@ -83,20 +86,23 @@
 						<li>
 							<label>输入旧密码：</label>
 							<label for="oldPassword"></label>
-							<input type="password" name="password" id="oldPassword" placeholder="输入旧密码" autocomplete="off" validate="true"
-							 data-rule="['password']" oncopy="return false" class="inpt" v-model="oldPassword">
+							<input type="password" name="password" id="oldPassword" placeholder="输入旧密码"
+								   autocomplete="off" validate="true"
+								   data-rule="['password']" oncopy="return false" class="inpt" v-model="oldPassword">
 						</li>
 						<li>
 							<label>输入新密码：</label>
 							<label for="password"></label>
-							<input type="password" name="password" id="password" placeholder="6-18位数字和字母组合" autocomplete="off" validate="true"
-							 data-rule="['password']" oncopy="return false" class="inpt" v-model="newPassword">
+							<input type="password" name="password" id="password" placeholder="6-18位数字和字母组合"
+								   autocomplete="off" validate="true"
+								   data-rule="['password']" oncopy="return false" class="inpt" v-model="newPassword">
 						</li>
 						<li>
 							<label>确认新密码：</label>
 							<label for="confirmPwd"></label>
-							<input id="confirmPwd" type="password" placeholder="确认新密码" autocomplete="off" oncopy="return false" class="inpt"
-							 v-model="confirmNewPassword">
+							<input id="confirmPwd" type="password" placeholder="确认新密码" autocomplete="off"
+								   oncopy="return false" class="inpt"
+								   v-model="confirmNewPassword">
 						</li>
 						<li class="acc_pass_b">
 							<button class="confirm_btn confirm_disable" @click="changePassword()">确认</button>
@@ -146,217 +152,221 @@
 </template>
 
 <script>
-	import {mapGetters} from "vuex";
-	import fileApi from '@/api/file';
-	import {Notification} from 'element-ui';
-	import Message from "element-ui/packages/message/src/main";
+    import { mapGetters } from 'vuex'
+    import fileApi from '@/api/file'
+    import { Notification } from 'element-ui'
+    import Message from 'element-ui/packages/message/src/main'
 
-	export default {
-		name: "PersonalCenter",
-		data() {
-			return {
-				asideList: [{
-						id: 1,
-						name: "PersonalData",
-						title: "个人资料"
-					},
-					{
-						id: 2,
-						name: "ProjectList",
-						title: "项目列表"
-					},
-					{
-						id: 3,
-						name: "ChangePassword",
-						title: "修改密码"
-					},
-					{
-						id: 6,
-						name: "BindAccount",
-						title: "绑定账号"
-					},
-				],
-				asideIndex: 1,
+    export default {
+        name: 'PersonalCenter',
+        data() {
+            return {
+                asideList: [{
+                    id: 1,
+                    name: 'PersonalData',
+                    title: '个人资料'
+                },
+                    {
+                        id: 2,
+                        name: 'ProjectList',
+                        title: '项目列表'
+                    },
+                    {
+                        id: 3,
+                        name: 'ChangePassword',
+                        title: '修改密码'
+                    },
+                    // {
+                    // 	id: 6,
+                    // 	name: "BindAccount",
+                    // 	title: "绑定账号"
+                    // },
+                ],
+                asideIndex: 1,
 
-				token: "",
-				changeInformationFlag: false,
-				userInfo: [{
-						id: 1,
-						name: "username",
-						title: "昵称",
-						value: localStorage.getItem('username')
-					},
-					{
-						id: 2,
-						name: "name",
-						title: "姓名",
-						value: ''
-					},
-					{
-						id: 3,
-						name: "gender",
-						title: "性别",
-						value: ''
-					},
-					{
-						id: 5,
-						name: "phone",
-						title: "手机",
-						value: ''
-					},
-					{
-						id: 6,
-						name: "mailbox",
-						title: "邮箱",
-						value: ''
-					},
-				],
-				userLevel: 0,
-				userTotalSize: 0,
-				userFileCount: 0,
+                token: '',
+                changeInformationFlag: false,
+                userInfo: [{
+                    id: 1,
+                    name: 'username',
+                    title: '昵称',
+                    value: localStorage.getItem('username')
+                },
+                    {
+                        id: 2,
+                        name: 'name',
+                        title: '姓名',
+                        value: ''
+                    },
+                    {
+                        id: 3,
+                        name: 'gender',
+                        title: '性别',
+                        value: ''
+                    },
+                    {
+                        id: 5,
+                        name: 'phone',
+                        title: '手机',
+                        value: ''
+                    },
+                    {
+                        id: 6,
+                        name: 'mailbox',
+                        title: '邮箱',
+                        value: ''
+                    },
+                ],
+                userLevel: 0,
+                userTotalSize: 0,
+                userFileCount: 0,
 
-				oldPassword: "",
-				newPassword: "",
-				confirmNewPassword: "",
-				changePasswordError: "",
-			};
-		},
-		computed: {
-			...mapGetters(['docHeight', 'fileList']),
-		},
-		methods: {
-			handleDelete(index, row) {
-				fileApi.deleteFile({
-					id: row.id
-				}).then(res => {
-					Notification({
-						title: '成功',
-						message: '文件移除成功',
-						type: 'success',
-						duration: 3000
-					})
-					this.$store.commit('app/SET_FILELIST', res.data)
-				});
-				location.reload();
-			},
+                oldPassword: '',
+                newPassword: '',
+                confirmNewPassword: '',
+                changePasswordError: '',
+            }
+        },
+        computed: {
+            ...mapGetters(['docHeight', 'fileList']),
+        },
+        methods: {
+            handleDelete(index, row) {
+                fileApi.deleteFile({
+                    filelist: [row.id]
+                }).then(res => {
+                    Notification({
+                        title: '成功',
+                        message: '文件移除成功',
+                        type: 'success',
+                        duration: 3000
+                    })
+                    this.$store.dispatch('app/getFileList')
+                }).catch(error => {
+                    this.$message({
+                        message: error,
+                        type: 'error'
+                    })
+                })
+            },
 
-			asideClick(itemId) {
-				this.asideIndex = itemId;
-			},
-			changePassword() {
-				// 1.校验密码位数
-				if (this.oldPassword.length < 6 || this.newPassword.length < 6) {
-					this.$message({
-						message: '密码位数错误！',
-						type: 'warning'
-					});
-				}
-				// 2.校验新密码和确认密码
-				if (this.newPassword !== this.confirmNewPassword) {
-					this.$message({
-						message: '新密码不一致！',
-						type: 'error'
-					});
-				}
-				// 3.整理消息体
-				let changePasswordParam = {
-					username: localStorage.getItem('username'),
-					password: this.oldPassword,
-					newpassword: this.newPassword,
-				}
-				// 4.通过axios发送数据
-				this.axios({
-					method: 'post',
-					url: 'http://39.105.21.62/flow/api/user/chapassword',
-					data: changePasswordParam
-				}).then(res => {
-					this.$message('密码更改成功！');
-				}).catch(err => {
-					this.$message({
-						message: err,
-						type: 'error'
-					});
-				})
-			},
-			changeInformation() {
-				this.changeInformationFlag = true;
-			},
-			saveChangeInformation() {
-				let phone = this.userInfo[3].value;
-				if (!/^1[34578]\d{9}$/.test(phone)) {
-					Message({
-						message: "请填写正确的手机号！",
-						type: "warning",
-					});
-					return
-				}
-				let mailbox = this.userInfo[4].value;
-				if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(mailbox)) {
-					Message({
-						message: "请填写正确的邮箱！",
-						type: "warning",
-					});
-					return
-				}
+            asideClick(itemId) {
+                this.asideIndex = itemId
+            },
+            changePassword() {
+                // 1.校验密码位数
+                if (this.oldPassword.length < 6 || this.newPassword.length < 6) {
+                    this.$message({
+                        message: '密码位数错误！',
+                        type: 'warning'
+                    })
+                }
+                // 2.校验新密码和确认密码
+                if (this.newPassword !== this.confirmNewPassword) {
+                    this.$message({
+                        message: '新密码不一致！',
+                        type: 'error'
+                    })
+                }
+                // 3.整理消息体
+                let changePasswordParam = {
+                    username: localStorage.getItem('username'),
+                    password: this.oldPassword,
+                    newpassword: this.newPassword,
+                }
+                // 4.通过axios发送数据
+                this.axios({
+                    method: 'post',
+                    url: 'http://39.105.21.62/flow/api/user/chapassword',
+                    data: changePasswordParam
+                }).then(res => {
+                    this.$message('密码更改成功！')
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    })
+                })
+            },
+            changeInformation() {
+                this.changeInformationFlag = true
+            },
+            saveChangeInformation() {
+                let phone = this.userInfo[3].value
+                if (!/^1[34578]\d{9}$/.test(phone)) {
+                    Message({
+                        message: '请填写正确的手机号！',
+                        type: 'warning',
+                    })
+                    return
+                }
+                let mailbox = this.userInfo[4].value
+                if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(mailbox)) {
+                    Message({
+                        message: '请填写正确的邮箱！',
+                        type: 'warning',
+                    })
+                    return
+                }
 
-				this.changeInformationFlag = false;
-				let changeData = {
-					username: localStorage.getItem('username'),
-					name: this.userInfo[1].value,
-					gender: this.userInfo[2].value,
-					phone: this.userInfo[3].value,
-					mailbox: this.userInfo[4].value,
-				};
-				this.axios({
-					method: 'post',
-					url: 'http://39.105.21.62/flow/api/user/chainformation',
-					data: changeData,
-				}).then(res => {
-					this.$message({
-						message: '保存成功！',
-						type: 'success'
-					});
-				}).catch(err => {
-					this.$message({
-						message: err,
-						type: 'error'
-					});
-				})
-			}
-		},
-		created() {
-			this.$store.dispatch("app/getFileList")
-			// 1.获取用户个人资料
-			this.axios({
-				method: 'get',
-				url: `http://39.105.21.62/flow/api/user/information?username=${localStorage.getItem('username')}`,
-			}).then(res => {
-				this.userInfo[1].value = res.data.data.name;
-				this.userInfo[2].value = res.data.data.gender === 2 ? '男' : '女';
-				this.userInfo[3].value = res.data.data.phone;
-				this.userInfo[4].value = res.data.data.mailbox;
-			}).catch(err => {
-				this.$message({
-					message: err,
-					type: 'error'
-				});
-			});
-			// 2.获取用户等级、上传文件总数、总文件大小
-			this.axios({
-				method: 'get',
-				url: `http://39.105.21.62/flow/api/fileinf?username=${localStorage.getItem('username')}`,
-			}).then(res => {
-				this.userLevel = res.data.data.userlvl;
-				this.userTotalSize = res.data.data.totalsize;
-				this.userFileCount = res.data.data.filecount;
-			}).catch(err => {
-				this.$message({
-					message: err,
-					type: 'error'
-				});
-			});
-		}
-	}
+                this.changeInformationFlag = false
+                let changeData = {
+                    username: localStorage.getItem('username'),
+                    name: this.userInfo[1].value,
+                    gender: this.userInfo[2].value,
+                    phone: this.userInfo[3].value,
+                    mailbox: this.userInfo[4].value,
+                }
+                this.axios({
+                    method: 'post',
+                    url: 'http://39.105.21.62/flow/api/user/chainformation',
+                    data: changeData,
+                }).then(res => {
+                    this.$message({
+                        message: '保存成功！',
+                        type: 'success'
+                    })
+                }).catch(err => {
+                    this.$message({
+                        message: err,
+                        type: 'error'
+                    })
+                })
+            }
+        },
+        created() {
+            this.$store.dispatch('app/getFileList')
+            // 1.获取用户个人资料
+            this.axios({
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/user/information?username=${localStorage.getItem('username')}`,
+            }).then(res => {
+                this.userInfo[1].value = res.data.data.name
+                this.userInfo[2].value = res.data.data.gender === 2 ? '男' : '女'
+                this.userInfo[3].value = res.data.data.phone
+                this.userInfo[4].value = res.data.data.mailbox
+            }).catch(err => {
+                this.$message({
+                    message: err,
+                    type: 'error'
+                })
+            })
+            // 2.获取用户等级、上传文件总数、总文件大小
+            this.axios({
+                method: 'get',
+                url: `http://39.105.21.62/flow/api/fileinf?username=${localStorage.getItem('username')}`,
+            }).then(res => {
+                this.userLevel = res.data.data.userlvl
+                this.userTotalSize = res.data.data.totalsize
+                this.userFileCount = res.data.data.filecount
+            }).catch(err => {
+                this.$message({
+                    message: err,
+                    type: 'error'
+                })
+            })
+        }
+    }
 </script>
 
 <style scoped>

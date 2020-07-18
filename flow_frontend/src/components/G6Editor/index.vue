@@ -30,6 +30,8 @@
     import Editor from '@/components/Base/Editor'
     import command from '@/command'
     import { mapGetters } from 'vuex'
+    import graphApi from '@/api/graph'
+    import { Notification } from 'element-ui'
 
     export default {
         name: 'G6Editor',
@@ -58,21 +60,42 @@
                 }
             }
         },
-        created() {
-            this.init()
-        },
         data() {
             return {
                 editor: {},
                 command: null,
             }
         },
+        created() {
+            this.init()
+        },
         methods: {
             init() {
                 this.editor = new Editor()
                 this.command = new command(this.editor)
                 this.$store.dispatch('app/getFileList')
+
+                graphApi.getGraphs(this.listQuery).then(res => {
+                    let projects = res.res
+					let param = location.href.split('/')
+					projects.forEach(item => {
+						if (item.id === parseInt(param[param.length - 1])) {
+                            this.$store.commit('app/SetGraphName', item.project_name)
+						}
+					})
+                }).catch(error => {
+                    Notification({
+                        title: '错误',
+                        message: error,
+                        type: 'error',
+                        duration: 10000
+                    })
+                    this.loading = false
+                })
             }
+        },
+		destroyed() {
+            this.$store.commit('app/SetGraphName', null)
         }
     }
 </script>
