@@ -177,7 +177,7 @@
 			saveTree() {
                 let data = {
                     graph_id: this.$route.params.id,
-                    treeNodeList: JSON.stringify(this.treeNodeList),
+                    nodeList: JSON.stringify(this.treeNodeList),
                 }
                 this.axios({
                     method: 'post',
