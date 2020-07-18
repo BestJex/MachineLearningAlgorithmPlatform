@@ -4,7 +4,7 @@ export default {
     getDefaultCfg() {
         return {
             keydown: false,
-            backKeyCode: 8,
+            backKeyCode: 8, // 试图删除一个节点
             deleteKeyCode: 46,
             shiftKeyCode: 16,
             _a: 65,

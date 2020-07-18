@@ -20,7 +20,7 @@ export default {
         }
     },
     onRightClick(e) {
-        store.commit('app/SET_CLICKNODE', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
+        store.commit('app/SET_CLICKNODE', { node: e.item })
         // eventBus.$emit('getname', { name: e.item._cfg.model.label, id: e.item._cfg.model.id })
     },
     onClick(e) {
