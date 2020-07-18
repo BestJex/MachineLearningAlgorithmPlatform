@@ -125,7 +125,7 @@
     export default {
         data() {
             return {
-                status: 'canvas-selected',
+                status: 'canvas-selected',	// 页面状态（选中画布/选中节点）
                 showGrid: false,
                 page: {},
                 graph: {},
@@ -133,16 +133,6 @@
                 visible: false,
                 node_detail: {},
                 point_detail: {},
-                point_options: [
-                    {
-                        id: 1,
-                        value: 'select-all'
-                    },
-                    {
-                        id: 2,
-                        value: 'random-select'
-                    }
-                ],
                 grid: null,
             }
         },
@@ -196,13 +186,6 @@
                             self.node_detail = item.target.getModel().node_detail
                             self.point_detail = item.target.getModel().point_detail
                             this.$store.dispatch('app/getFileList')
-                            // self.node_detail.forEach(item => {
-                            //     if (item.label === '文件第一行是否是索引') {
-                            //         for (let i = 0; i < item.selection.length; i++) {
-                            //             item.selection[i] = (item.selection[i] === 0 ? '是' : '否')
-							// 		}
-                            //     }
-                            // })
                         } else {
                             self.status = 'canvas-selected'
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null)
@@ -234,6 +217,7 @@
                     node_detail: this.node_detail
                 }
                 this.graph.update(this.item, model)
+				this.saveDetail()
             },
 
             // 检查输入内容中括号是否匹配
@@ -294,15 +278,25 @@
             },
 
             saveDetail() {
-                let graph = this.graph.save()
-                Object.assign(graph, { id: this.graphId })
+                let graph = this.$store.state.app.graph_info.save()
+
+                Object.assign(graph, { id: this.$route.params.id })
                 let data = {
-                    graphid: this.graphId,
+                    graphid: this.$route.params.id,
                     graph: JSON.stringify(graph),
                 }
-                graphApi.sendGraph(data).then(() => {
+                graphApi.sendGraph(data).then(res => {
+                    graphApi.getGraphById({ graphid: this.$route.params.id }).then(res => {
+                        this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
+                        this.graph.read(this.data)
+                        if (this.data.nodes.length) {
+                            this.graph.fitView(100)
+                        }
+                    }).catch(err => {
+                        // console.log(err)
+                    })
                 }).catch(err => {
-                    console.error(err)
+                    // console.error(err)
                 })
             }
         }

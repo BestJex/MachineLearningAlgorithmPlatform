@@ -39,7 +39,6 @@ export default {
       let code = p.charCodeAt(0).toString(16).toUpperCase()
       return '%' + (code.length < 2 ? '0' + code : code)
     })
-
     return JSON.parse(decodeURIComponent(result))
   }
 }

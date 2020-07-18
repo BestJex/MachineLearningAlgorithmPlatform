@@ -151,18 +151,6 @@
                     this.resStatus = 0
                 }
             },
-            // datas: function (val) {
-            // 	this.data = val
-            // 	console.log(this.data);
-            // 	////////////////////////////////////////解决方法
-            // }
-            // graphs: {
-            //     deep: true,
-            //     handler: function (val) {
-            //         this._graph = Object.assign(this._graph, val)
-            //         console.log(this._graph)
-            //     }
-            // }
         },
         methods: {
             init() {
@@ -237,7 +225,7 @@
                                     } else if (data.status === 'finished') {
                                         if (data.type === 'matrix') {
                                             let value = JSON.parse(data.value)
-                                            console.log(value)
+                                            // console.log(value)
                                             let allInfo = []
                                             this.resStatus = 1
                                             let a = 0, b = 0 // a是宽 b/a是长
@@ -264,11 +252,11 @@
                                                     Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": "${String(allInfo[a * i + j])}"}`))
                                                 }
                                             }
-                                            console.log(this.outputDetails)
+                                            // console.log(this.outputDetails)
                                         } else if (data.type === 'list') {
                                             this.resStatus = 2
                                             let value = JSON.parse(data.value)
-                                            console.log(value)
+                                            // console.log(value)
                                             for (let cont in value) {
                                                 this.listInfo_key.push(cont)
                                                 this.listInfo_value.push(value[cont])
@@ -279,7 +267,7 @@
                                         }
                                     }
                                 }).catch(err => {
-                                    console.log(err)
+                                    // console.log(err)
                                 })
                             },
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
@@ -370,10 +358,10 @@
                         //     this.$parent.graph.fitView(100)
                         // }
                     }).catch(err => {
-                        console.log(err)
+                        // console.log(err)
                     })
                 }).catch(err => {
-                    console.error(err)
+                    // console.error(err)
                 })
             },
             doDeleteNode() {
