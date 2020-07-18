@@ -71,7 +71,18 @@
 			<p>确认删除此节点？</p>
 			<span slot="footer" class="dialog-footer">
    				<el-button @click="dialogVisible = false">取 消</el-button>
-    			<el-button type="primary" @click="doDelete">确 定</el-button>
+    			<el-button type="primary" @click="doDeleteNode">确 定</el-button>
+  			</span>
+		</el-dialog>
+		<el-dialog
+			v-if="params === 3"
+			title="提示"
+			:visible.sync="dialogVisible"
+			width="400px">
+			<p>确认删除此指针？</p>
+			<span slot="footer" class="dialog-footer">
+   				<el-button @click="dialogVisible = false">取 消</el-button>
+    			<el-button type="primary" @click="doDeleteEdge">确 定</el-button>
   			</span>
 		</el-dialog>
 	</div>
@@ -85,6 +96,7 @@
 	* */
     import graphApi from '@/api/graph'
     import graph from '../../../api/graph'
+    import eventBus from '@/utils/eventBus'
 
     export default {
         name: 'Menu',
@@ -93,10 +105,10 @@
                 type: Object,
                 default: {}
             },
-            graph: {
+            graphs: {
                 type: Object,
                 default: {}
-            }
+            },
         },
         data() {
             return {
@@ -110,10 +122,12 @@
                 matrixOutputTitle: [],
                 value: 0,
                 isRightClickNode: false, // 判断右击是否点了节点
+                isRightClickEdge: false, // 判断右击是否点击了箭头
                 interceptor: null, // 拦截器，防止用户的憨憨行为
-                _graph: {},
-                _data: {},
-                command: null
+                command: null,
+                locateClickNode: null,   // 暂时把点击节点的数据整合在本地
+                locateClickEdge: null,
+                _graph: {}
             }
         },
         mounted() {
@@ -137,11 +151,18 @@
                     this.resStatus = 0
                 }
             },
-			datas: function (val) {
-				this.data = val
-				console.log(this.data);
-				////////////////////////////////////////解决方法
-            }
+            // datas: function (val) {
+            // 	this.data = val
+            // 	console.log(this.data);
+            // 	////////////////////////////////////////解决方法
+            // }
+            // graphs: {
+            //     deep: true,
+            //     handler: function (val) {
+            //         this._graph = Object.assign(this._graph, val)
+            //         console.log(this._graph)
+            //     }
+            // }
         },
         methods: {
             init() {
@@ -150,6 +171,7 @@
             },
             getContextMenu() {
                 this.isClickNode()
+                this.isClickEdge()
                 this.$contextmenu({
                     items: [
                         // {
@@ -185,6 +207,15 @@
                                 this.dialogVisible = true
                             },
                             disabled: !this.isRightClickNode,
+                            icon: 'el-icon-edit',
+                        },
+                        {
+                            label: '删除指针',
+                            onClick: () => {
+                                this.params = 3
+                                this.dialogVisible = true
+                            },
+                            disabled: !this.isRightClickEdge,
                             icon: 'el-icon-edit',
                         },
                         {
@@ -254,7 +285,6 @@
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
                             icon: 'el-icon-tickets',
                         },
-
                     ],
                     event,
                     customClass:
@@ -264,8 +294,11 @@
                     minWidth:
                         230
                 })
+                // 还原数据
                 this.isRightClickNode = false
-                // this.$store.commit('app/SET_CLICKNODE', null)
+                this.isRightClickEdge = false
+                this.$store.commit('app/SET_CLICKNODE', null)
+                this.$store.commit('app/SET_CLICKEDGE', null)
             },
 
             submitName() {
@@ -281,13 +314,12 @@
                         }, 2500)
                     }
                 } else {
-                    for (let i = 0; i < this.data.nodes.length; i++) {
-                        if (this.data.nodes[i].id === this.input.id) {
-                            // console.log(this.data.nodes[i])
-                            this.data.nodes[i].label = this.input.name
-
+                    this._graph = this.$store.state.app.graph_info
+                    for (let i = 0; i < this.datas.nodes.length; i++) {
+                        if (this.datas.nodes[i].id === this.input.id) {
+                            this._graph._cfg.data.nodes[i].label = this.input.name
+                            this.$store.commit('app/SET_GRAPHINFO', this._graph)
                             this.saveDetail()
-
                             setTimeout(() => {
                                 this.dialogVisible = false
                             }, 500)
@@ -299,15 +331,25 @@
                 // 使用全局不使用$on触发，防止出现注册先后的问题，草
                 if (this.$store.state.app.click_node) {
                     // console.log(this.$store.state.app.click_node);
+                    this.locateClickNode = this.$store.state.app.click_node
                     this.input = this.$store.state.app.click_node.node._cfg.model
                     this.isRightClickNode = true
                 } else {
                     this.isRightClickNode = false
                 }
             },
+            isClickEdge() {
+                console.log(this.$store.state.app.clickEdge)
+                if (this.$store.state.app.clickEdge) {
+                    this.locateClickEdge = this.$store.state.app.clickEdge
+                    this.isRightClickEdge = true
+                } else {
+                    this.isRightClickEdge = false
+                }
+            },
             saveDetail() {
+                // console.log(this.$parent.graph);
                 let graph = this.$store.state.app.graph_info.save()
-
                 Object.assign(graph, { id: this.$route.params.id })
                 let data = {
                     graphid: this.$route.params.id,
@@ -316,16 +358,17 @@
                 graphApi.sendGraph(data).then(res => {
                     graphApi.getGraphById({ graphid: this.$route.params.id }).then(res => {
                         // 为了实现功能，暂时关闭不是很重要的副功能，如果有需要的话，就解除注释
-                        // this.data = res.data.data
-
+                        // let a = res.data.data
                         // this.isRunning = this.data.status === 'loading'
-                        // this.forEach(this.data)
+                        // this.forEach(a)
                         this.$store.commit('app/SET_GRAPHDATA', res.data.data) // 全局保存一下图数据
                         // this.$store.commit('app/SET_MAXID', this.max_id)
-                        this.graph.read(this.data)
-                        if (this.data.nodes.length) {
-                            this.graph.fitView(100)
-                        }
+                        this.$store.commit('app/SET_GRAPHDATA', res.data.data)
+                        this.graphs.read(res.data.data)
+                        // this.$parent.graph.read(this._data)
+                        // if (this._data.nodes.length) {
+                        //     this.$parent.graph.fitView(100)
+                        // }
                     }).catch(err => {
                         console.log(err)
                     })
@@ -333,24 +376,35 @@
                     console.error(err)
                 })
             },
-            doDelete() {
-                for (let i = 0; i < this.graph._cfg.data.nodes.length; i++) {
+            doDeleteNode() {
+                for (let i = 0; i < this.$parent.graph._cfg.data.nodes.length; i++) {
                     // 遍历，寻找id符合的节点
-                    if (this.graph._cfg.data.nodes[i].id === this.$store.state.app.click_node.node._cfg.id) {
-						let graphData = Object.assign({}, this.$store.state.app.graph_info)
-						graphData._cfg.data.nodes.splice(i, 1)
-						console.log(graphData);
-						this.$store.commit('app/SET_GRAPHINFO', graphData)
-                        this.saveDetail()
+                    if (this.$parent.graph._cfg.data.nodes[i].id === this.locateClickNode.node._cfg.id) {
+                        let subInfo = this.locateClickNode.node
+                        this.$emit('changeGraph', [subInfo])
                         setTimeout(() => {
                             this.dialogVisible = false
                         }, 500)
+                    } else {
+                        // 查询失败
                     }
                 }
-                // let deleteObj = [].push(this.$store.state.app.click_node.node)
-                // this.command.executeCommand('delete', deleteObj)
-                // this.saveDetail()
+            },
+            doDeleteEdge() {
+                for (let i = 0; i < this.$parent.graph._cfg.data.edges.length; i++) {
+                    // 遍历，寻找id符合的节点
+                    if (this.$parent.graph._cfg.data.edges[i].id === this.locateClickEdge._cfg.id) {
+                        let subInfo = this.locateClickEdge
+                        this.$emit('changeGraph', [subInfo])
+                        setTimeout(() => {
+                            this.dialogVisible = false
+                        }, 500)
+                    } else {
+                        // 查询失败
+                    }
+                }
             }
+
         }
     }
 </script>

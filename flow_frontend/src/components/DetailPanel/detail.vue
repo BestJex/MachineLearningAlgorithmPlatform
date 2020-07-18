@@ -203,7 +203,6 @@
 							// 		}
                             //     }
                             // })
-                            console.log(self.node_detail)
                         } else {
                             self.status = 'canvas-selected'
                             this.$store.commit('app/SET_SETSELECTEDNODEID', null)

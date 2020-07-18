@@ -14,7 +14,7 @@
 				<Terminal/>
 			</div>
 		</div>
-		<Menu ref="menu" :datas="data" :graph="graph"/>
+		<Menu ref="menu" :graphs="graph" :datas="data" v-on:changeGraph="changeGraph"/>
 	</div>
 </template>
 
@@ -25,12 +25,14 @@
     import graphApi from '@/api/graph'
     import { Message } from 'element-ui'
     import Terminal from '../Terminal'
-	import Menu from './Menu/index.vue'
+    import Menu from './Menu/index.vue'
+    import { Notification } from 'element-ui'
 
     export default {
         components: {
-            Terminal,Menu
+            Terminal, Menu
         },
+
         data() {
             return {
                 pageId: 'graph-container',
@@ -39,7 +41,9 @@
                 data: null, // 图里元素信息
                 max_id: 0,
                 isLockCanvas: false,
-				// isRunning: '',
+                editor: null,
+                command: null,
+                // isRunning: '',
                 supportBehavior: [
                     'drag-canvas',
                     'brush-select',
@@ -88,6 +92,7 @@
         },
 
         created() {
+            this.initEvent()
             initBehavors()
             this.getGraph()
             // this.$store.dispatch('app/getProjectFileList', this.id);
@@ -101,15 +106,43 @@
         },
 
         methods: {
-			// 检验点击区域
+            initEvent() {
+                const { editor, command } = this.$parent
+                this.editor = editor
+                this.command = command
+            },
+            changeGraph(event) {
+                console.log(event)
+                this.command.executeCommand('delete', event)
+                let graph = this.graph.save()
+                Object.assign(graph, { id: this.$route.params.id })
+                let data = {
+                    graphid: this.$route.params.id,
+                    graph: JSON.stringify(graph),
+                }
+                graphApi.sendGraph(data).then(res => {
+
+                }).then(() => {
+                    // 注释是为了提高用户体验
+                    // return graphApi.getGraphById({ graphid: this.graphId })
+                }).catch(err => {
+                    Notification({
+                        title: '错误',
+                        message: err,
+                        type: 'error',
+                        duration: 3000
+                    })
+                })
+            },
+            // 检验点击区域
             onContextmenu(event) {
                 let e = event || window.event
                 if (this.$store.state.app.terminal_display === 'block') {
                     if (e.clientY >= 0 && e.clientY <= document.body.clientHeight - this.$store.state.app.terminal_height) {
-						this.$refs.menu.getContextMenu(this.isRightClickNode)
+                        this.$refs.menu.getContextMenu()
                     }
                 } else {
-					this.$refs.menu.getContextMenu(this.isRightClickNode)
+                    this.$refs.menu.getContextMenu()
                 }
                 return false
             },
@@ -184,6 +217,7 @@
                 this.readData()
                 // 把图信息（整张图）存到全局
                 this.$store.commit('app/SET_GRAPHINFO', this.graph)
+                console.log(this.graph)
             },
 
             readData() {
