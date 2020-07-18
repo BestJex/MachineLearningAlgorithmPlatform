@@ -139,7 +139,7 @@
             },
 			datas: function (val) {
 				this.data = val
-				console.log(this.data);
+				// console.log(this.data);
 				////////////////////////////////////////解决方法
             }
         },
@@ -206,7 +206,7 @@
                                     } else if (data.status === 'finished') {
                                         if (data.type === 'matrix') {
                                             let value = JSON.parse(data.value)
-                                            console.log(value)
+                                            // console.log(value)
                                             let allInfo = []
                                             this.resStatus = 1
                                             let a = 0, b = 0 // a是宽 b/a是长
@@ -233,11 +233,11 @@
                                                     Object.assign(this.outputDetails[i], JSON.parse(`{"${this.matrixOutputTitle[j]}": "${String(allInfo[a * i + j])}"}`))
                                                 }
                                             }
-                                            console.log(this.outputDetails)
+                                            // console.log(this.outputDetails)
                                         } else if (data.type === 'list') {
                                             this.resStatus = 2
                                             let value = JSON.parse(data.value)
-                                            console.log(value)
+                                            // console.log(value)
                                             for (let cont in value) {
                                                 this.listInfo_key.push(cont)
                                                 this.listInfo_value.push(value[cont])
@@ -248,7 +248,7 @@
                                         }
                                     }
                                 }).catch(err => {
-                                    console.log(err)
+                                    // console.log(err)
                                 })
                             },
                             disabled: !(this.$store.state.app.running_complete && this.isRightClickNode && this.$store.state.app.is_on_circle),
@@ -327,19 +327,20 @@
                             this.graph.fitView(100)
                         }
                     }).catch(err => {
-                        console.log(err)
+                        // console.log(err)
                     })
                 }).catch(err => {
-                    console.error(err)
+                    // console.error(err)
                 })
             },
+
             doDelete() {
                 for (let i = 0; i < this.graph._cfg.data.nodes.length; i++) {
                     // 遍历，寻找id符合的节点
                     if (this.graph._cfg.data.nodes[i].id === this.$store.state.app.click_node.node._cfg.id) {
 						let graphData = Object.assign({}, this.$store.state.app.graph_info)
 						graphData._cfg.data.nodes.splice(i, 1)
-						console.log(graphData);
+						// console.log(graphData);
 						this.$store.commit('app/SET_GRAPHINFO', graphData)
                         this.saveDetail()
                         setTimeout(() => {

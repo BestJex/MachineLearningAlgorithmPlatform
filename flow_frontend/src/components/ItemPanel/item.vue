@@ -212,7 +212,6 @@
             },
 
             recoveryTreeNode() {
-                console.log(this.checkedNodes)
                 let data = {
                     graphid: this.$route.params.id,
                     checked: [],
@@ -232,9 +231,9 @@
                     // console.log(res)
                     this.getTree()
                     this.isShowRecoveryTreeNode = false
-                }).catch(err => {
+                }).catch(error => {
                     this.$message({
-                        message: err,
+                        message: error,
                         type: 'error'
                     })
                 })

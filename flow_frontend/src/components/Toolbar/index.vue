@@ -106,7 +106,7 @@
 					rel="stylesheet"
 					type="text/css"/>
 				<el-button @click="runProject" type="success">重启项目</el-button>
-				<el-button @click="stopRunning" type="danger">停止运行</el-button>
+				<el-button @click="stopRunning('termination')" type="danger">停止运行</el-button>
 			</div>
 		</transition>
 		<el-dialog
@@ -592,12 +592,13 @@
                             type: 'error',
                         })
                         self.terminalContent = `<p style="color: #dd6161">${data.value}</p>`
-                        self.stopRunning()
+                        self.stopRunning('termination')
                     }
+
                     if (data.type === 5) {
                         self.terminalContent = `<p><span>${time.toLocaleString()}</span> : <span style="color: #13ce66;line-height: 10px">项目运行完毕</span></p><hr>`
                         self.graph.save()
-                        self.stopRunning()
+                        self.stopRunning('complete')
                     }
                 }
                 window.s = socket
@@ -648,7 +649,12 @@
                 })
             },
 
-            stopRunning() {
+            stopRunning(typeName) {
+                console.log(this.graph)
+                if (typeName === 'complete') {
+				} else if (typeName === 'termination') {
+
+				}
                 this.testRunning = false
                 this.closeWebSocket()
             },
