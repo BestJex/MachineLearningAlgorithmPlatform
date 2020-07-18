@@ -118,7 +118,6 @@
 <script>
     import eventBus from '@/utils/eventBus'
     import Grid from '@antv/g6/build/grid'
-    import visualFile from './components/visualization'
     import graphApi from '@/api/graph'
     import { mapGetters } from 'vuex'
     import { Notification } from 'element-ui'
@@ -176,9 +175,6 @@
                 }
                 return ans
             },
-        },
-        components: {
-            visualFile,
         },
         created() {
             this.bindEvent()

@@ -6,8 +6,11 @@
 				icon="el-icon-back"
 				circle
 				size="medium"
-				style="margin-top: 12px; margin-left: 10px"
+				style="margin-top: 12px; margin-left: 10px; float: left"
 				@click="backProject()"></el-button>
+			<el-menu-item>
+				<h1 style="margin: 0 10px; color: #3a8ee6">{{ graphName }}</h1>
+			</el-menu-item>
 			<el-submenu
 				index="5"
 				style="float: right">
@@ -79,7 +82,7 @@
         data() {
             return {
                 activeIndex: '1',
-				graphActiveIndex: '1',
+                graphActiveIndex: '1',
             }
         },
         computed: {
@@ -91,7 +94,7 @@
             },
             jumpPersonal() {
                 this.$router.push({ path: `/personal/${localStorage.getItem('userId')}` })
-			},
+            },
             logout() {
                 this.$store.dispatch('user/Logout').then(() => {
                     this.$router.push('/login')

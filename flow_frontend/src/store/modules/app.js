@@ -5,7 +5,7 @@ import {Message} from "element-ui";
 const state = {
     fileList: [],               // 用户上传的所有文件
     graphName: null,            // 图名
-    terminal_display: 'none',
+    terminal_display: 'none',   // 运行项目控制台显示
     graph_data: [],             // 图信息(节点和指针）
     graph_info: {},             // 整张图的信息
 

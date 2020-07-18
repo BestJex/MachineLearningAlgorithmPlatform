@@ -50,6 +50,13 @@ export default {
             data
         })
     },
+    getGraphTree(data) {
+        return request({
+            url: '/node_template/',
+            method: 'get',
+            params: data,
+        })
+    },
     runProject(data) {
         return request({
             url: '/run_project',
@@ -70,5 +77,5 @@ export default {
             method: 'get',
             params: data
         })
-    }
+    },
 }

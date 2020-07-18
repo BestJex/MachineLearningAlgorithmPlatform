@@ -61,7 +61,6 @@
 					data-command="toFront"
 					title="层级前置"></i>
 				<span class="separator"></span>
-				<span class="separator"></span>
 				<i
 					:class="multiSelect?'disable':''"
 					@click="handleMuiltSelect"
@@ -84,13 +83,13 @@
 					</el-button>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>
-							<span @click="isShowImportManage = true">导入.gph文件</span>
+							<p @click="isShowImportManage = true">导入.gph文件</p>
 						</el-dropdown-item>
 						<el-dropdown-item>
-							<span @click="exportPythonFile()">导出.py文件</span>
+							<p @click="exportPythonFile()">导出.py文件</p>
 						</el-dropdown-item>
 						<el-dropdown-item>
-							<span @click="exportJsonFile()">导出.gph文件</span>
+							<p @click="exportJsonFile()">导出.gph文件</p>
 						</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>

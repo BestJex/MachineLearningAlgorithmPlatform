@@ -22,14 +22,14 @@
 				title="恢复节点"></el-button>
 		</el-tooltip>
 		<el-tooltip placement="top">
-			<div slot="content">隐藏节点</div>
+			<div slot="content">删除节点</div>
 			<el-button
 				v-show="this.$store.state.app.operation"
 				type="danger"
-				icon="el-icon-view"
+				icon="el-icon-delete"
 				circle
 				@click="deleteNodes()"
-				title="隐藏"></el-button>
+				title="删除"></el-button>
 		</el-tooltip>
 		<el-input
 			v-show="!$store.state.app.operation"
@@ -41,7 +41,7 @@
 			ref="tree"
 			class="filter-tree"
 			default-expand-all
-			:data="nodeList"
+			:data="treeNodeList"
 			:draggable="true"
 			:props="defaultProps"
 			:allow-drop="allowDrop"
@@ -64,27 +64,34 @@
 					  :id="node.label">
                         <span v-show="!$store.state.app.operation">{{ node.label }}</span>
                         <label>
-                            <input type="text" v-model="data.name" v-show="$store.state.app.operation">
+                            <input
+								type="text" 
+								v-model="data.name" 
+								v-show="$store.state.app.operation">
                         </label>
                   </span>
 		</el-tree>
 		<el-dialog
 			:append-to-body="true"
-			:visible.sync="isShowTreeNodeManage"
+			:visible.sync="isShowRecoveryTreeNode"
 			custom-class="preview-dialog"
 			title="恢复结点"
-			style="min-width: 700px"
-		>
+			style="min-width: 700px">
 			<!--            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-			<el-checkbox-group v-model="checkedNodes" @change="handleCheckedNodesChange">
-				<el-checkbox v-for="city in cities" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
+			<el-checkbox-group
+				v-model="checkedNodes" 
+				@change="handleCheckedNodesChange">
+				<el-checkbox
+					v-for="node in recoveryNodes" 
+					:label="node.name" 
+					:key="node.id">
+					{{node.name}}
+				</el-checkbox>
 			</el-checkbox-group>
-			<el-button
-				@click="recoveryTreeNode()"
-				size="small"
-				style="margin: 20px 50% 10px 50%"
-				type="success">确认
-			</el-button>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="this.isShowRecoveryTreeNode = false">取 消</el-button>
+				<el-button type="primary" @click="recoveryTreeNode()">确 定</el-button>
+			</div>
 		</el-dialog>
 	</div>
 </template>
@@ -100,18 +107,9 @@
             return {
                 checkAll: false,
                 checkedNodes: [],
-                cities: [],
+                recoveryNodes: [],
                 isIndeterminate: true,
-
-                isShowTreeNodeManage: false,
-                treeNode: {
-                    nodeId: 0,
-                    categoryName: '',
-                    parentId: 0,
-                },
-                treeList: [],
-                initTree: false,
-                treeListData: [],
+                isShowRecoveryTreeNode: false,		// 是否显示恢复节点对话框
                 defaultProps: {
                     children: 'children',
                     label: 'name',
@@ -119,12 +117,11 @@
                 filterText: '',
                 page: null,
                 command: null,
-                nodeList: null,
+                treeNodeList: null,
                 offsetX: 0,
                 clientX: 0,
                 offsetY: 0,
                 clientY: 0,
-                // operation: false,
             }
         },
         computed: {
@@ -141,64 +138,18 @@
             },
         },
         methods: {
-            handleCheckAllChange(val) {
-                this.checkedNodes = val ? this.cities : []
-                this.isIndeterminate = false
-            },
-
-            handleCheckedNodesChange(value) {
-                let checkedCount = value.length
-                this.checkAll = checkedCount === this.cities.length
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
-            },
-
             /**
              * 获取左侧树形图
              */
             getTree() {
-                this.axios({
-                    method: 'get',
-                    url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/node_template/?graph_id=${this.$route.params.id}`,
-                }).then(res => {
-                    this.nodeList = res.data.data.path.data
-                }).catch(err => {
+                graphApi.getGraphTree({ graph_id: this.$route.params.id }).then(res => {
+                    this.treeNodeList = res.data.path.data
+                }).catch(error => {
                     this.$message({
-                        message: err,
+                        message: error,
                         type: 'error'
                     })
                 })
-            },
-
-            handleCheckChange(data, checked, indeterminate) {
-                // console.log(data);
-            },
-
-            /**
-             * 操作节点
-             */
-            handleOperation() {
-                // 全局
-                this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
-                this.operation = !this.operation
-                if (!this.$store.state.app.operation) {
-                    // 保存修改的树形图
-                    let data = {
-                        graph_id: this.$route.params.id,
-                        nodeList: JSON.stringify(this.nodeList),
-                    }
-                    this.axios({
-                        method: 'post',
-                        url: `https://bird.ioliu.cn/v2?url=http://39.105.21.62/flow/api/updatetree`,
-                        data: data,
-                    }).then(() => {
-                        this.getTree()
-                    }).catch(err => {
-                        this.$message({
-                            message: err,
-                            type: 'error',
-                        })
-                    })
-                }
             },
 
             /**
@@ -210,15 +161,48 @@
             },
 
             /**
-             * 恢复节点
+             * 操作节点
+             */
+            handleOperation() {
+                this.$store.commit('app/SET_OPERATION', !this.$store.state.app.operation)
+                this.operation = !this.operation
+                if (!this.$store.state.app.operation) {
+                    this.saveTree()
+                }
+            },
+
+			/**
+			 * 保存树形图
+			 */
+			saveTree() {
+                let data = {
+                    graph_id: this.$route.params.id,
+                    treeNodeList: JSON.stringify(this.treeNodeList),
+                }
+                this.axios({
+                    method: 'post',
+                    url: `http://39.105.21.62/flow/api/updatetree`,
+                    data: data,
+                }).then(() => {
+                    this.getTree()
+                }).catch(() => {
+                    this.$message({
+                        message: '树形图保存失败！',
+                        type: 'error'
+                    })
+                })
+			},
+
+            /**
+             * 显示恢复节点对话框并且获取可恢复的节点
              */
             recoveryNode() {
-                this.isShowTreeNodeManage = true
+                this.isShowRecoveryTreeNode = true
                 this.axios({
                     method: 'get',
                     url: `http://39.105.21.62/flow/api/searchdeletenode?graphid=${this.$route.params.id}&username=${localStorage.getItem('username')}`,
                 }).then(res => {
-                    this.cities = res.data.data.list
+                    this.recoveryNodes = res.data.data.list
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -233,10 +217,10 @@
                     graphid: this.$route.params.id,
                     checked: [],
                 }
-                for (let i = 0; i < this.cities.length; i++) {
+                for (let i = 0; i < this.recoveryNodes.length; i++) {
                     for (let j = 0; j < this.checkedNodes.length; j++) {
-                        if (this.cities[i].name === this.checkedNodes[j]) {
-                            data.checked.push(this.cities[i])
+                        if (this.recoveryNodes[i].name === this.checkedNodes[j]) {
+                            data.checked.push(this.recoveryNodes[i])
                         }
                     }
                 }
@@ -247,7 +231,7 @@
                 }).then(res => {
                     // console.log(res)
                     this.getTree()
-                    this.isShowTreeNodeManage = false
+                    this.isShowRecoveryTreeNode = false
                 }).catch(err => {
                     this.$message({
                         message: err,
@@ -260,27 +244,38 @@
              * 删除节点
              */
             deleteNodes() {
-                let arr = this.$refs.tree.getCheckedNodes()
-                let res = []
-                for (let i = 0; i < arr.length; i++) {
-                    res.push(arr[i].$treeNodeId)
-                }
-                for (let index = 0; index < res.length; index++) {
-                    let item = res[index]
-                    for (let i = 0; i < this.nodeList.length; i++) {
-                        if (this.nodeList[i].$treeNodeId === item) {
-                            this.nodeList.splice(i, 1)
-                            continue
-                        }
-                        if (this.nodeList[i].children) {
-                            for (let j = 0; j < this.nodeList[i].children.length; j++) {
-                                if (this.nodeList[i].children[j].$treeNodeId === item) {
-                                    this.nodeList[i].children.splice(j, 1)
+                let checkedNodes = this.$refs.tree.getCheckedNodes()
+                for (let index = 0; index < checkedNodes.length; index++) {
+                    let item = checkedNodes[index]
+                    for (let i = 0; i < this.treeNodeList.length; i++) {
+                        if (this.treeNodeList[i].children) {
+                            for (let j = 0; j < this.treeNodeList[i].children.length; j++) {
+                                if (this.treeNodeList[i].children[j].$treeNodeId === item.$treeNodeId) {
+                                    this.treeNodeList[i].children.splice(j, 1)
                                 }
                             }
                         }
+                        if (this.treeNodeList[i].$treeNodeId === item.$treeNodeId) {
+                            this.treeNodeList.splice(i, 1)
+                        }
                     }
                 }
+                this.saveTree()
+            },
+
+            handleCheckAllChange(val) {
+                this.checkedNodes = val ? this.recoveryNodes : []
+                this.isIndeterminate = false
+            },
+
+            handleCheckedNodesChange(value) {
+                let checkedCount = value.length
+                this.checkAll = checkedCount === this.recoveryNodes.length
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.recoveryNodes.length
+            },
+
+            handleCheckChange(data, checked, indeterminate) {
+                // console.log(data);
             },
 
             handleElDragStart(node, e) {
