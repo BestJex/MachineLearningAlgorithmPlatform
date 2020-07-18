@@ -19,7 +19,6 @@
 						class="user-avatar"
 						src="@/assets/img/logo.jpg"
 						alt="avatar"/>
-					<span class="user-avatar-span">{{ username }}</span>
 				</template>
 				<el-menu-item
 					index=""
