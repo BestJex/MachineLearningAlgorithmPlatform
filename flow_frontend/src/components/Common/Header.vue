@@ -12,7 +12,7 @@
 				<h1 style="margin: 0 10px; color: #3a8ee6">{{ graphName }}</h1>
 			</el-menu-item>
 			<el-submenu
-				index="5"
+				index=""
 				style="float: right">
 				<template slot="title">
 					<img
@@ -22,13 +22,13 @@
 					<span class="user-avatar-span">{{ username }}</span>
 				</template>
 				<el-menu-item
-					index="5-1"
+					index=""
 					@click="jumpPersonal()">
 					<i class="iconfont icon-gerenzhongxin"></i>
 					<span>个人中心</span>
 				</el-menu-item>
 				<el-menu-item
-					index="5-3"
+					index=""
 					@click="logout">
 					<i class="iconfont icon-tuichu"></i>
 					<span>退出</span>

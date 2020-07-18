@@ -120,7 +120,6 @@
                 sortCount: 0, // 修复element-ui排序特性用的参数
                 timeout: null,
                 restaurants: [],
-                uploadFileList: [],		// 上传文件列表
                 fileListNotSort: [],
                 multipleSelection: [],
                 base_api: configJS.BASE_API,
@@ -136,7 +135,17 @@
                 get() {
                     return this.$route.params.id || this.$store.getters.graphId
                 }
-            }
+            },
+			// 上传文件列表
+            uploadFileList: {
+                get() {
+                    let tempFileList = this.fileList
+					for (let i = 0; i < tempFileList.length; i++) {
+                        tempFileList[i].name = tempFileList[i].filename
+					}
+                    return tempFileList
+				}
+			}
         },
         props: {
             graph: {
